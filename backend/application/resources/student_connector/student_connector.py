@@ -17,3 +17,4 @@ def get_all_study_programs():
 
 @student_connector.route("/profile/<id>", methods=["GET"])
 def get_profile(id):
+    pass
