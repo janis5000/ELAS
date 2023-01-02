@@ -8,7 +8,6 @@ class Student_Connector_User(Base):
     id = Column(Integer, unique=True, nullable=False, autoincrement=True)
     email = Column(String, ForeignKey('user.email'), primary_key=True)
     description = Column(String)
-    languages = Column(String)
     degree_id = Column(String, ForeignKey('study_program.id'))
     sc_degree = relationship('StudyProgram', back_populates="sc_user")
     skills = relationship('Student_Connector_Skills',
