@@ -1,5 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token
+
+from orm_interface.entities.student_connector_entity.student_connector_user import Student_Connector_User
 from .extensions import bcrypt
 from dotenv import load_dotenv
 import os
@@ -26,7 +28,15 @@ def adminUser():
     lastname = "Admin"
 
     user = session.query(User).filter(User.email == email).first()
+    sc_user = session.query(Student_Connector_User).filter(Student_Connector_User.email == email).first()
 
+    if sc_user is None:
+        new_sc_user = Student_Connector_User(
+            id=1,email=email, description=None, skills=None, languages=None, degree_id=None
+        )
+        session.add(new_sc_user)
+        session.commit()
+        return jsonify({"success": "Student_Connector_User registered"})
     if user is None:
         hash_password = bcrypt.generate_password_hash(password).decode("utf-8")
         new_user = User(
@@ -35,10 +45,8 @@ def adminUser():
         session.add(new_user)
         session.commit()
         return jsonify({"success": "User registered"})
-
     else:
         return jsonify({"success": "Server initialized"})
-
 
 @main.route("/login", methods=["POST"])
 def login():

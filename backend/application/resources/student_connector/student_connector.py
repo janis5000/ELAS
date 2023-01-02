@@ -1,5 +1,6 @@
-from flask import Blueprint
+from flask import Blueprint, jsonify
 from orm_interface.base import Base, Session, engine
+from orm_interface.entities.student_connector_entity.student_connector_user import Student_Connector_User
 from orm_interface.entities.studyprogram import StudyProgram
 
 student_connector = Blueprint("student_connector", __name__)
@@ -17,4 +18,5 @@ def get_all_study_programs():
 
 @student_connector.route("/profile/<id>", methods=["GET"])
 def get_profile(id):
-    pass
+    profile = session.query(Student_Connector_User).filter(Student_Connector_User.id == id).first()
+    return str(profile.id)

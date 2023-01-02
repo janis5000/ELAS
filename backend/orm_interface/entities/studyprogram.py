@@ -13,9 +13,10 @@ class Lecture_Studyprogram(Base):
 class StudyProgram(Base):
     __tablename__ = 'study_program'
     id = Column(String, primary_key=True)
-    name = Column(String)
+    name = Column(String, unique=True)
     url = Column(String)
     lectures = relationship('Lecture', secondary='lecture_studyprogram', back_populates='root_id')
+    sc_user = relationship('Student_Connector_User', back_populates='sc_degree')
 
     def __init__(self, id, name, url):
         self.id = id
