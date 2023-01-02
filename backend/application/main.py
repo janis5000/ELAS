@@ -32,7 +32,7 @@ def adminUser():
 
     if sc_user is None:
         new_sc_user = Student_Connector_User(
-            id=1,email=email, description=None, skills=None, languages=None, degree_id=None
+            id=1,email=email, description=None, languages=None, degree_id=None
         )
         session.add(new_sc_user)
         session.commit()

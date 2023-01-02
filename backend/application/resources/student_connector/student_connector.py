@@ -19,4 +19,12 @@ def get_all_study_programs():
 @student_connector.route("/profile/<id>", methods=["GET"])
 def get_profile(id):
     profile = session.query(Student_Connector_User).filter(Student_Connector_User.id == id).first()
-    return str(profile.id)
+    return {"id": profile.id,
+            "email": profile.email,
+            "description": profile.description,
+            "skills": profile.skills,
+            "languages": profile.languages}
+
+@student_connector.route("/profile/<id>", methods=["POST"])
+def set_profile_description(id, description):
+    session.query(Student_Connector_User)
