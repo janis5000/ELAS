@@ -26,6 +26,7 @@ class Lecture(Base):
     root_id = relationship('StudyProgram',
                            secondary='lecture_studyprogram',
                            back_populates='lectures')
+    sc_user = relationship('Student_Connector_User', secondary='student_connector_courses_user', back_populates="courses")
     keywords = Column(ARRAY(JSONB))
 
     def __init__(self, id, url, name, subject_type, semester, sws, longtext, shorttext, language, hyperlink,

@@ -9,15 +9,23 @@ Student_Connector_Skills_User = Table(
     Column('user_id', Integer, ForeignKey('student_connector_user.id'), primary_key=True)
 )
 
+Student_Connector_Courses_User = Table(
+    "student_connector_courses_user",
+    Base.metadata,
+    Column('lecture_id', String, ForeignKey('lecture.id'), primary_key=True),
+    Column('user_id', Integer, ForeignKey('student_connector_user.id'), primary_key=True)
+)
+
 class Student_Connector_User(Base):
     __tablename__ = 'student_connector_user'
     id = Column(Integer, unique=True, nullable=False, autoincrement=True)
     email = Column(String, ForeignKey('user.email'), primary_key=True)
     description = Column(String)
     degree_id = Column(String, ForeignKey('study_program.id'))
+    courses = relationship('Lecture', secondary='student_connector_courses_user', back_populates='sc_user')
     sc_degree = relationship('StudyProgram', back_populates="sc_user")
     skills = relationship('Student_Connector_Skills',
-        secondary=Student_Connector_Skills_User, back_populates="user"
+        secondary='student_connector_skills_user', back_populates="user"
     )
 
     def __init__(self, id, email, description, languages, degree_id):
