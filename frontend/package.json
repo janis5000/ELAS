@@ -26,6 +26,8 @@
     "react-scripts": "^5.0.1",
     "react-wordcloud": "^1.2.7",
     "serve": "^14.0.0",
+    "socket.io": "^4.5.1",
+    "socket.io-client": "^4.5.1",
     "uuid": "^8.3.2",
     "web-vitals": "^1.1.1"
   },

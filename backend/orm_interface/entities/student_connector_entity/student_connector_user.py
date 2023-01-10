@@ -38,7 +38,7 @@ class Student_Connector_Messages(Base):
 
 class Student_Connector_User(Base):
     __tablename__ = 'student_connector_user'
-    id = Column(Integer, unique=True, nullable=False, autoincrement=True)
+    id = Column(Integer, unique=True, autoincrement=True)
     email = Column(String, ForeignKey('user.email'), primary_key=True)
     description = Column(String)
     degree_id = Column(String, ForeignKey('study_program.id'))

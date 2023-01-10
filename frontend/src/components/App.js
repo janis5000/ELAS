@@ -81,7 +81,7 @@ export default function App() {
           />
           <Route
             exact
-            path="/student-connector"
+            path="/studentconnector"
             render={() => <StudentConnector/>}
           />
           <Route

@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Backend from "../../../assets/functions/Backend";
+import Chat from "./Chat";
 
 const StudentConnector = () => {
   const [greeting, setGreeting] = useState("");
@@ -13,7 +14,7 @@ const StudentConnector = () => {
 
   return (
     <>
-      <h1>{greeting}</h1>
+      <Chat/>
     </>
   );
 

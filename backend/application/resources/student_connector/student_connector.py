@@ -17,15 +17,53 @@ def home():
 @student_connector.route("/study-programs", methods=["GET"])
 def get_all_study_programs():
     all_studyprograms = session.query(StudyProgram).all()
+    response = []
+    for studyprogram in all_studyprograms:
+        lectures = studyprogram.lectures
+        seminar, vorlesung, vorlesung_uebung, uebung = 0,0,0,0
+        for lecture in lectures:
+            if len(lecture.sws.strip()) > 0:
+                if lecture.subject_type == "Vorlesung":
+                    vorlesung += int(lecture.sws)
+                elif lecture.subject_type == "Seminar":
+                    seminar += int(lecture.sws)
+                elif lecture.subject_type == "Vorlesung/Übung":
+                    vorlesung_uebung += int(lecture.sws)
+                elif lecture.subject_type == "Übung":
+                    uebung += int(lecture.sws)
 
+        response.append({
+            "id": studyprogram.id,
+            "name": studyprogram.name,
+            "url": studyprogram.url,
+            "stats": {
+                "Vorlesung": vorlesung,
+                "Vorlesung/Übung": vorlesung_uebung,
+                "Übung": uebung,
+                "Seminar": seminar
+            }
+        })
+    return jsonify(response)
+@student_connector.route("/http-call", methods=["GET"])
+def http_call():
+    """return JSON with string data as the value"""
+    data = {'data':'This text was fetched using an HTTP call to server on render'}
+    return jsonify(data)
 @student_connector.route("/profile/<id>", methods=["GET"])
 def get_profile(id):
     profile = session.query(Student_Connector_User).filter(Student_Connector_User.id == id).first()
-    return {"id": profile.id,
-            "email": profile.email,
-            "description": profile.description,
-            "skills": profile.skills,
-            "degree": profile.sc_degree.name}
+    if profile.sc_degree is not None:
+        return {"id": profile.id,
+                "email": profile.email,
+                "description": profile.description,
+                "skills": profile.skills,
+                "degree": profile.sc_degree.name}
+    else:
+        return {"id": profile.id,
+                "email": profile.email,
+                "description": profile.description,
+                "skills": profile.skills,
+                "degree": ""}
 
 @student_connector.route("/add_course", methods=["POST"])
 def add_course_to_profile():
@@ -40,6 +78,7 @@ def add_course_to_profile():
                     if course_from_db is not None:
                         courses.append(course_from_db)
                 user.courses.extend(courses)
+                session.commit()
         return jsonify("Successful added course")
     abort(403)
 
