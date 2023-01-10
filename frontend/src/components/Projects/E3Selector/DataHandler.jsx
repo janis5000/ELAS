@@ -43,8 +43,8 @@ class DataHandler {
 
 		this.sortState = require("./data/sorting.json");
 
-		this.backendURL = `${process.env.REACT_APP_BASE_URL}/e3selector`; // CHANGE ME IN PRODUCTION
-		this.frontendURL = `${process.env.REACT_APP_BASE_URL}/e3selector`; // CHANGE ME IN PRODUCTION
+		this.backendURL = "http://localhost:5000/e3selector";//me mahmoud changed it from venv variable to hardcoded variable because mine had a bug that returns undefined in path like http://localhost:5000/undefined/e3selector  CHANGE ME IN PRODUCTION
+		this.frontendURL = "http://localhost:3000/e3selector"; // CHANGE ME IN PRODUCTION
 		this.tryToLoadSharedState();
 	}
 

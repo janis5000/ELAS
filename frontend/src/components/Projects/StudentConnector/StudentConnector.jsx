@@ -1,5 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import Backend from "../../../assets/functions/Backend";
+import CButton from "./components/CButton"
+import TemporaryDrawer from './components/sidebar';
+import { TextField } from '@material-ui/core';
 
 const StudentConnector = () => {
   const [greeting, setGreeting] = useState("");
@@ -13,9 +16,12 @@ const StudentConnector = () => {
 
   return (
     <>
-      <h1>{greeting}</h1>
+      <div className='sidebar'>
+        <TemporaryDrawer/>
+      </div>
     </>
   );
+
 
 }
 

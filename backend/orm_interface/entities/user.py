@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String,Integer
 from sqlalchemy.orm import relationship
 
 from orm_interface.base import Base
@@ -7,14 +7,15 @@ from orm_interface.entities.student_connector_entity.student_connector_user impo
 
 class User(Base):
     __tablename__ = "user"
-
+    id = Column(Integer ,primary_key=True,autoincrement=True)
     firstname = Column(String)
     lastname = Column(String)
-    email = Column(String, primary_key=True)
+    email = Column(String)
     password = Column(String)
     student_connector_user = relationship(Student_Connector_User)
 
-    def __init__(self, firstname, lastname, email, password):
+    def __init__(self, id, firstname, lastname, email, password):
+        self.id = id
         self.firstname = firstname
         self.lastname = lastname
         self.email = email

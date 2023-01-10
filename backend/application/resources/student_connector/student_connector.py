@@ -68,3 +68,7 @@ def set_profile_attributes(id):
         session.commit()
         return jsonify("Successfully changed!")
     abort(403)
+@student_connector.route("/Messages/<id>", methods=["GET"])
+def get_user_messages(id):
+
+    return jsonify("id is ",id)
