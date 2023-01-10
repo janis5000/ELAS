@@ -2,103 +2,79 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import SearchIcon from '@material-ui/icons/Search';
-import MailIcon from '@material-ui/icons/Mail';
-import PersonIcon from '@material-ui/icons/Person';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    backgroundColor: 'white',
-    fontFamily: 'Roboto',
-  },
-  logo: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    padding: theme.spacing(2),
-  },
-  logoText: {
-    color: 'black',
-    fontSize: 24,
-    fontWeight: 500,
-  },
-  logoIcon: {
-    marginRight: theme.spacing(1),
-  },
+const useStyles = makeStyles({
   list: {
     width: 250,
   },
   fullList: {
     width: 'auto',
   },
-  listItem: {
+  menuButton: {
+    marginRight: 10,
+  },
+  text: {
+    fontFamily: 'Roboto',
     color: 'black',
   },
-}));
+});
 
-export default function TemporaryDrawer() {
+export default function Sidebar() {
   const classes = useStyles();
   const [state, setState] = React.useState({
-    top: false,
     left: false,
-    bottom: false,
-    right: false,
   });
 
-  const toggleDrawer = (side, open) => event => {
+  const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
 
-    setState({ ...state, [side]: open });
+    setState({ ...state, [anchor]: open });
   };
 
-  const sideList = side => (
+  const list = (anchor) => (
     <div
       className={classes.list}
       role="presentation"
-      onClick={toggleDrawer(side, false)}
-      onKeyDown={toggleDrawer(side, false)}
+      onClick={toggleDrawer(anchor, false)}
+      onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        <div className={classes.logo}>
-          {/* Add your logo here */}
-          <div className={classes.logoIcon}>{/* Your logo icon goes here */}</div>
-          <div className={classes.logoText}>Your logo text goes here</div>
-        </div>
-        <ListItem button key={'Dashboard'} className={classes.listItem}>
-          <ListItemIcon><DashboardIcon /></ListItemIcon>
-          <ListItemText primary={'Dashboard'} />
+        <ListItem button>
+          <ListItemText primary="Dashboard" className={classes.text} />
         </ListItem>
-        <ListItem button key={'Search Courses'} className={classes.listItem}>
-          <ListItemIcon><SearchIcon /></ListItemIcon>
-          <ListItemText primary={'Search Courses'} />
+        <ListItem button>
+          <ListItemText primary="Search Courses" className={classes.text} />
         </ListItem>
-        <ListItem button key={'Messages'} className={classes.listItem}>
-          <ListItemIcon><MailIcon /></ListItemIcon>
-          <ListItemText primary={'Messages'} />
+        <ListItem button>
+          <ListItemText primary="Messages" className={classes.text} />
         </ListItem>
-        <ListItem button key={'My Profile'} className={classes.listItem}>
-          <ListItemIcon><PersonIcon /></ListItemIcon>
-          <ListItemText primary={'My Profile'} />
+        <ListItem button>
+          <ListItemText primary="My Profile" className={classes.text} />
         </ListItem>
       </List>
-      <Divider />
     </div>
   );
 
   return (
     <div>
-      <React.Fragment key={'left'}>
-        <Drawer open={state['left']} onClose={toggleDrawer('left', false)}>
-          {sideList('left')}
-        </Drawer>
-      </React.Fragment>
+      <IconButton
+        edge="start"
+        className={classes.menuButton}
+        color="inherit"
+        aria-label="menu"
+        onClick={toggleDrawer('left', true)}
+      >
+        <MenuIcon />
+      </IconButton>
+      <Drawer anchor={'left'} open={state['left']} onClose={toggleDrawer('left', false)}>
+        {list('left')}
+      </Drawer>
     </div>
   );
 }
