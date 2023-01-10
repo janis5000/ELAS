@@ -10,7 +10,7 @@ class User(Base):
     id = Column(Integer ,primary_key=True,autoincrement=True)
     firstname = Column(String)
     lastname = Column(String)
-    email = Column(String)
+    email = Column(String, unique=True)
     password = Column(String)
     student_connector_user = relationship(Student_Connector_User)
 
