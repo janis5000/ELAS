@@ -1,4 +1,6 @@
 from flask import Blueprint, jsonify, request, abort
+from flask_jwt_extended import jwt_required, get_jwt_identity
+
 from orm_interface.base import Base, Session, engine
 from orm_interface.entities.lecture import Lecture
 from orm_interface.entities.student_connector_entity.student_connector_user import Student_Connector_User, \
@@ -13,6 +15,12 @@ session = Session()
 @student_connector.route("/")
 def home():
     return "Student Connector Home"
+
+@student_connector.route("/get-token", methods=["GET"])
+@jwt_required()
+def get_profile_info():
+    current_user = get_jwt_identity()
+    return jsonify(logged_in_as=current_user), 200
 
 @student_connector.route("/study-programs", methods=["GET"])
 def get_all_study_programs():
@@ -49,6 +57,26 @@ def http_call():
     """return JSON with string data as the value"""
     data = {'data':'This text was fetched using an HTTP call to server on render'}
     return jsonify(data)
+
+@student_connector.route("/profile", methods=["GET"])
+@jwt_required()
+def get_personal_profile_information():
+    current_user = get_jwt_identity()
+    profile = session.query(Student_Connector_User).filter(Student_Connector_User.email == current_user["email"]).first()
+    if profile.sc_degree is not None:
+        return {"id": profile.id,
+                "email": profile.email,
+                "description": profile.description,
+                "skills": profile.skills,
+                "degree": profile.sc_degree.name,
+                "degree_id": profile.sc_degree.id}
+    else:
+        return {"id": profile.id,
+                "email": profile.email,
+                "description": profile.description,
+                "skills": profile.skills,
+                "degree": "",
+                "degree_id": 0}
 @student_connector.route("/profile/<id>", methods=["GET"])
 def get_profile(id):
     profile = session.query(Student_Connector_User).filter(Student_Connector_User.id == id).first()
@@ -66,44 +94,57 @@ def get_profile(id):
                 "degree": ""}
 
 @student_connector.route("/add_course", methods=["POST"])
+@jwt_required()
 def add_course_to_profile():
     # this is only a dummy authentication, it is completely useless!
-    if 'id' in request.form and 'auth' in request.form:
-        if request.form['id'] == request.form['auth']:
-            user = session.query(Student_Connector_User).filter(Student_Connector_User.id == request.form['id']).first()
-            if 'courses' in request.form:
-                courses = []
-                for course in request.form.getlist('courses'):
-                    course_from_db = session.query(Lecture).filter(Lecture.id == course).first()
-                    if course_from_db is not None:
-                        courses.append(course_from_db)
-                user.courses.extend(courses)
-                session.commit()
-        return jsonify("Successful added course")
-    abort(403)
+    current_user = get_jwt_identity()
+    user = session.query(Student_Connector_User).filter(Student_Connector_User.email == current_user.email).first()
+    if 'courses' in request.form:
+        courses = []
+        for course in request.form.getlist('courses'):
+            course_from_db = session.query(Lecture).filter(Lecture.id == course).first()
+            if course_from_db is not None:
+                courses.append(course_from_db)
+        user.courses.extend(courses)
+        session.commit()
+    return jsonify("Successful added course")
 
 @student_connector.route("/profile/<id>", methods=["POST"])
+@jwt_required()
 def set_profile_attributes(id):
     # this is only a dummy authentication, it is completely useless!
     profile_attributes = request.form
-    if id == profile_attributes['check']:
-        user_db = session.query(Student_Connector_User).filter(Student_Connector_User.id == id)
-        user = user_db.first()
-        if 'description' in profile_attributes:
-            user_db.update({'description': profile_attributes['description']})
-        if 'skills' in profile_attributes:
-            skill_from_db = session.query(Student_Connector_Skills).filter(Student_Connector_Skills.skill_name == profile_attributes['skills']).first()
-            if skill_from_db is not None:
-                user.skills.append(skill_from_db)
-            else:
-                skills = []
-                for skill in profile_attributes.getlist('skills'):
-                    skill_db = Student_Connector_Skills(skill)
-                    skills.append(skill_db)
-                    session.add(skill_db)
-                user.skills.extend(skills)
-        if 'degree_id' in profile_attributes:
-            user_db.update({'degree_id': profile_attributes['degree_id']})
-        session.commit()
-        return jsonify("Successfully changed!")
-    abort(403)
+    current_user = get_jwt_identity()
+    user_db = session.query(Student_Connector_User).filter(Student_Connector_User.email == current_user.email)
+    user = user_db.first()
+    if 'description' in profile_attributes:
+        user_db.update({'description': profile_attributes['description']})
+    if 'skills' in profile_attributes:
+        skill_from_db = session.query(Student_Connector_Skills).filter(Student_Connector_Skills.skill_name == profile_attributes['skills']).first()
+        if skill_from_db is not None:
+            user.skills.append(skill_from_db)
+        else:
+            skills = []
+            for skill in profile_attributes.getlist('skills'):
+                skill_db = Student_Connector_Skills(skill)
+                skills.append(skill_db)
+                session.add(skill_db)
+            user.skills.extend(skills)
+    if 'degree_id' in profile_attributes:
+        user_db.update({'degree_id': profile_attributes['degree_id']})
+    session.commit()
+    return jsonify("Successfully changed!")
+
+@student_connector.route("/lectures", methods=["GET"])
+def get_lectures():
+    result = []
+    studyprogram_id = request.args.get('studyprogram-id')
+    lectures = session.query(Lecture).filter(Lecture.root_id.any(id = studyprogram_id)).all()
+    #lectures = session.query(Lecture).filter_by(Lecture.root_id.any(studyprogram_id)).all()
+    for lecture in lectures:
+        result.append({"id": lecture.id,
+                       "longtext": lecture.longtext,
+                       "description": lecture.description,
+                       "sws": lecture.sws,
+                       "name": lecture.name})
+    return jsonify(result)

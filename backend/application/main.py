@@ -66,6 +66,7 @@ def login():
                     "email": user.email,
                 }
             )
+            print(access_token)
             return jsonify({"token": access_token})
         else:
             return jsonify({"error": "Wrong password!"})
