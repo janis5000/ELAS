@@ -15,20 +15,24 @@ const SearchSite = (Profile) => {
         Backend.get("/studentconnector/study-programs").then((response) => {
             let res = response.data
             setStudyPrograms(res)
+            setDegree(studyPrograms.filter(x => x.id === Profile?.Profile?.degree_id)[0])
+            Backend.get("/studentconnector/lectures?studyprogram-id=" + degree.id).then((response) => {
+                let res = response.data
+                setLectures(res)
         });
     }, [])
 
-    useEffect(() => {
+    /*(() => {
         setDegree(studyPrograms.filter(x => x.id === Profile?.Profile?.degree_id)[0])
-    }, [studyPrograms])
+    }, [studyPrograms])*/
 
-    useEffect(() => {
+    /*useEffect(() => {
 
         Backend.get("/studentconnector/lectures?studyprogram-id=" + degree.id).then((response) => {
             let res = response.data
             setLectures(res)
         })
-    },[degree])
+    },[degree])*/
 
     /*if (Profile != null && Profile.Profile != null && Profile.Profile.degree != null){
     }*/
