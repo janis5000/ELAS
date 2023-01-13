@@ -3,6 +3,8 @@ from flask_cors import CORS
 import nltk
 import ssl
 
+from flask_socketio import SocketIO
+
 from .extensions import jwt
 from .main import main
 from .resources.study_compass.study_compass import study_compass
@@ -14,11 +16,14 @@ from .resources.study_soon.study_soon import study_soon
 from .resources.smatch.smatch import smatch
 
 
+
 def create_app(config_object="application.settings"):
     app = Flask(__name__)
-    CORS(app)
-
+    CORS(app, resources={r"/*":{"origins":"*"}})
+    app.secret_key = "testing_stuff2345234234234324"
     app.config.from_object(config_object)
+    socketio = SocketIO(app)
+    socketio.init_app(app, cors_allowed_origins="*")
 
     jwt.init_app(app)
 
@@ -42,4 +47,5 @@ def create_app(config_object="application.settings"):
     nltk.download('punkt')
     nltk.download('sentiwordnet')
 
-    return app
+    #socketio.init_app(app)
+    return app, socketio

@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
 export default function App() {
   const classes = useStyles();
   const isLoggedIn = !!sessionStorage.getItem("elas_userLoggedIn");
-
   useEffect(async () => {
     await Backend.get("/");
   }, [])
@@ -81,7 +80,7 @@ export default function App() {
           />
           <Route
             exact
-            path="/student-connector"
+            path="/studentconnector"
             render={() => <StudentConnector/>}
           />
           <Route

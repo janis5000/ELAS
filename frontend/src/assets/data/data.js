@@ -62,7 +62,7 @@ export const projectDetails = [
   {
     name: "Student Connector (Studect)",
     image: "images/studect.jpg",
-    shortName: "student-connector",
+    shortName: "studentconnector",
     teamMembers:
       "Osman Tasdelen, Ahmad Rifaee, Shahab Aldin Abbaszadeh, Oliver Fischer Fabian, Furkan Erbil",
     github1: "https://github.com/SteveMelons/awt-bionweb-project",
