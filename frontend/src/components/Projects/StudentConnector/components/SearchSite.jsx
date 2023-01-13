@@ -5,7 +5,6 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import {muiStyles} from "../utils/muiStyles";
 
 const SearchSite = (Profile) => {
-    const [greeting, setGreeting] = useState("");
     const [degree, setDegree] = useState({});
     //const [degreeId, setDegreeId] = useState(0);
     const [studyPrograms, setStudyPrograms] = useState([]);
@@ -15,24 +14,13 @@ const SearchSite = (Profile) => {
         Backend.get("/studentconnector/study-programs").then((response) => {
             let res = response.data
             setStudyPrograms(res)
-            setDegree(studyPrograms.filter(x => x.id === Profile?.Profile?.degree_id)[0])
-            Backend.get("/studentconnector/lectures?studyprogram-id=" + degree.id).then((response) => {
-                let res = response.data
-                setLectures(res)
+            setDegree(res.filter(x => x.id === Profile?.Profile?.degree_id)[0])
         });
     }, [])
 
-    /*(() => {
+    /*useEffect(() => {
         setDegree(studyPrograms.filter(x => x.id === Profile?.Profile?.degree_id)[0])
     }, [studyPrograms])*/
-
-    /*useEffect(() => {
-
-        Backend.get("/studentconnector/lectures?studyprogram-id=" + degree.id).then((response) => {
-            let res = response.data
-            setLectures(res)
-        })
-    },[degree])*/
 
     /*if (Profile != null && Profile.Profile != null && Profile.Profile.degree != null){
     }*/
@@ -50,6 +38,10 @@ const SearchSite = (Profile) => {
                         onChange = {
                             (event, newValue) => {
                                 setDegree(newValue);
+                                Backend.get("/studentconnector/lectures?studyprogram-id=" + newValue.id).then((response) => {
+                                    let res = response.data
+                                    setLectures(res)
+                                })
                             }
                         }
                         className={classes.preSelectInput}
