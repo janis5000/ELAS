@@ -3,18 +3,25 @@ import Backend from "../../../../assets/functions/Backend";
 import {Grid, Paper, TextField} from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import {muiStyles} from "../utils/muiStyles";
+import {createAuthConfig} from "../utils/auth";
 
-const SearchSite = (Profile) => {
+const SearchSite = () => {
     const [degree, setDegree] = useState({});
     //const [degreeId, setDegreeId] = useState(0);
     const [studyPrograms, setStudyPrograms] = useState([]);
     const [lectures, setLectures] = useState([]);
 
+    const authConfig = createAuthConfig()
+    const [profile, setProfile] = useState(null);
     useEffect(() => {
         Backend.get("/studentconnector/study-programs").then((response) => {
-            let res = response.data
-            setStudyPrograms(res)
-            setDegree(res.filter(x => x.id === Profile?.Profile?.degree_id)[0])
+            let studyProgramsRes = response.data
+            setStudyPrograms(studyProgramsRes)
+            Backend.get("/studentconnector/profile", authConfig).then((response) => {
+                let profileRes = response.data
+                setProfile(profileRes)
+                setDegree(studyProgramsRes.filter(x => x.id === profileRes.degree_id)[0])
+            })
         });
     }, [])
 

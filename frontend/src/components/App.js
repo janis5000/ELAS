@@ -18,6 +18,10 @@ import Backend from "../assets/functions/Backend";
 import ProjectFinder from "./Projects/ProjectFinder/ProjectFinder";
 import StudentConnector from "./Projects/StudentConnector/StudentConnector";
 import Smatch from "./Projects/Smatch/Smatch";
+import SearchSite from "./Projects/StudentConnector/components/SearchSite";
+import Student_Connector_Routes from "./Projects/StudentConnector/components/Routes";
+import Sidebar from "./Projects/StudentConnector/components/Sidebar";
+import StudentConnectorRoutes from "./Projects/StudentConnector/components/Routes";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -78,11 +82,7 @@ export default function App() {
             path="/project-finder"
             render={() => <ProjectFinder/>}
           />
-          <Route
-            exact
-            path="/studentconnector"
-            render={() => <StudentConnector/>}
-          />
+          <StudentConnectorRoutes/>
           <Route
             exact
             path="/smatch"

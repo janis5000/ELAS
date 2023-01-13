@@ -30,6 +30,14 @@ def adminUser():
     user = session.query(User).filter(User.email == email).first()
     sc_user = session.query(Student_Connector_User).filter(Student_Connector_User.email == email).first()
 
+    if user is None:
+        hash_password = bcrypt.generate_password_hash(password).decode("utf-8")
+        new_user = User(
+            id=None, firstname=firstname, lastname=lastname, email=email, password=hash_password
+        )
+        session.add(new_user)
+        session.commit()
+        return jsonify({"success": "User registered"})
     if sc_user is None:
         new_sc_user = Student_Connector_User(
             id=1,email=email, description=None, languages=None, degree_id=None
@@ -37,14 +45,6 @@ def adminUser():
         session.add(new_sc_user)
         session.commit()
         return jsonify({"success": "Student_Connector_User registered"})
-    if user is None:
-        hash_password = bcrypt.generate_password_hash(password).decode("utf-8")
-        new_user = User(
-            firstname=firstname, lastname=lastname, email=email, password=hash_password
-        )
-        session.add(new_user)
-        session.commit()
-        return jsonify({"success": "User registered"})
     else:
         return jsonify({"success": "Server initialized"})
 
@@ -66,7 +66,6 @@ def login():
                     "lastname": user.lastname,
                     "email": user.email,
                 }
-                , exp_delta=60*60*24
             )
             print(access_token)
             return jsonify({"token": access_token})

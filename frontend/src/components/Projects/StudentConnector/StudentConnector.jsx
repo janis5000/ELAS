@@ -5,35 +5,18 @@ import SearchSite from "./components/SearchSite";
 import { createAuthConfig } from "./utils/auth"
 import Box from "@material-ui/core/Box";
 import {Container, Grid} from "@material-ui/core";
-import Sidebar from './components/sidebar';
+import Sidebar from './components/Sidebar';
 import { TextField } from '@material-ui/core';
 import { StylesProvider } from '@material-ui/core/styles';
 import UserProfileEdit from "./components/EditProfile";
+import {Route} from "react-router-dom";
+import EditProfile from "./components/EditProfile";
+import StudentConnectorRoutes from "./components/Routes";
 
 
 const StudentConnector = () => {
-  const [profile, setProfile] = useState(null);
-
-  const authConfig = createAuthConfig()
-
-  useEffect(() => {
-    Backend.get("/studentconnector/profile", authConfig).then((response) => {
-      let res = response.data
-      setProfile(res)
-    })
-  }, [])
-
   return (
     <>
-        <div className='profile'>
-      <UserProfileEdit />
-      </div>
-      <div className='sidebar'>
-      <Sidebar />
-      </div>
-      <div style={{marginTop: "40px"}}>
-      <SearchSite Profile={profile}/>
-    </div>
     </>
   );
 

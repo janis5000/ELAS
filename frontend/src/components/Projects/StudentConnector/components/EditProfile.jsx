@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { TextField, Button, RadioGroup, FormControlLabel, Radio } from "@material-ui/core";
 import { Select, MenuItem } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import Backend from "../../../../assets/functions/Backend";
+import {createAuthConfig} from "../utils/auth";
 
 const useStyles = makeStyles((theme) => ({
   textField: {
@@ -21,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     }
   }
 }));
-const UserProfileEdit = () => {
+const UserProfileEdit = (Profile) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -29,15 +31,13 @@ const UserProfileEdit = () => {
   const [skills, setSkills] = useState([]);
   const [degree_id, setDegreeId] = useState("");
   const classes = useStyles();
-
-
   const handleSkillsChange = (event) => {
     const skillsList = event.target.value.split(' ');
     setSkills(skillsList);
   };
 
   const handleSave = async () => {
-    const user_id = JSON.parse(sessionStorage.getItem("elas_user")).id;
+    const user_id = Profile.Profile.id;
 
 
     const data = { firstName, lastName, email, description, skills, degree_id};

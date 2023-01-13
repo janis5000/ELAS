@@ -6,6 +6,9 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import {Route, useHistory} from "react-router-dom";
+import StudentConnector from "../StudentConnector";
+import SearchSite from "./SearchSite";
 
 const useStyles = makeStyles({
   list: {
@@ -23,7 +26,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Sidebar() {
+const Sidebar = () => {
   const classes = useStyles();
   const [state, setState] = React.useState({
     left: false,
@@ -36,6 +39,21 @@ export default function Sidebar() {
 
     setState({ ...state, [anchor]: open });
   };
+  const history = useHistory();
+
+  const searchCourseButton = () =>{
+    let path = `/studentconnector/search-course`;
+    history.push(path);
+  }
+  const dashboardButton = () => {
+    let path = "/studentconnector/";
+    history.push(path);
+  }
+
+  const myProfileButton = () => {
+    let path = "/studentconnector/profile/";
+    history.push(path);
+  }
 
   const list = (anchor) => (
     <div
@@ -46,16 +64,17 @@ export default function Sidebar() {
     >
       <List>
         <ListItem button>
-          <ListItemText primary="Dashboard" className={classes.text} />
+          <ListItemText primary="Dashboard" className={classes.text} onClick={dashboardButton}/>
+
         </ListItem>
         <ListItem button>
-          <ListItemText primary="Search Courses" className={classes.text} />
+          <ListItemText primary="Search Courses" className={classes.text} onClick={searchCourseButton} />
         </ListItem>
         <ListItem button>
           <ListItemText primary="Messages" className={classes.text} />
         </ListItem>
         <ListItem button>
-          <ListItemText primary="My Profile" className={classes.text} />
+          <ListItemText primary="My Profile" className={classes.text} onClick={myProfileButton} />
         </ListItem>
       </List>
     </div>
@@ -78,3 +97,5 @@ export default function Sidebar() {
     </div>
   );
 }
+
+export default Sidebar;
