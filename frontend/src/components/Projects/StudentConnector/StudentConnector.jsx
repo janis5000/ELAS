@@ -3,6 +3,7 @@ import Backend from "../../../assets/functions/Backend";
 import Sidebar from './components/sidebar';
 import { TextField } from '@material-ui/core';
 import { StylesProvider } from '@material-ui/core/styles';
+import UserProfileEdit from "./components/EditProfile";
 
 const StudentConnector = () => {
   const [greeting, setGreeting] = useState("");
@@ -16,6 +17,9 @@ const StudentConnector = () => {
 
   return (
     <>
+        <div className='profile'>
+      <UserProfileEdit />
+      </div>
       <div className='sidebar'>
       <Sidebar />
       </div>

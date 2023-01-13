@@ -65,10 +65,12 @@ def login():
             
             access_token = create_access_token(
                 identity={
+                    "id":user.id,
                     "firstname": user.firstname,
                     "lastname": user.lastname,
                     "email": user.email,
                 }
+                , exp_delta=60*60*24
             )
 
             return (jsonify({"token": access_token,"id":id}))
@@ -174,6 +176,4 @@ def gete3course():
 
 
     
-   
-
 

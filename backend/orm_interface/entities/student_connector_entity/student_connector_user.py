@@ -27,13 +27,14 @@ class Student_Connector_User(Base):
     skills = relationship('Student_Connector_Skills',
         secondary='student_connector_skills_user', back_populates="user"
     )
-
+    profile_image = Column(String)
     def __init__(self, id, email, description, languages, degree_id):
         self.id = id
         self.email = email
         self.description = description
         self.languages = languages
         self.degree_id = degree_id
+        self.profile_image
 
 class Student_Connector_Skills(Base):
     __tablename__ = 'student_connector_skills'
