@@ -1,6 +1,6 @@
 import HttpCall from "./HttpCall";
 import WebSocketCall from "./WebSocketCall";
-import { io } from "socket.io-client";
+import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
 import { useEffect, useState } from "react";
 
 function Chat() {
