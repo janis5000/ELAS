@@ -6,6 +6,7 @@ import {createAuthConfig} from "../utils/auth";
 import Backend from "../../../../assets/functions/Backend";
 import Sidebar from "./Sidebar";
 import EditProfile from "./EditProfile";
+import LectureSite from "./LectureSite";
 const StudentConnectorRoutes = () => {
     return (
         <>
@@ -26,9 +27,14 @@ const StudentConnectorRoutes = () => {
             />
             <Route
                 exact
-                path="/studentconnector/profile"
+                path="/studentconnector/profile/:id"
                 render={() => <EditProfile/>}
             />
+                <Route
+                    exact
+                    path="/studentconnector/lecture/:id"
+                    render={() => <LectureSite/>}
+                />
             </div>
         </>
     )
