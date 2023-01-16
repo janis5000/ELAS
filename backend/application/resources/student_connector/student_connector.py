@@ -64,6 +64,8 @@ def get_personal_profile_information():
     current_user = get_jwt_identity()
     profile = session.query(Student_Connector_User).filter(Student_Connector_User.email == current_user["email"]).first()
     courses = []
+    if profile is None:
+        return jsonify({"error" : "Profile not found!"})
     if profile.courses is not None:
         for course in profile.courses:
             courses.append({"id": course.id,
@@ -142,13 +144,13 @@ def remove_single_course_from_profile(id):
     else:
         return abort(400, "Course not found")
 
-@student_connector.route("/profile/<id>", methods=["POST"])
+@student_connector.route("/profile/", methods=["POST"])
 @jwt_required()
 def set_profile_attributes():
     # this is only a dummy authentication, it is completely useless!
     profile_attributes = request.form
     current_user = get_jwt_identity()
-    user_db = session.query(Student_Connector_User).filter(Student_Connector_User.email == current_user.email)
+    user_db = session.query(Student_Connector_User).filter(Student_Connector_User.email == current_user['email'])
     user = user_db.first()
     if 'description' in profile_attributes:
         user_db.update({'description': profile_attributes['description']})

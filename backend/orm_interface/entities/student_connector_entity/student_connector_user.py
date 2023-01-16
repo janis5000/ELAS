@@ -38,8 +38,8 @@ class Student_Connector_Messages(Base):
 
 class Student_Connector_User(Base):
     __tablename__ = 'student_connector_user'
-    id = Column(Integer, ForeignKey('user.id'), primary_key=True, autoincrement=True)
-    email = Column(String, unique=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    email = Column(String, ForeignKey('user.email'), unique=True)
     description = Column(String)
     degree_id = Column(String, ForeignKey('study_program.id'))
     courses = relationship('Lecture', secondary='student_connector_courses_user', back_populates='sc_user')

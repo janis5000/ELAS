@@ -37,16 +37,15 @@ def adminUser():
         )
         session.add(new_user)
         session.commit()
-        return jsonify({"success": "User registered"})
     if sc_user is None:
         new_sc_user = Student_Connector_User(
-            id=1,email=email, description=None, languages=None, degree_id=None
+            id=None,email=email, description=None, languages=None, degree_id=None
         )
         session.add(new_sc_user)
         session.commit()
-        return jsonify({"success": "Student_Connector_User registered"})
     else:
         return jsonify({"success": "Server initialized"})
+    return jsonify({"success": "Student_Connector_User registered"})
 
 @main.route("/login", methods=["POST"])
 def login():
@@ -67,6 +66,7 @@ def login():
                     "email": user.email,
                 }
             )
+            print(access_token)
             return jsonify({"token": access_token})
         else:
             return jsonify({"error": "Wrong password!"})
@@ -81,7 +81,7 @@ def register():
     lastname = request.get_json()["lastname"]
 
     user = session.query(User).filter(User.email == email).first()
-    sc_user = session.query(Student_Connector_User).filter(User.email == email).first()
+    sc_user = session.query(Student_Connector_User).filter(Student_Connector_User.email == email).first()
 
     if user is None:
         hash_password = bcrypt.generate_password_hash(password).decode("utf-8")
@@ -89,6 +89,7 @@ def register():
             id=None, firstname=firstname, lastname=lastname, email=email, password=hash_password
         )
         session.add(new_user)
+        session.commit()
     if sc_user is None:
         new_sc_user = Student_Connector_User(
             id=None,email=email, description=None, languages=None, degree_id=None

@@ -39,19 +39,16 @@ export default function ProfileEditPage() {
   const authConfig = createAuthConfig();
 
   const handleSaveProfile = () => {
-    const urlRegex = new RegExp(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/);
-    if (!urlRegex.test(avatarUrl)) {
+    /*const urlRegex = new RegExp(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/);
+    if (urlRegex.test(avatarUrl)) {
       setErrorMessage("Invalid Image URL")
       setOpen(true);
       return;
-    }
-  
-
+    }*/
 
     Backend.post('/studentconnector/profile/',{
       Skills: Skills.split(" "),
-      Description: Description,
-      avatarUrl: encodeURI(avatarUrl)
+      Description: Description
     }, authConfig)
     .then((res) => {
       setSuccess(true);
@@ -88,13 +85,6 @@ export default function ProfileEditPage() {
           onChange={e => setDescription(e.target.value)}
           multiline
           rows={4}
-        />
-        <TextField
-          id="avatar-url"
-          label="Avatar Image URL"
-          className={classes.avatar}
-          value={avatarUrl}
-          onChange={e => setAvatarUrl(e.target.value)}
         />
         <Button
           variant="contained"
