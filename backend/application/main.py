@@ -81,6 +81,7 @@ def register():
     lastname = request.get_json()["lastname"]
 
     user = session.query(User).filter(User.email == email).first()
+    sc_user = session.query(Student_Connector_User).filter(User.email == email).first()
 
     if user is None:
         hash_password = bcrypt.generate_password_hash(password).decode("utf-8")
@@ -88,9 +89,11 @@ def register():
             id=None, firstname=firstname, lastname=lastname, email=email, password=hash_password
         )
         session.add(new_user)
+        new_user = Student_Connector_User(
+            id=None, email=email, description=None, languages=None, degree_id=None
+        )
+        session.add(new_user)
         session.commit()
-        return jsonify({"success": "User registered"})
-
     else:
         return jsonify({"error": "User is already registered"})
 
