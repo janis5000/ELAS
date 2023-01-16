@@ -89,11 +89,13 @@ def register():
             id=None, firstname=firstname, lastname=lastname, email=email, password=hash_password
         )
         session.add(new_user)
-        new_user = Student_Connector_User(
-            id=None, email=email, description=None, languages=None, degree_id=None
+    if sc_user is None:
+        new_sc_user = Student_Connector_User(
+            id=1,email=email, description=None, languages=None, degree_id=None
         )
-        session.add(new_user)
+        session.add(new_sc_user)
         session.commit()
+        return jsonify({"success": "Student_Connector_User registered"})
     else:
         return jsonify({"error": "User is already registered"})
 
