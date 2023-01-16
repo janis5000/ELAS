@@ -122,6 +122,17 @@ def get_profile(id):
                 "skills": profile.skills,
                 "degree": ""}
 
+@student_connector.route("/profile/<id>/courses", methods=["GET"])
+def get_courses_from_profile(id):
+    user = session.query(Student_Connector_User).filter(Student_Connector_User.id == id).first()
+    courses = []
+    if user is not None:
+        for course in user.courses:
+            courses.append({"id" : course.id,
+                            "name": course.name})
+        return jsonify(courses)
+    return abort(400, "User does not exist")
+
 @student_connector.route("/add-course", methods=["POST"])
 @jwt_required()
 def add_course_to_profile():

@@ -86,8 +86,8 @@ const LectureSite = () => {
                     <Button onClick={removeCourseFromProfile}>Remove Course</Button>) : <></>}
                 {otherUsers && otherUsers.map(x =>
                     <Card>
-                        <CardContent onClick={() => redirectToProfile(x['id'])}>
-                            {x['firstname'] + ' ' + x['lastname']}
+                        <CardContent onClick={() => redirectToProfile(x.id)}>
+                            {x.firstname + ' ' + x.lastname}
                         </CardContent>
                     </Card>
                 )}
