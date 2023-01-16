@@ -11,6 +11,10 @@ import StudentConnector from "../StudentConnector";
 import SearchSite from "./SearchSite";
 
 const useStyles = makeStyles({
+ // adjust this value to match the height of your header
+ drawer: {
+  zIndex: -12,
+},
   list: {
     width: 250,
   },
@@ -91,7 +95,11 @@ const Sidebar = () => {
       >
         <MenuIcon />
       </IconButton>
-      <Drawer anchor={'left'} open={state['left']} onClose={toggleDrawer('left', false)}>
+      <Drawer 
+      className='drawer' 
+      anchor={'left'} 
+      open={state['left']} 
+      onClose={toggleDrawer('left', false)}>
         {list('left')}
       </Drawer>
     </div>

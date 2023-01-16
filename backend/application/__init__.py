@@ -22,8 +22,7 @@ def create_app(config_object="application.settings"):
     CORS(app, resources={r"/*":{"origins":"*"}})
     app.secret_key = "testing_stuff2345234234234324"
     app.config.from_object(config_object)
-    socketio = SocketIO(app, logger=True, engineio_logger=True)
-    socketio.init_app(app, cors_allowed_origins="*")
+    socketio = SocketIO(app, logger=True, engineio_logger=True, cors_allowed_origins="*")
 
     jwt.init_app(app)
 
@@ -47,5 +46,4 @@ def create_app(config_object="application.settings"):
     nltk.download('punkt')
     nltk.download('sentiwordnet')
 
-    #socketio.init_app(app)
-    return app, socketio
+    return app

@@ -109,9 +109,9 @@ def add_course_to_profile():
         session.commit()
     return jsonify("Successful added course")
 
-@student_connector.route("/profile/<id>", methods=["POST"])
+@student_connector.route("/profile/", methods=["POST"])
 @jwt_required()
-def set_profile_attributes(id):
+def set_profile_attributes():
     # this is only a dummy authentication, it is completely useless!
     profile_attributes = request.form
     current_user = get_jwt_identity()

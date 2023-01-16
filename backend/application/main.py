@@ -67,7 +67,6 @@ def login():
                     "email": user.email,
                 }
             )
-            print(access_token)
             return jsonify({"token": access_token})
         else:
             return jsonify({"error": "Wrong password!"})
@@ -75,6 +74,7 @@ def login():
 
 @main.route("/register", methods=["POST"])
 def register():
+    id= None
     email = request.get_json()["email"]
     password = request.get_json()["password"]
     firstname = request.get_json()["firstname"]
@@ -85,7 +85,7 @@ def register():
     if user is None:
         hash_password = bcrypt.generate_password_hash(password).decode("utf-8")
         new_user = User(
-            firstname=firstname, lastname=lastname, email=email, password=hash_password
+            id=None, firstname=firstname, lastname=lastname, email=email, password=hash_password
         )
         session.add(new_user)
         session.commit()
