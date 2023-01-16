@@ -5,7 +5,7 @@ import Backend from '../../../../assets/functions/Backend';
 import { createAuthConfig } from '../utils/auth';
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import {useHistory} from "react-router-dom";
+import {useHistory, useParams} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,10 +41,12 @@ export default function ProfileEditPage() {
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [courses, setCourses] = useState(null);
+  const [currentProfile, setCurrentProfile] = useState(null);
 
   const authConfig = createAuthConfig();
 
   const history = useHistory()
+  const params = useParams();
 
   useEffect(() => {
     Backend.get("/studentconnector/profile", authConfig).then((response) => {
@@ -55,24 +57,26 @@ export default function ProfileEditPage() {
         setCourses(courseRes)
       })
     })
+    getProfileInfoAndSetProfileInfoState();
   }, [])
 
-  const handleSaveProfile = () => {
-    /*const urlRegex = new RegExp(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/);
-    if (urlRegex.test(avatarUrl)) {
-      setErrorMessage("Invalid Image URL")
-      setOpen(true);
-      return;
-    }*/
+  const getProfileInfoAndSetProfileInfoState = () => {
+    Backend.get('/studentconnector/profile/' + params.id).then((response) => {
+      let currentProfileRes = response.data
+      setCurrentProfile(currentProfileRes)
+    })
+  }
 
-    Backend.post('/studentconnector/profile/',{
-      Skills: Skills.split(" "),
-      Description: Description
+  const handleSaveProfile = () => {
+    Backend.post('/studentconnector/profile/' + params.id,{
+      "skills": Skills.split(" "),
+      "description": Description
     }, authConfig)
     .then((res) => {
       setSuccess(true);
       setOpen(true);
       setErrorMessage("Profile Updated!")
+      getProfileInfoAndSetProfileInfoState()
     })
     .catch((err) => {
       setSuccess(false);
@@ -96,12 +100,14 @@ export default function ProfileEditPage() {
       <Grid container direction="column" justify="flex-start" alignItems="center">
         <Paper className={classes.paper}>
           <form className={classes.root} noValidate autoComplete="off">
+            <div>Skills: {currentProfile?.skills.map(x => x + " ")}</div>
             <TextField
               id="Skills"
               label="Skills"
               value={Skills}
               onChange={e => setSkills(e.target.value)}
             />
+            <div>Description: {currentProfile?.description}</div>
             <TextField
               id="Description"
               label="Description"
@@ -129,7 +135,7 @@ export default function ProfileEditPage() {
         </Paper>
         {courses && courses.map(x =>
             <Card>
-              <CardContent onClick={() => redirectToCourse(x.id)}>
+              <CardContent onClick={() => redirectToCourse(x.id)} key={x.id}>
                 {x.name}
               </CardContent>
             </Card>

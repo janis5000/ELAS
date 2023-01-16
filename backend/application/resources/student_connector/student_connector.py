@@ -109,18 +109,33 @@ def get_personal_profile_information():
 @student_connector.route("/profile/<id>", methods=["GET"])
 def get_profile(id):
     profile = session.query(Student_Connector_User).filter(Student_Connector_User.id == id).first()
+    courses = []
+    skills = []
+    if profile is None:
+        return jsonify({"error" : "Profile not found!"})
+    if profile.courses is not None:
+        for course in profile.courses:
+            courses.append({"id": course.id,
+                           "name": course.name})
+    if profile.skills:
+        for skill in profile.skills:
+            skills.append(skill.skill_name)
     if profile.sc_degree is not None:
         return {"id": profile.id,
                 "email": profile.email,
                 "description": profile.description,
-                "skills": profile.skills,
-                "degree": profile.sc_degree.name}
+                "skills": skills,
+                "degree": profile.sc_degree.name,
+                "degree_id": profile.sc_degree.id,
+                "courses": courses}
     else:
         return {"id": profile.id,
                 "email": profile.email,
                 "description": profile.description,
-                "skills": profile.skills,
-                "degree": ""}
+                "skills": skills,
+                "degree": "",
+                "degree_id": 0,
+                "courses": courses}
 
 @student_connector.route("/profile/<id>/courses", methods=["GET"])
 def get_courses_from_profile(id):
@@ -175,22 +190,26 @@ def remove_single_course_from_profile(id):
     else:
         return abort(400, "Course not found")
 
-@student_connector.route("/profile/", methods=["POST"])
+@student_connector.route("/profile/<id>", methods=["POST"])
 @jwt_required()
-def set_profile_attributes():
-    profile_attributes = request.form
+def set_profile_attributes(id):
+    profile_attributes = request.json
     current_user = get_jwt_identity()
+    if str(current_user['id']) != id:
+        return abort(401)
     user_db = session.query(Student_Connector_User).filter(Student_Connector_User.email == current_user['email'])
     user = user_db.first()
     if 'description' in profile_attributes:
         user_db.update({'description': profile_attributes['description']})
     if 'skills' in profile_attributes:
-        skill_from_db = session.query(Student_Connector_Skills).filter(Student_Connector_Skills.skill_name == profile_attributes['skills']).first()
-        if skill_from_db is not None:
-            user.skills.append(skill_from_db)
+        #skill_from_db = session.query(Student_Connector_Skills).filter(profile_attributes['skills'].any(Student_Connector_Skills.skill_name)).first()
+        skill_from_db = session.query(Student_Connector_Skills).filter(Student_Connector_Skills.skill_name.in_(profile_attributes['skills'])).all()
+        if skill_from_db != []:
+            for skill in skill_from_db:
+                user.skills.append(skill)
         else:
             skills = []
-            for skill in profile_attributes.getlist('skills'):
+            for skill in profile_attributes['skills']:
                 skill_db = Student_Connector_Skills(skill)
                 skills.append(skill_db)
                 session.add(skill_db)
