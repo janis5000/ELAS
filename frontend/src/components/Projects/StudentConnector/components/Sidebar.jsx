@@ -43,13 +43,17 @@ const Sidebar = () => {
 
   useEffect(() => {
         if (authConfig !== null) {
-          Backend.get("/studentconnector/profile", authConfig).then((response) => {
-            let profileRes = response.data
-            setProfile(profileRes)
-          })
+          getProfile();
         }
       }
   , [])
+
+  const getProfile = () => {
+    Backend.get("/studentconnector/profile", authConfig).then((response) => {
+      let profileRes = response.data
+      setProfile(profileRes)
+    })
+  }
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -73,6 +77,9 @@ const Sidebar = () => {
     if (profile !== null) {
       let path = "/studentconnector/profile/" + profile.id;
       history.push(path);
+    }
+    else {
+      getProfile()
     }
   }
 

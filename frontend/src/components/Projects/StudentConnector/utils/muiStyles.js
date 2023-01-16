@@ -253,5 +253,8 @@ mdSelectedHidden: {
   [`${theme.breakpoints.down("md")}`]: {
     display: "none"
   }
+},
+searchLectureResult: {
+    backgroundColor:"#4399FF"
 }
 }));

@@ -9,6 +9,10 @@ import List from "@material-ui/core/List";
 import CourseResults from "./CourseResults";
 import LectureSite from "./LectureSite";
 import {useHistory} from "react-router-dom";
+import CardContent from "@material-ui/core/CardContent";
+import Card from "@material-ui/core/Card";
+import CardMedia from "@material-ui/core/CardMedia";
+import Box from "@material-ui/core/Box";
 
 const SearchSite = () => {
     const [degree, setDegree] = useState({});
@@ -60,52 +64,57 @@ const SearchSite = () => {
     const classes = muiStyles()
     return (
         <>
-            <Grid container direction="column" justify="flex-start" alignItems="center">
-                <Grid item xs={10}>
-                    <Autocomplete
-                        id="studyprogram"
-                        options={studyPrograms}
+                <Grid container direction="column" justify="flex-start" alignItems="center">
+                    <Grid item xs={10}>
+                        <Paper>
+                        <Autocomplete
+                            id="studyprogram"
+                            options={studyPrograms}
+                            getOptionLabel={(option) => option.name}
+                            style={{ width: 500 }}
+                            onChange = {
+                                (event, newValue) => {
+                                    setDegree(newValue);
+                                    Backend.get("/studentconnector/lectures?studyprogram-id=" + newValue.id).then((response) => {
+                                        let res = response.data
+                                        setLectures(res)
+                                    })
+                                }
+                            }
+                            className={classes.preSelectInput}
+                            renderInput={(params) => <TextField {...params} label="Study Program" variant="outlined" />}
+                        />
+                        </Paper>
+                    </Grid>
+
+                    <Grid item xs={10}>
+                        <Paper>
+                        <Autocomplete
+                        id="courses"
+                        options={lectures}
                         getOptionLabel={(option) => option.name}
                         style={{ width: 500 }}
                         onChange = {
                             (event, newValue) => {
                                 setDegree(newValue);
-                                Backend.get("/studentconnector/lectures?studyprogram-id=" + newValue.id).then((response) => {
-                                    let res = response.data
-                                    setLectures(res)
-                                })
+                                setSelectedLecture(newValue)
+                                console.log("SELECT", selectedLecture);
                             }
                         }
                         className={classes.preSelectInput}
-                        renderInput={(params) => <TextField {...params} label="Study Program" variant="outlined" />}
+                        renderInput={(params) => <TextField {...params} label="Courses" variant="outlined" />}
                     />
-                </Grid>
-
-                <Grid item xs={10}>
-                    <Autocomplete
-                    id="courses"
-                    options={lectures}
-                    getOptionLabel={(option) => option.name}
-                    style={{ width: 500 }}
-                    onChange = {
-                        (event, newValue) => {
-                            setDegree(newValue);
-                            setSelectedLecture(newValue)
-                            console.log("SELECT", selectedLecture);
-                        }
-                    }
-                    className={classes.preSelectInput}
-                    renderInput={(params) => <TextField {...params} label="Courses" variant="outlined" />}
-                />
-                </Grid>
+                        </Paper>
+                    </Grid>
                 <Button variant="contained" color="primary" disableElevation onClick={GetCourses}>Search</Button>
-                <List component="nav" aria-label="secondary mailbox folders">
-                    {resultLectures?.map(x =>
-                        <ListItem button onClick={RedirectToCourseSite} key={x.id} >
-                            <ListItemText primary={x.name} />
-                        </ListItem>
-                    )}
-                </List>
+                {resultLectures?.map(x =>
+                    <Card>
+                        <CardMedia><Box className={classes.searchLectureResult} width="100" height="100" minWidth="100" minHeight="100"> 2 </Box></CardMedia>
+                        <CardContent>
+                            {x.name}
+                        </CardContent>
+                    </Card>
+                )}
             </Grid>
         </>
     );
