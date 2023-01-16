@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Button, Paper, Snackbar } from '@material-ui/core';
-import { isValidURL } from 'validator';
 import Backend from '../../../../assets/functions/Backend';
 import { createAuthConfig } from '../utils/auth';
 

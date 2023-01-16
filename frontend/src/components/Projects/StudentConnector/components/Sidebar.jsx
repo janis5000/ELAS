@@ -40,13 +40,11 @@ const Sidebar = () => {
 
   const authConfig = createAuthConfig()
   const [profile, setProfile] = useState(null);
-  let profileId = "";
 
   useEffect(() => {
         if (authConfig !== null) {
           Backend.get("/studentconnector/profile", authConfig).then((response) => {
             let profileRes = response.data
-            profileId = profileRes.id
             setProfile(profileRes)
           })
         }
@@ -72,7 +70,7 @@ const Sidebar = () => {
   }
 
   const myProfileButton = () => {
-    let path = "/studentconnector/profile/" + profileId;
+    let path = "/studentconnector/profile/" + profile.id;
     history.push(path);
   }
 
