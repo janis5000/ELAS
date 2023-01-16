@@ -63,20 +63,26 @@ def http_call():
 def get_personal_profile_information():
     current_user = get_jwt_identity()
     profile = session.query(Student_Connector_User).filter(Student_Connector_User.email == current_user["email"]).first()
+    courses = []
+    for course in profile.courses:
+        courses.append({"id": course.id,
+                       "name": course.name})
     if profile.sc_degree is not None:
         return {"id": profile.id,
                 "email": profile.email,
                 "description": profile.description,
                 "skills": profile.skills,
                 "degree": profile.sc_degree.name,
-                "degree_id": profile.sc_degree.id}
+                "degree_id": profile.sc_degree.id,
+                "courses": courses}
     else:
         return {"id": profile.id,
                 "email": profile.email,
                 "description": profile.description,
                 "skills": profile.skills,
                 "degree": "",
-                "degree_id": 0}
+                "degree_id": 0,
+                "courses": courses}
 @student_connector.route("/profile/<id>", methods=["GET"])
 def get_profile(id):
     profile = session.query(Student_Connector_User).filter(Student_Connector_User.id == id).first()
@@ -93,7 +99,7 @@ def get_profile(id):
                 "skills": profile.skills,
                 "degree": ""}
 
-@student_connector.route("/add_course", methods=["POST"])
+@student_connector.route("/add-course", methods=["POST"])
 @jwt_required()
 def add_course_to_profile():
     # this is only a dummy authentication, it is completely useless!
@@ -109,7 +115,33 @@ def add_course_to_profile():
         session.commit()
     return jsonify("Successful added course")
 
-@student_connector.route("/profile/", methods=["POST"])
+@student_connector.route("/add-course/<id>", methods=["POST"])
+@jwt_required()
+def add_single_course_to_profile(id):
+    courses = []
+    current_user = get_jwt_identity()
+    user = session.query(Student_Connector_User).filter(Student_Connector_User.email == current_user['email']).first()
+    course = session.query(Lecture).filter(Lecture.id == id).first()
+    if course is not None:
+        courses.append(course)
+        user.courses.extend(courses)
+        session.commit()
+    return jsonify("Successful added course")
+
+@student_connector.route("/remove-course/<id>", methods=["POST"])
+@jwt_required()
+def remove_single_course_from_profile(id):
+    current_user = get_jwt_identity()
+    user = session.query(Student_Connector_User).filter(Student_Connector_User.email == current_user['email']).first()
+    course = session.query(Lecture).filter(Lecture.id == id).first()
+    if course is not None and course in user.courses:
+        user.courses.remove(course)
+        session.commit()
+        return jsonify("Successful removed course")
+    else:
+        return abort(400, "Course not found")
+
+@student_connector.route("/profile/<id>", methods=["POST"])
 @jwt_required()
 def set_profile_attributes():
     # this is only a dummy authentication, it is completely useless!
@@ -143,6 +175,17 @@ def get_lectures():
     #lectures = session.query(Lecture).filter_by(Lecture.root_id.any(studyprogram_id)).all()
     for lecture in lectures:
         result.append({"id": lecture.id,
+                       "longtext": lecture.longtext,
+                       "description": lecture.description,
+                       "sws": lecture.sws,
+                       "name": lecture.name})
+    return jsonify(result)
+
+@student_connector.route("/lecture/<id>", methods=["GET"])
+def get_lecture_by_id(id):
+    result = []
+    lecture = session.query(Lecture).filter(Lecture.id == id).first()
+    result.append({"id": lecture.id,
                        "longtext": lecture.longtext,
                        "description": lecture.description,
                        "sws": lecture.sws,

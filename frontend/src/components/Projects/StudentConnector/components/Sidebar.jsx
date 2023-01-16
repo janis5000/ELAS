@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
@@ -9,6 +9,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import {Route, useHistory} from "react-router-dom";
 import StudentConnector from "../StudentConnector";
 import SearchSite from "./SearchSite";
+import Backend from "../../../../assets/functions/Backend";
+import {createAuthConfig} from "../utils/auth";
 
 const useStyles = makeStyles({
  // adjust this value to match the height of your header
@@ -36,6 +38,21 @@ const Sidebar = () => {
     left: false,
   });
 
+  const authConfig = createAuthConfig()
+  const [profile, setProfile] = useState(null);
+  let profileId = "";
+
+  useEffect(() => {
+        if (authConfig !== null) {
+          Backend.get("/studentconnector/profile", authConfig).then((response) => {
+            let profileRes = response.data
+            profileId = profileRes.id
+            setProfile(profileRes)
+          })
+        }
+      }
+  , [])
+
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
@@ -55,7 +72,7 @@ const Sidebar = () => {
   }
 
   const myProfileButton = () => {
-    let path = "/studentconnector/profile/";
+    let path = "/studentconnector/profile/" + profileId;
     history.push(path);
   }
 
