@@ -64,9 +64,10 @@ def get_personal_profile_information():
     current_user = get_jwt_identity()
     profile = session.query(Student_Connector_User).filter(Student_Connector_User.email == current_user["email"]).first()
     courses = []
-    for course in profile.courses:
-        courses.append({"id": course.id,
-                       "name": course.name})
+    if profile.courses is not None:
+        for course in profile.courses:
+            courses.append({"id": course.id,
+                           "name": course.name})
     if profile.sc_degree is not None:
         return {"id": profile.id,
                 "email": profile.email,
