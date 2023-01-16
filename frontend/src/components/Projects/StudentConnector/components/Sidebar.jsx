@@ -70,8 +70,10 @@ const Sidebar = () => {
   }
 
   const myProfileButton = () => {
-    let path = "/studentconnector/profile/" + profile.id;
-    history.push(path);
+    if (profile !== null) {
+      let path = "/studentconnector/profile/" + profile.id;
+      history.push(path);
+    }
   }
 
   const list = (anchor) => (
