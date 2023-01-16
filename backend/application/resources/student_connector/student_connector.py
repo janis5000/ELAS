@@ -4,7 +4,8 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from orm_interface.base import Base, Session, engine
 from orm_interface.entities.lecture import Lecture
 from orm_interface.entities.student_connector_entity.student_connector_user import Student_Connector_User, \
-    Student_Connector_Skills
+    Student_Connector_Skills, Student_Connector_Courses_User
+from orm_interface.entities.user import User
 from orm_interface.entities.studyprogram import StudyProgram
 
 student_connector = Blueprint("student_connector", __name__)
@@ -58,23 +59,42 @@ def http_call():
     data = {'data':'This text was fetched using an HTTP call to server on render'}
     return jsonify(data)
 
+@student_connector.route("/other-users/<course_id>", methods=["GET"])
+def get_other_users_in_course(course_id):
+    users = session.query(User) \
+            .join(Student_Connector_User)\
+            .join(Student_Connector_Courses_User)\
+            .filter(Student_Connector_Courses_User.c.lecture_id == course_id).distinct().all()
+    result = []
+    amount = min(len(users), 4)
+    for i in range(amount):
+        result.append({"id": users[i].id,
+                       "firstname": users[i].firstname,
+                       "lastname": users[i].lastname})
+    return jsonify(result)
+
+
 @student_connector.route("/profile", methods=["GET"])
 @jwt_required()
 def get_personal_profile_information():
     current_user = get_jwt_identity()
     profile = session.query(Student_Connector_User).filter(Student_Connector_User.email == current_user["email"]).first()
     courses = []
+    skills = []
     if profile is None:
         return jsonify({"error" : "Profile not found!"})
     if profile.courses is not None:
         for course in profile.courses:
             courses.append({"id": course.id,
                            "name": course.name})
+    if profile.skills:
+        for skill in profile.skills:
+            skills.append(skill.skill_name)
     if profile.sc_degree is not None:
         return {"id": profile.id,
                 "email": profile.email,
                 "description": profile.description,
-                "skills": profile.skills,
+                "skills": skills,
                 "degree": profile.sc_degree.name,
                 "degree_id": profile.sc_degree.id,
                 "courses": courses}
@@ -82,7 +102,7 @@ def get_personal_profile_information():
         return {"id": profile.id,
                 "email": profile.email,
                 "description": profile.description,
-                "skills": profile.skills,
+                "skills": skills,
                 "degree": "",
                 "degree_id": 0,
                 "courses": courses}
@@ -147,7 +167,6 @@ def remove_single_course_from_profile(id):
 @student_connector.route("/profile/", methods=["POST"])
 @jwt_required()
 def set_profile_attributes():
-    # this is only a dummy authentication, it is completely useless!
     profile_attributes = request.form
     current_user = get_jwt_identity()
     user_db = session.query(Student_Connector_User).filter(Student_Connector_User.email == current_user['email'])
