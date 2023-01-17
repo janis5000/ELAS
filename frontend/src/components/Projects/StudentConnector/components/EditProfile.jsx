@@ -9,6 +9,8 @@ import {useHistory, useParams} from "react-router-dom";
 import { Avatar } from "@material-ui/core";
 import { deepOrange} from '@material-ui/core/colors';
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import ListItemText from '@material-ui/core/ListItemText';
+import DoneIcon from '@material-ui/icons/Done';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,12 +31,10 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center'
   },
   avatar: {
-    margin: theme.spacing(2),
     width: theme.spacing(7),
     hight: theme.spacing(7),
     color: theme.palette.getContrastText(deepOrange[500]),
     backgroundColor: deepOrange[500],
-    alignItems: 'center'
 
   },
 }));
@@ -97,7 +97,9 @@ const InitialsAvatar = () => {
     </Avatar>
   );
 };
-
+const handleDelete = () => {
+    ;
+  };
   const handleSaveProfile = () => {
     Backend.post('/studentconnector/profile/' + params.id,{
       "skills": Skills.split(" "),
@@ -131,16 +133,33 @@ const InitialsAvatar = () => {
   return (
       <Grid container direction="column" justify="flex-start" alignItems="center">
         {isOwner ? (<Paper className={classes.paper}>
-              <InitialsAvatar className={classes.avatar}/>
+           <InitialsAvatar className={classes.avatar}/>
 
-          <div>Name: {currentProfile?.firstname + ' ' + currentProfile?.lastname}</div>
+           <ListItemText
+
+
+             primary={'Welcome ' + ' ' + currentProfile?.firstname + ' ' + currentProfile?.lastname} color="primary"
+           />
+
 
 
 
           <form className={classes.root} noValidate autoComplete="off">
 
 
-            <div>Skills: {currentProfile?.skills.map(x => (<Chip color="primary" label={x} key={x.id}></Chip>))}</div>
+            <div>Skills: {currentProfile?.skills.map(x => (
+                <Chip
+                clickable
+                color="primary"
+                onClick={handleClick}
+
+                onDelete={handleDelete}
+                deleteIcon={<DoneIcon />}color="primary"
+                label={x} key={x.id}>
+
+                </Chip>
+            ))}
+            </div>
             <TextField
               id="Skills"
               label="Skills"

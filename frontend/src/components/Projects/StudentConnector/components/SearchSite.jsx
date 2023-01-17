@@ -54,7 +54,7 @@ const SearchSite = () => {
     }*/
 
     const GetCourses = () => {
-        Backend.get("studentconnector/lecture/" + selectedLecture['id']).then((response) => {
+        Backend.get("/studentconnector/lecture/" + selectedLecture['id']).then((response) => {
             let lecture = response.data
             setResultLectures(lecture);
         })
