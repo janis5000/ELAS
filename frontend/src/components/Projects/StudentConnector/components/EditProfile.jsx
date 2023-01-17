@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {TextField, Button, Paper, Snackbar, Grid} from '@material-ui/core';
+import {TextField, Button, Paper, Snackbar, Grid, Chip} from '@material-ui/core';
 import Backend from '../../../../assets/functions/Backend';
 import { createAuthConfig } from '../utils/auth';
 import Card from "@material-ui/core/Card";
@@ -108,7 +108,7 @@ export default function ProfileEditPage() {
         {isOwner ? (<Paper className={classes.paper}>
           <div>Name: {currentProfile?.firstname + ' ' + currentProfile?.lastname}</div>
           <form className={classes.root} noValidate autoComplete="off">
-            <div>Skills: {currentProfile?.skills.map(x => x + " ")}</div>
+            <div>Skills: {currentProfile?.skills.map(x => (<Chip label={x}></Chip>))}</div>
             <TextField
               id="Skills"
               label="Skills"
