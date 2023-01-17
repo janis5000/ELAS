@@ -8,6 +8,7 @@ import CardContent from "@material-ui/core/CardContent";
 import {useHistory, useParams} from "react-router-dom";
 import { Avatar } from "@material-ui/core";
 import { deepOrange} from '@material-ui/core/colors';
+import Autocomplete from "@material-ui/lab/Autocomplete";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,6 +51,8 @@ export default function ProfileEditPage() {
   const [currentProfile, setCurrentProfile] = useState(null);
   const [isOwner, setIsOwner] = useState(null);
   const [initials, setInitials] = useState(null);
+  const [studyPrograms, setStudyPrograms] = useState([]);
+  const [degree, setDegree] = useState(null);
 
   const authConfig = createAuthConfig();
 
@@ -57,6 +60,11 @@ export default function ProfileEditPage() {
   const params = useParams();
 
   useEffect(() => {
+    let studyProgramsRes = ""
+    Backend.get("/studentconnector/study-programs").then((response) => {
+      studyProgramsRes = response.data
+      setStudyPrograms(studyProgramsRes)
+    })
     Backend.get("/studentconnector/profile", authConfig).then((response) => {
       let profileRes = response.data
       setProfile(profileRes)
@@ -66,6 +74,7 @@ export default function ProfileEditPage() {
       else{
         setIsOwner(false);
       }
+      setDegree(studyProgramsRes.filter(x => x.id === profileRes.degree_id)[0])
       Backend.get('/studentconnector/profile/' + profileRes.id + '/courses').then((response) => {
         let courseRes = response.data
         setCourses(courseRes)
@@ -78,7 +87,7 @@ export default function ProfileEditPage() {
     Backend.get('/studentconnector/profile/' + params.id).then((response) => {
       let currentProfileRes = response.data
       setCurrentProfile(currentProfileRes)
-      setInitials(currentProfileRes.firstname.substring(0, 1) + currentProfileRes.lastname.substring(0, 1)).toUpperCase()
+      setInitials(currentProfileRes.firstname.substring(0, 1).toUpperCase() + currentProfileRes.lastname.substring(0, 1).toUpperCase())
     })
   }
 const InitialsAvatar = () => {
@@ -92,7 +101,8 @@ const InitialsAvatar = () => {
   const handleSaveProfile = () => {
     Backend.post('/studentconnector/profile/' + params.id,{
       "skills": Skills.split(" "),
-      "description": Description
+      "description": Description,
+      "degree_id": degree.id
     }, authConfig)
     .then((res) => {
       setSuccess(true);
@@ -130,7 +140,7 @@ const InitialsAvatar = () => {
           <form className={classes.root} noValidate autoComplete="off">
 
 
-            <div>Skills: {currentProfile?.skills.map(x => (<Chip color="primary" label={x}></Chip>))}</div>
+            <div>Skills: {currentProfile?.skills.map(x => (<Chip color="primary" label={x} key={x.id}></Chip>))}</div>
             <TextField
               id="Skills"
               label="Skills"
@@ -146,6 +156,22 @@ const InitialsAvatar = () => {
               multiline
               rows={4}
             />
+            <Paper>
+              <Autocomplete
+                  id="studyprogram"
+                  options={studyPrograms}
+                  getOptionLabel={(option) => option.name}
+                  style={{ width: 500 }}
+                  value={degree}
+                  onChange = {
+                    (event, newValue) => {
+                      setDegree(newValue);
+                    }
+                  }
+                  className={classes.preSelectInput}
+                  renderInput={(params) => <TextField {...params} label="Study Program" variant="outlined" />}
+              />
+            </Paper>
             <Button
               variant="contained"
               color="primary"

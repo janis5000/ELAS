@@ -34,7 +34,15 @@ const SearchSite = () => {
             Backend.get("/studentconnector/profile", authConfig).then((response) => {
                 let profileRes = response.data
                 setProfile(profileRes)
-                setDegree(studyProgramsRes.filter(x => x.id === profileRes.degree_id)[0])
+                let filteredDegree = studyProgramsRes.filter(x => x.id === profileRes.degree_id)
+                if (filteredDegree !== []) {
+                    let tempDegree = studyProgramsRes.filter(x => x.id === profileRes.degree_id)[0]
+                    setDegree(tempDegree)
+                    Backend.get("/studentconnector/lectures?studyprogram-id=" + tempDegree.id).then((response) => {
+                        let res = response.data
+                        setLectures(res)
+                    })
+                }
             })
         });
     }, [])
@@ -72,6 +80,7 @@ const SearchSite = () => {
                             id="studyprogram"
                             options={studyPrograms}
                             getOptionLabel={(option) => option.name}
+                            value={degree}
                             style={{ width: 500 }}
                             onChange = {
                                 (event, newValue) => {
@@ -97,7 +106,6 @@ const SearchSite = () => {
                         style={{ width: 500 }}
                         onChange = {
                             (event, newValue) => {
-                                setDegree(newValue);
                                 setSelectedLecture(newValue)
                                 console.log("SELECT", selectedLecture);
                             }
