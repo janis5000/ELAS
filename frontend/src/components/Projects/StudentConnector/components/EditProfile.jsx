@@ -42,6 +42,7 @@ export default function ProfileEditPage() {
   const [errorMessage, setErrorMessage] = useState('');
   const [courses, setCourses] = useState(null);
   const [currentProfile, setCurrentProfile] = useState(null);
+  const [isOwner, setIsOwner] = useState(null);
 
   const authConfig = createAuthConfig();
 
@@ -52,6 +53,12 @@ export default function ProfileEditPage() {
     Backend.get("/studentconnector/profile", authConfig).then((response) => {
       let profileRes = response.data
       setProfile(profileRes)
+      if (profileRes.id + '' === params.id){
+        setIsOwner(true);
+      }
+      else{
+        setIsOwner(false);
+      }
       Backend.get('/studentconnector/profile/' + profileRes.id + '/courses').then((response) => {
         let courseRes = response.data
         setCourses(courseRes)
@@ -98,7 +105,7 @@ export default function ProfileEditPage() {
   }
   return (
       <Grid container direction="column" justify="flex-start" alignItems="center">
-        <Paper className={classes.paper}>
+        {isOwner ? (<Paper className={classes.paper}>
           <form className={classes.root} noValidate autoComplete="off">
             <div>Skills: {currentProfile?.skills.map(x => x + " ")}</div>
             <TextField
@@ -132,7 +139,11 @@ export default function ProfileEditPage() {
             message={errorMessage}
             style={{backgroundColor: success ? 'green' : 'red'}}
           />
-        </Paper>
+        </Paper>) :
+            (<><
+              div>Skills: {currentProfile?.skills.map(x => x + " ")}</div>
+              <div>Description: {currentProfile?.description}</div>
+            </>)}
         {courses && courses.map(x =>
             <Card>
               <CardContent onClick={() => redirectToCourse(x.id)} key={x.id}>
