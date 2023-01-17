@@ -97,9 +97,7 @@ const InitialsAvatar = () => {
     </Avatar>
   );
 };
-const handleDelete = () => {
-    ;
-  };
+
   const handleSaveProfile = () => {
     Backend.post('/studentconnector/profile/' + params.id,{
       "skills": Skills.split(" "),
@@ -125,7 +123,9 @@ const handleDelete = () => {
     }
     setOpen(false);
   };
-
+const handleDelete = (element) => {
+    setSkills(currentProfile?.skills.filter((e) => e !== element));
+  };
   const redirectToCourse = (id) => {
     let path = "/studentconnector/lecture/" + id;
     history.push(path);
@@ -151,9 +151,8 @@ const handleDelete = () => {
                 <Chip
                 clickable
                 color="primary"
-                onClick={handleClick}
+                onClick={handleDelete}
 
-                onDelete={handleDelete}
                 deleteIcon={<DoneIcon />}color="primary"
                 label={x} key={x.id}>
 
