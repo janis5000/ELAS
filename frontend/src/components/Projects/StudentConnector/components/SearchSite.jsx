@@ -110,7 +110,7 @@ const SearchSite = () => {
                 <Button variant="contained" color="primary" disableElevation onClick={GetCourses}>Search</Button>
                 {resultLectures?.map(x =>
                     <Card>
-                        <CardMedia image={backgroundBox} key={x.id}></CardMedia>
+                        <CardMedia imgsrc="/images/backgroundbox.png" key={x.id}></CardMedia>
                         <CardContent onClick={RedirectToCourseSite} key={x.id}>
                             {x.name}
                         </CardContent>

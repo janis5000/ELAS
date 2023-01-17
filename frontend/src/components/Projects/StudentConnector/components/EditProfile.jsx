@@ -43,7 +43,6 @@ export default function ProfileEditPage() {
   const [profile, setProfile] = useState(null);
   const [Skills, setSkills] = useState('');
   const [Description, setDescription] = useState('');
-  const [avatarUrl, setAvatarUrl] = useState('');
   const [open, setOpen] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');

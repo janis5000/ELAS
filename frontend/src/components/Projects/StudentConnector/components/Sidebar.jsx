@@ -11,7 +11,7 @@ import StudentConnector from "../StudentConnector";
 import SearchSite from "./SearchSite";
 import Backend from "../../../../assets/functions/Backend";
 import {createAuthConfig} from "../utils/auth";
-
+import Avatar from "@material-ui/core/Avatar";
 const useStyles = makeStyles({
  // adjust this value to match the height of your header
  drawer: {
@@ -92,7 +92,16 @@ const Sidebar = () => {
     >
       <List>
         <ListItem button>
+           <img src='/images/logos/student-connector-logo.png' height="35" alt="studect Logo"/>
+           <ListItemText primary="Student Connector" className={classes.text} />
+        </ListItem>
+        <ListItem button>
+
           <ListItemText primary="Dashboard" className={classes.text} onClick={dashboardButton}/>
+
+        </ListItem>
+        <ListItem IconButton>
+
 
         </ListItem>
         <ListItem button>
