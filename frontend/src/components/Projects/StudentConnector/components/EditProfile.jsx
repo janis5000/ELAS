@@ -50,6 +50,7 @@ export default function ProfileEditPage() {
   const [courses, setCourses] = useState(null);
   const [currentProfile, setCurrentProfile] = useState(null);
   const [isOwner, setIsOwner] = useState(null);
+  const [initials, setInitials] = useState(null);
 
   const authConfig = createAuthConfig();
 
@@ -78,10 +79,10 @@ export default function ProfileEditPage() {
     Backend.get('/studentconnector/profile/' + params.id).then((response) => {
       let currentProfileRes = response.data
       setCurrentProfile(currentProfileRes)
+      setInitials(currentProfileRes.firstname.substring(0, 1) + currentProfileRes.lastname.substring(0, 1)).toUpperCase()
     })
   }
-const InitialsAvatar = ({ firstName, lastName }) => {
-  const initials = (firstName.substring(0, 1) + lastName.substring(0, 1)).toUpperCase();
+const InitialsAvatar = () => {
   return (
     <Avatar variant="circle" className={classes.avatar}>
       {initials}
@@ -121,7 +122,7 @@ const InitialsAvatar = ({ firstName, lastName }) => {
   return (
       <Grid container direction="column" justify="flex-start" alignItems="center">
         {isOwner ? (<Paper className={classes.paper}>
-              <InitialsAvatar className={classes.avatar} firstName={currentProfile?.firstname} lastName={currentProfile?.lastname}  />
+              <InitialsAvatar className={classes.avatar}/>
 
           <div>Name: {currentProfile?.firstname + ' ' + currentProfile?.lastname}</div>
 
@@ -163,7 +164,8 @@ const InitialsAvatar = ({ firstName, lastName }) => {
             style={{backgroundColor: success ? 'green' : 'red'}}
           />
         </Paper>) :
-            (<><div>Name: {currentProfile?.firstname + ' ' + currentProfile?.lastname}</div>
+            (<><InitialsAvatar className={classes.avatar}/>
+              <div>Name: {currentProfile?.firstname + ' ' + currentProfile?.lastname}</div>
               <div>Skills: {currentProfile?.skills.map(x => x + " ")}</div>
               <div>Description: {currentProfile?.description}</div>
             </>)}
