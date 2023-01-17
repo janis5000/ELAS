@@ -119,10 +119,12 @@ const InitialsAvatar = ({ firstName, lastName }) => {
     history.push(path);
   }
   return (
-      <Grid startIcon container direction="column" justify="flex-start" >
+      <Grid container direction="column" justify="flex-start" alignItems="center">
         {isOwner ? (<Paper className={classes.paper}>
+              <InitialsAvatar className={classes.avatar} firstName={currentProfile?.firstname} lastName={currentProfile?.lastname}  />
 
-            <InitialsAvatar className={classes.avatar} firstName="John" lastName="Doe"  />
+          <div>Name: {currentProfile?.firstname + ' ' + currentProfile?.lastname}</div>
+
 
 
           <form className={classes.root} noValidate autoComplete="off">
@@ -161,13 +163,8 @@ const InitialsAvatar = ({ firstName, lastName }) => {
             style={{backgroundColor: success ? 'green' : 'red'}}
           />
         </Paper>) :
-            (<>
-
-              <div>
-
-
-                Skills: {currentProfile?.skills.map(x => <Chip> label={x} , index={x.id}/> </Chip>)}
-              </div>
+            (<><div>Name: {currentProfile?.firstname + ' ' + currentProfile?.lastname}</div>
+              <div>Skills: {currentProfile?.skills.map(x => x + " ")}</div>
               <div>Description: {currentProfile?.description}</div>
             </>)}
         {courses && courses.map(x =>

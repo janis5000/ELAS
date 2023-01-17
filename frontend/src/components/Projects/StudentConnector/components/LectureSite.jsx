@@ -29,32 +29,40 @@ const LectureSite = () => {
             setLectureInfo(lecture[0])
             console.log(lecture[0])
         })
+        getOtherUsers()
+    }, [])
+
+    const getOtherUsers = () => {
         Backend.get("/studentconnector/other-users/" + params.id).then((response) => {
             let users = response.data
             setOtherUsers(users)
             console.log(users)
         })
-    }, [])
+    }
 
     const addCourseToProfile = () => {
         Backend.post("/studentconnector/add-course/" + params.id, {}, authConfig).then((response) => {
             console.log(response.data)
+            let prevProfile = null;
             setProfile(prevState => {
-                let prevProfile = {...prevState};
+                prevProfile = {...prevState};
                 prevProfile.courses.push(lectureInfo)
                 setProfile(prevProfile)
             })
+            getOtherUsers()
         })
     }
 
     const removeCourseFromProfile = () => {
         Backend.post("/studentconnector/remove-course/" + params.id, {}, authConfig).then((response) => {
             console.log(response.data)
+            let prevProfile = null;
             setProfile(prevState => {
-                let prevProfile = {...prevState};
-                prevProfile = prevProfile.courses.filter(x => x['id'] !== params.id)
+                prevProfile = {...prevState};
+                prevProfile.courses = prevProfile.courses.filter(x => x['id'] !== params.id)
                 setProfile(prevProfile)
             })
+            getOtherUsers()
         })
     }
 

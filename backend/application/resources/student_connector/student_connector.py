@@ -108,30 +108,40 @@ def get_personal_profile_information():
                 "courses": courses}
 @student_connector.route("/profile/<id>", methods=["GET"])
 def get_profile(id):
-    profile = session.query(Student_Connector_User).filter(Student_Connector_User.id == id).first()
+    #profile = session.query(Student_Connector_User).filter(Student_Connector_User.id == id).first()
+    profile = session.query(User)\
+            .join(Student_Connector_User)\
+            .filter(Student_Connector_User.id == id).first()
     courses = []
     skills = []
+    sc_profile = profile.student_connector_user[0]
     if profile is None:
         return jsonify({"error" : "Profile not found!"})
-    if profile.courses is not None:
-        for course in profile.courses:
+    if sc_profile.courses is not None:
+        for course in sc_profile.courses:
             courses.append({"id": course.id,
                            "name": course.name})
-    if profile.skills:
-        for skill in profile.skills:
+    if sc_profile.skills:
+        for skill in sc_profile.skills:
             skills.append(skill.skill_name)
-    if profile.sc_degree is not None:
-        return {"id": profile.id,
+    if sc_profile.sc_degree is not None:
+        return {"id": sc_profile.id,
+                "uid": profile.id,
                 "email": profile.email,
-                "description": profile.description,
+                "firstname": profile.firstname,
+                "lastname": profile.lastname,
+                "description": sc_profile.description,
                 "skills": skills,
-                "degree": profile.sc_degree.name,
-                "degree_id": profile.sc_degree.id,
+                "degree": sc_profile.sc_degree.name,
+                "degree_id": sc_profile.sc_degree.id,
                 "courses": courses}
     else:
-        return {"id": profile.id,
+        return {"id": sc_profile.id,
+                "uid": profile.id,
                 "email": profile.email,
-                "description": profile.description,
+                "firstname": profile.firstname,
+                "lastname": profile.lastname,
+                "description": sc_profile.description,
                 "skills": skills,
                 "degree": "",
                 "degree_id": 0,
