@@ -200,6 +200,7 @@ def remove_single_course_from_profile(id):
     else:
         return abort(400, "Course not found")
 
+
 @student_connector.route("/profile/<id>", methods=["POST"])
 @jwt_required()
 def set_profile_attributes(id):
@@ -211,19 +212,22 @@ def set_profile_attributes(id):
     user = user_db.first()
     if 'description' in profile_attributes:
         user_db.update({'description': profile_attributes['description']})
-    if 'skills' in profile_attributes:
-        #skill_from_db = session.query(Student_Connector_Skills).filter(profile_attributes['skills'].any(Student_Connector_Skills.skill_name)).first()
-        skill_from_db = session.query(Student_Connector_Skills).filter(Student_Connector_Skills.skill_name.in_(profile_attributes['skills'])).all()
-        if skill_from_db != []:
-            for skill in skill_from_db:
-                user.skills.append(skill)
-        else:
-            skills = []
-            for skill in profile_attributes['skills']:
-                skill_db = Student_Connector_Skills(skill)
-                skills.append(skill_db)
-                session.add(skill_db)
-            user.skills.extend(skills)
+    if 'skills_add' in profile_attributes:
+        skill_from_db = session.query(Student_Connector_Skills).filter(Student_Connector_Skills.skill_name.in_(profile_attributes['skills_add'])).all()
+        new_skills_user = list(filter(lambda x: x not in user.skills, profile_attributes['skills_add']))
+        new_skills_db = list(filter(lambda x: x not in skill_from_db, profile_attributes['skills_add']))
+        for skill in new_skills_db:
+            skill_db = Student_Connector_Skills(skill)
+            session.add(skill_db)
+        for skill in new_skills_user:
+            skill_db = Student_Connector_Skills(skill)
+            user.skills.append(skill_db)
+    if 'skills_remove' in profile_attributes:
+        user.skills = []
+        skills = []
+        for skill in profile_attributes['skills_remove']:
+            skills.append(skill)
+        user.skills.extend(skills)
     if 'degree_id' in profile_attributes:
         user_db.update({'degree_id': profile_attributes['degree_id']})
     session.commit()

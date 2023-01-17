@@ -12,7 +12,6 @@ const Dashboard = () => {
     useEffect(() => {
         Backend.get("/studentconnector/profile", authConfig).then((response) => {
             let profileRes = response.data
-            debugger;
             setProfile(profileRes)
         })
     }, [])

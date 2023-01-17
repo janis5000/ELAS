@@ -43,6 +43,7 @@ export default function ProfileEditPage() {
   const classes = useStyles();
   const [profile, setProfile] = useState(null);
   const [Skills, setSkills] = useState('');
+  const [skillsRemove, setSkillsRemove] = useState('');
   const [Description, setDescription] = useState('');
   const [open, setOpen] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -74,7 +75,13 @@ export default function ProfileEditPage() {
       else{
         setIsOwner(false);
       }
-      setDegree(studyProgramsRes.filter(x => x.id === profileRes.degree_id)[0])
+      if(studyProgramsRes !== "" && studyProgramsRes !== null) {
+        let filteredDegree = studyProgramsRes.filter(x => x.id === profileRes.degree_id)
+        if (filteredDegree !== []) {
+          let tempDegree = studyProgramsRes.filter(x => x.id === profileRes.degree_id)[0]
+          setDegree(tempDegree)
+        }
+      }
       Backend.get('/studentconnector/profile/' + profileRes.id + '/courses').then((response) => {
         let courseRes = response.data
         setCourses(courseRes)
@@ -100,7 +107,8 @@ const InitialsAvatar = () => {
 
   const handleSaveProfile = () => {
     Backend.post('/studentconnector/profile/' + params.id,{
-      "skills": Skills.split(" "),
+      "skills_add": Skills.split(" "),
+      "skills_remove": skillsRemove.split(" "),
       "description": Description,
       "degree_id": degree.id
     }, authConfig)
@@ -123,9 +131,18 @@ const InitialsAvatar = () => {
     }
     setOpen(false);
   };
+
 const handleDelete = (element) => {
-    setSkills(currentProfile?.skills.filter((e) => e !== element));
+    let newSkills = []
+    setCurrentProfile(prevState => {
+      let prevProfile = {... prevState}
+      newSkills = prevProfile.skills.filter((e) => e !== element)
+      prevProfile.skills = newSkills
+      setCurrentProfile(prevProfile)}
+    );
+    setSkillsRemove(newSkills)
   };
+
   const redirectToCourse = (id) => {
     let path = "/studentconnector/lecture/" + id;
     history.push(path);
@@ -151,9 +168,10 @@ const handleDelete = (element) => {
                 <Chip
                 clickable
                 color="primary"
-                onClick={handleDelete}
+                onClick={() => handleDelete(x)}
 
-                deleteIcon={<DoneIcon />}color="primary"
+                deleteIcon={<DoneIcon />}
+                color="primary"
                 label={x} key={x.id}>
 
                 </Chip>
@@ -162,7 +180,6 @@ const handleDelete = (element) => {
             <TextField
               id="Skills"
               label="Skills"
-              value={Skills}
               onChange={e => setSkills(e.target.value)}
             />
             <div>Description: {currentProfile?.description}</div>
