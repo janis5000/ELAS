@@ -106,6 +106,7 @@ export default function ProfileEditPage() {
   return (
       <Grid container direction="column" justify="flex-start" alignItems="center">
         {isOwner ? (<Paper className={classes.paper}>
+          <div>Name: {currentProfile?.firstname + ' ' + currentProfile?.lastname}</div>
           <form className={classes.root} noValidate autoComplete="off">
             <div>Skills: {currentProfile?.skills.map(x => x + " ")}</div>
             <TextField
@@ -140,8 +141,8 @@ export default function ProfileEditPage() {
             style={{backgroundColor: success ? 'green' : 'red'}}
           />
         </Paper>) :
-            (<><
-              div>Skills: {currentProfile?.skills.map(x => x + " ")}</div>
+            (<><div>Name: {currentProfile?.firstname + ' ' + currentProfile?.lastname}</div>
+              <div>Skills: {currentProfile?.skills.map(x => x + " ")}</div>
               <div>Description: {currentProfile?.description}</div>
             </>)}
         {courses && courses.map(x =>
