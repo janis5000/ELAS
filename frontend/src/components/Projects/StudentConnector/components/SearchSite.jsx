@@ -34,7 +34,7 @@ const SearchSite = () => {
                 let profileRes = response.data
                 setProfile(profileRes)
                 let filteredDegree = studyProgramsRes.filter(x => x.id === profileRes.degree_id)
-                if (filteredDegree !== []) {
+                if (filteredDegree.length > 0) {
                     let tempDegree = studyProgramsRes.filter(x => x.id === profileRes.degree_id)[0]
                     setDegree(tempDegree)
                     Backend.get("/studentconnector/lectures?studyprogram-id=" + tempDegree.id).then((response) => {

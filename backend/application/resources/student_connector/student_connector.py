@@ -212,23 +212,27 @@ def set_profile_attributes(id):
     user = user_db.first()
     if 'description' in profile_attributes:
         user_db.update({'description': profile_attributes['description']})
-    if 'skills_add' in profile_attributes:
+    if 'skills_add' in profile_attributes and profile_attributes['skills_add'] != []:
         skill_from_db = session.query(Student_Connector_Skills).filter(Student_Connector_Skills.skill_name.in_(profile_attributes['skills_add'])).all()
-        new_skills_user = list(filter(lambda x: x not in user.skills, profile_attributes['skills_add']))
-        new_skills_db = list(filter(lambda x: x not in skill_from_db, profile_attributes['skills_add']))
+        new_skills_user = list(filter(lambda x: x not in list(map(lambda y: y.skill_name, user.skills)), profile_attributes['skills_add']))
+        new_skills_db = list(filter(lambda x: x not in list(map(lambda y: y.skill_name, skill_from_db)), profile_attributes['skills_add']))
+        skills = []
         for skill in new_skills_db:
             skill_db = Student_Connector_Skills(skill)
+            if skill in new_skills_user:
+                skills.append(skill_db)
             session.add(skill_db)
         for skill in new_skills_user:
-            skill_db = Student_Connector_Skills(skill)
-            user.skills.append(skill_db)
-    if 'skills_remove' in profile_attributes:
-        user.skills = []
-        skills = []
-        for skill in profile_attributes['skills_remove']:
-            skills.append(skill)
+            if skill not in new_skills_db:
+                skill_db = session.query(Student_Connector_Skills).filter(Student_Connector_Skills.skill_name == skill).first()
+                skills.append(skill_db)
+
         user.skills.extend(skills)
-    if 'degree_id' in profile_attributes:
+    if 'skills_remove' in profile_attributes and profile_attributes['skills_remove'] != []:
+        for skill in profile_attributes['skills_remove']:
+            skill_db = session.query(Student_Connector_Skills).filter(Student_Connector_Skills.skill_name == skill).first()
+            user.skills.remove(skill_db)
+    if 'degree_id' in profile_attributes and profile_attributes['degree_id'] is not None:
         user_db.update({'degree_id': profile_attributes['degree_id']})
     session.commit()
     return jsonify("Successfully changed!")
