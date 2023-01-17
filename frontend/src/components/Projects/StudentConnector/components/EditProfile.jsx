@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {TextField, Button, Paper, Snackbar, Grid} from '@material-ui/core';
+import {TextField, Button, Paper, Snackbar, Grid, Chip} from '@material-ui/core';
 import Backend from '../../../../assets/functions/Backend';
 import { createAuthConfig } from '../utils/auth';
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import {useHistory, useParams} from "react-router-dom";
+import { Avatar } from "@material-ui/core";
+import { deepOrange} from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,8 +28,13 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center'
   },
   avatar: {
-    margin: theme.spacing(1.5),
-    width: '25ch',
+    margin: theme.spacing(2),
+    width: theme.spacing(7),
+    hight: theme.spacing(7),
+    color: theme.palette.getContrastText(deepOrange[500]),
+    backgroundColor: deepOrange[500],
+    alignItems: 'center'
+
   },
 }));
 
@@ -73,6 +80,14 @@ export default function ProfileEditPage() {
       setCurrentProfile(currentProfileRes)
     })
   }
+const InitialsAvatar = ({ firstName, lastName }) => {
+  const initials = (firstName.substring(0, 1) + lastName.substring(0, 1)).toUpperCase();
+  return (
+    <Avatar variant="circle" className={classes.avatar}>
+      {initials}
+    </Avatar>
+  );
+};
 
   const handleSaveProfile = () => {
     Backend.post('/studentconnector/profile/' + params.id,{
@@ -104,10 +119,16 @@ export default function ProfileEditPage() {
     history.push(path);
   }
   return (
-      <Grid container direction="column" justify="flex-start" alignItems="center">
+      <Grid startIcon container direction="column" justify="flex-start" >
         {isOwner ? (<Paper className={classes.paper}>
+
+            <InitialsAvatar className={classes.avatar} firstName="John" lastName="Doe"  />
+
+
           <form className={classes.root} noValidate autoComplete="off">
-            <div>Skills: {currentProfile?.skills.map(x => x + " ")}</div>
+
+
+            <div>Skills: {currentProfile?.skills.map(x => (<Chip color="primary" label={x}></Chip>))}</div>
             <TextField
               id="Skills"
               label="Skills"
@@ -140,8 +161,13 @@ export default function ProfileEditPage() {
             style={{backgroundColor: success ? 'green' : 'red'}}
           />
         </Paper>) :
-            (<><
-              div>Skills: {currentProfile?.skills.map(x => x + " ")}</div>
+            (<>
+
+              <div>
+
+
+                Skills: {currentProfile?.skills.map(x => <Chip> label={x} , index={x.id}/> </Chip>)}
+              </div>
               <div>Description: {currentProfile?.description}</div>
             </>)}
         {courses && courses.map(x =>

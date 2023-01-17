@@ -16,8 +16,6 @@ class Lecture_Professor(Base):
 
 class Professor(Base):
     __tablename__ = 'professor'
-    __table_args__ = {"extend_existing": True}
-
     id = Column(String, primary_key=True)
     name = Column(String)
     url = Column(String)

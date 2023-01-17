@@ -55,7 +55,6 @@ class Student_Connector_User(Base):
         self.description = description
         self.languages = languages
         self.degree_id = degree_id
-        self.profile_image
 
 class Student_Connector_Skills(Base):
     __tablename__ = 'student_connector_skills'
