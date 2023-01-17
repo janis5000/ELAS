@@ -13,7 +13,6 @@ import CardContent from "@material-ui/core/CardContent";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 import Box from "@material-ui/core/Box";
-import backgroundBox from "../images/backgroundbox.png"
 
 const SearchSite = () => {
     const [degree, setDegree] = useState({});
@@ -118,8 +117,8 @@ const SearchSite = () => {
                 <Button variant="contained" color="primary" disableElevation onClick={GetCourses}>Search</Button>
                 {resultLectures?.map(x =>
                     <Card>
-                        <CardMedia imgsrc="/images/backgroundbox.png" key={x.id}></CardMedia>
-                        <CardContent onClick={RedirectToCourseSite} key={x.id}>
+                        <CardMedia image="/images/studentconnector/backgroundbox.png" key={"media" + x.id}></CardMedia>
+                        <CardContent onClick={RedirectToCourseSite} key={"content" + x.id}>
                             {x.name}
                         </CardContent>
                     </Card>
