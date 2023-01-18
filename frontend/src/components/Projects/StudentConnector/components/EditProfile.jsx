@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ProfileEditPage() {
     const classes = useStyles();
     const [profile, setProfile] = useState(null);
-    const [newSkills, setNewSkills] = useState([]);
+    const [newSkills, setNewSkills] = useState('');
     const [skillsRemove, setSkillsRemove] = useState([]);
     const [Description, setDescription] = useState('');
     const [open, setOpen] = useState(false);
@@ -86,7 +86,7 @@ export default function ProfileEditPage() {
                 setCourses(courseRes)
             })
         })
-        getProfileInfoAndSetProfileInfoState();
+        getProfileInfoAndSetProfileInfoState()
     }, [])
 
     const getProfileInfoAndSetProfileInfoState = () => {
@@ -106,8 +106,8 @@ export default function ProfileEditPage() {
 
     const handleSaveProfile = () => {
         Backend.post('/studentconnector/profile/' + params.id, {
-            "skills_add": newSkills === '' ? [] : newSkills.split(" "),
-            "skills_remove": skillsRemove === '' ? [] : skillsRemove,
+            "skills_add": newSkills === "" ? [] : newSkills.split(" "),
+            "skills_remove": skillsRemove.length === 0 ? [] : skillsRemove,
             "description": Description,
             "degree_id": degree ? degree.id : null
         }, authConfig)
@@ -115,18 +115,45 @@ export default function ProfileEditPage() {
                 setSuccess(true);
                 setOpen(true);
                 setErrorMessage("Profile Updated!")
-                removeSearchQueries()
             })
             .catch((err) => {
                 setSuccess(false);
                 setOpen(true);
                 setErrorMessage("An error occured. Profile not updated")
             });
+        setNewProfileSkillsAfterPostRequest()
+    }
+
+    const setNewProfileSkillsAfterPostRequest = () => {
+        setCurrentProfile(prevState => {
+            let prevProfile = prevState
+            if(newSkills !== "" && skillsRemove.length > 0) {
+                let newSkillsList = newSkills.split(" ")
+                newSkillsList = newSkillsList.filter(x => !prevProfile.skills.includes(x))
+                prevProfile.skills.push(...newSkillsList)
+                skillsRemove.forEach(x => prevProfile.skills = prevProfile.skills.filter(e => e !== x))
+                setCurrentProfile(prevProfile)
+            }
+            else if(newSkills !== ""){
+                let newSkillsList = newSkills.split(" ")
+                newSkillsList = newSkillsList.filter(x => !prevProfile.skills.includes(x))
+                prevProfile.skills.push(...newSkillsList)
+                setCurrentProfile(prevProfile)
+            }
+            else if(skillsRemove.length > 0){
+                skillsRemove.forEach(x => prevProfile.skills = prevProfile.skills.filter(e => e !== x))
+                setCurrentProfile(prevProfile)
+            }
+            else {
+                setCurrentProfile(prevProfile)
+            }
+            removeSearchQueries()
+        })
     }
 
     const removeSearchQueries = () => {
         setSkillsRemove([])
-        setNewSkills([])
+        setNewSkills("")
     }
 
     const handleClose = (event, reason) => {
@@ -147,7 +174,6 @@ export default function ProfileEditPage() {
         );
         setSkillsRemove(prevState => {
             prevState.push(element)
-            debugger;
             setSkillsRemove(prevState)
         })
     };
@@ -188,6 +214,7 @@ export default function ProfileEditPage() {
                         <TextField
                             id="Skills"
                             label="Skills"
+                            value={newSkills}
                             onChange={e => setNewSkills(e.target.value)}
                         />
                         <div>Description: {currentProfile?.description}</div>
