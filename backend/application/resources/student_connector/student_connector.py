@@ -210,7 +210,7 @@ def set_profile_attributes(id):
         return abort(401)
     user_db = session.query(Student_Connector_User).filter(Student_Connector_User.email == current_user['email'])
     user = user_db.first()
-    if 'description' in profile_attributes:
+    if 'description' in profile_attributes and profile_attributes['description'] is not None and profile_attributes['description'] != "":
         user_db.update({'description': profile_attributes['description']})
     if 'skills_add' in profile_attributes and profile_attributes['skills_add'] != []:
         skill_from_db = session.query(Student_Connector_Skills).filter(Student_Connector_Skills.skill_name.in_(profile_attributes['skills_add'])).all()

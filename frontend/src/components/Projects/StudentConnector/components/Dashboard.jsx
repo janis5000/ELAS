@@ -18,7 +18,7 @@ const Dashboard = () => {
 
     return (
         <>
-            {profile?.courses.map(x => (
+            {profile?.courses === null || profile?.courses.length === 0 ? "You have no courses selected yet." : profile?.courses.map(x => (
                 <Card>
                     <CardContent>
                         {x.name}

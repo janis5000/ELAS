@@ -44,7 +44,7 @@ export default function ProfileEditPage() {
     const [profile, setProfile] = useState(null);
     const [newSkills, setNewSkills] = useState('');
     const [skillsRemove, setSkillsRemove] = useState([]);
-    const [Description, setDescription] = useState('');
+    const [description, setDescription] = useState('');
     const [open, setOpen] = useState(false);
     const [success, setSuccess] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
@@ -108,7 +108,7 @@ export default function ProfileEditPage() {
         Backend.post('/studentconnector/profile/' + params.id, {
             "skills_add": newSkills === "" ? [] : newSkills.split(" "),
             "skills_remove": skillsRemove.length === 0 ? [] : skillsRemove,
-            "description": Description,
+            "description": description === "" ? null : description,
             "degree_id": degree ? degree.id : null
         }, authConfig)
             .then((res) => {
@@ -154,6 +154,7 @@ export default function ProfileEditPage() {
     const removeSearchQueries = () => {
         setSkillsRemove([])
         setNewSkills("")
+        setDescription("")
     }
 
     const handleClose = (event, reason) => {
@@ -221,7 +222,7 @@ export default function ProfileEditPage() {
                         <TextField
                             id="Description"
                             label="Description"
-                            value={Description}
+                            value={description}
                             onChange={e => setDescription(e.target.value)}
                             multiline
                             rows={4}
