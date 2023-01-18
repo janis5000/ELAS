@@ -113,7 +113,6 @@ const LectureSite = () => {
                     </Typography>
                     {profile && !profileHasCourse() ? (
                         <Button
-
                             variant="contained"
                             color="primary"
                             onClick={addCourseToProfile}>Add Course</Button>) : <></>}
