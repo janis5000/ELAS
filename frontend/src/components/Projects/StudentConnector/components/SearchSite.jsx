@@ -116,7 +116,7 @@ const SearchSite = () => {
                     </Grid>
                 <Button variant="contained" color="primary" disableElevation onClick={GetCourses}>Search</Button>
                 {resultLectures?.map(x =>
-                    <Card>
+                    <Card >
                         <CardMedia image="/images/studentconnector/backgroundbox.png" key={"media" + x.id}></CardMedia>
                         <CardContent onClick={RedirectToCourseSite} key={"content" + x.id}>
                             {x.name}

@@ -3,12 +3,28 @@ import Backend from "../../../../assets/functions/Backend";
 import {useHistory, useParams} from "react-router-dom";
 import {createAuthConfig, createPostAuthConfig} from "../utils/auth";
 import Button from "@material-ui/core/Button";
-import {Grid} from "@material-ui/core";
+import {Grid, Paper, Typography} from "@material-ui/core";
 import {blue} from "@material-ui/core/colors";
 import CardContent from "@material-ui/core/CardContent";
 import Card from "@material-ui/core/Card";
+import {makeStyles} from "@material-ui/core/styles";
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+        margin: theme.spacing(8),
+
+
+   paper:{
+
+    },
+      typography:{
+            margin:theme.spacing(1),
+          padding:theme.spacing(4),
+      }
+  },
+}));
 const LectureSite = () => {
+    const classes = useStyles();
 
     const [profile, setProfile] = useState(null);
     const [lectureInfo, setLectureInfo] = useState(null);
@@ -83,22 +99,36 @@ const LectureSite = () => {
     return (
         <>
             <Grid container direction="column" justify="flex-start" alignItems="center">
-                {lectureInfo ? (
-                    <>
-                        <h1>{lectureInfo['name']}</h1>
-                        {lectureInfo['description']}
-                    </>
-                ) : "loading..."}
-                {profile && !profileHasCourse() ? (<Button onClick={addCourseToProfile}>Add Course</Button>) : <></>}
-                {profile && profileHasCourse() ? (
-                    <Button onClick={removeCourseFromProfile}>Remove Course</Button>) : <></>}
-                {otherUsers && otherUsers.map(x =>
-                    <Card>
-                        <CardContent onClick={() => redirectToProfile(x.id)} key={x.id}>
-                            {x.firstname + ' ' + x.lastname}
-                        </CardContent>
-                    </Card>
-                )}
+                <Paper className={classes.root} elevation={3}>
+                    <Typography className={classes.root} >
+
+
+                    {lectureInfo ? (
+                        <>
+                            <h1>{lectureInfo['name']}</h1>
+                            {lectureInfo["description"]}
+
+                        </>
+                        ) : "loading..."}
+                    </Typography>
+                    {profile && !profileHasCourse() ? (
+                        <Button
+
+                            variant="contained"
+                            color="primary"
+                            onClick={addCourseToProfile}>Add Course</Button>) : <></>}
+                    {profile && profileHasCourse() ? (
+                        <Button variant="contained"
+                                color="primary" onClick={removeCourseFromProfile}>Remove Course</Button>) : <></>}
+                    {otherUsers && otherUsers.map(x =>
+
+                        <Card>
+                            <CardContent onClick={() => redirectToProfile(x.id)} key={x.id}>
+                                {x.firstname + ' ' + x.lastname}
+                            </CardContent>
+                        </Card>
+                    )}
+                </Paper>
             </Grid>
         </>
     )

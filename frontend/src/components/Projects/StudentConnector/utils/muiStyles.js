@@ -257,4 +257,5 @@ mdSelectedHidden: {
 searchLectureResult: {
     backgroundColor:"#4399FF"
 }
+
 }));
