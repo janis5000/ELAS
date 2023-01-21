@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import Backend from "../../../../assets/functions/Backend";
-import {Grid, ListItem, ListItemText, Paper, TextField} from "@material-ui/core";
+import {Container, Grid, ListItem, ListItemText, Paper, TextField, Typography} from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import {muiStyles} from "../utils/muiStyles";
 import {createAuthConfig} from "../utils/auth";
@@ -13,6 +13,9 @@ import CardContent from "@material-ui/core/CardContent";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 import Box from "@material-ui/core/Box";
+import scStyles from "../utils/studentConnectorStyles";
+import CardActions from "@material-ui/core/CardActions";
+
 
 const SearchSite = () => {
     const [degree, setDegree] = useState({});
@@ -67,21 +70,23 @@ const SearchSite = () => {
 
     const history = useHistory();
 
-    useEffect(() => {console.log("RESULTS:",resultLectures)}, [resultLectures])
+    useEffect(() => {
+        console.log("RESULTS:", resultLectures)
+    }, [resultLectures])
 
-    const classes = muiStyles()
+    const classes = scStyles();
     return (
         <>
-                <Grid container direction="column" justify="flex-start" alignItems="center">
-                    <Grid item xs={10}>
-                        <Paper>
+            <Grid container direction="column" justify="flex-start" alignItems="center">
+                <Grid item xs={10}>
+                    <Paper>
                         <Autocomplete
                             id="studyprogram"
                             options={studyPrograms}
                             getOptionLabel={(option) => option.name}
                             value={degree}
-                            style={{ width: 500 }}
-                            onChange = {
+                            style={{width: 500}}
+                            onChange={
                                 (event, newValue) => {
                                     setDegree(newValue);
                                     Backend.get("/studentconnector/lectures?studyprogram-id=" + newValue.id).then((response) => {
@@ -91,38 +96,53 @@ const SearchSite = () => {
                                 }
                             }
                             className={classes.preSelectInput}
-                            renderInput={(params) => <TextField {...params} label="Study Program" variant="outlined" />}
+                            renderInput={(params) => <TextField {...params} label="Study Program" variant="outlined"/>}
                         />
-                        </Paper>
-                    </Grid>
+                    </Paper>
+                </Grid>
 
-                    <Grid item xs={10}>
-                        <Paper>
+                <Grid item xs={10}>
+                    <Paper>
                         <Autocomplete
-                        id="courses"
-                        options={lectures}
-                        getOptionLabel={(option) => option.name}
-                        style={{ width: 500 }}
-                        onChange = {
-                            (event, newValue) => {
-                                setSelectedLecture(newValue)
-                                console.log("SELECT", selectedLecture);
+                            id="courses"
+                            options={lectures}
+                            getOptionLabel={(option) => option.name}
+                            style={{width: 500}}
+                            onChange={
+                                (event, newValue) => {
+                                    setSelectedLecture(newValue)
+                                    console.log("SELECT", selectedLecture);
+                                }
                             }
-                        }
-                        className={classes.preSelectInput}
-                        renderInput={(params) => <TextField {...params} label="Courses" variant="outlined" />}
-                    />
-                        </Paper>
-                    </Grid>
+                            className={classes.preSelectInput}
+                            renderInput={(params) => <TextField {...params} label="Courses" variant="outlined"/>}
+                        />
+                    </Paper>
+                </Grid>
                 <Button variant="contained" color="primary" disableElevation onClick={GetCourses}>Search</Button>
-                {resultLectures?.map(x =>
-                    <Card >
-                        <CardMedia image="/images/studentconnector/backgroundbox.png" key={"media" + x.id}></CardMedia>
-                        <CardContent onClick={RedirectToCourseSite} key={"content" + x.id}>
-                            {x.name}
-                        </CardContent>
-                    </Card>
-                )}
+                <Container className={classes.cardContainer}>
+                    <Grid className={classes.cardGrid} container spacing={4}>
+                        {resultLectures?.map(x =>
+                            <Grid item alignItems="center" xs={12} sm={6} md={4}>
+                                <Card className={classes.card}>
+                                    <CardMedia className={classes.cardMedia}
+                                               image="https://cdn.pixabay.com/photo/2014/06/03/19/38/board-361516__340.jpg"
+                                               key={"media" + x.id}>
+                                    </CardMedia>
+                                    <CardContent className={classes.cardContent}
+                                                 key={"content" + x.id}>
+                                        <Typography gutterBottom variant="h5">
+                                            {x.name}
+                                        </Typography>
+                                    </CardContent>
+                                    <CardActions>
+                                        <Button size="small" color="primary" onClick={RedirectToCourseSite}>View Course</Button>
+                                    </CardActions>
+                                </Card>
+                            </Grid>
+                        )}
+                    </Grid>
+                </Container>
             </Grid>
         </>
     );
