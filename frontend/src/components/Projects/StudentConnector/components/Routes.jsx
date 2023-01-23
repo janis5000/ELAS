@@ -7,6 +7,7 @@ import Backend from "../../../../assets/functions/Backend";
 import Sidebar from "./Sidebar";
 import EditProfile from "./EditProfile";
 import LectureSite from "./LectureSite";
+import ProfileView from "./ProfileView";
 const StudentConnectorRoutes = () => {
     return (
         <>
@@ -28,7 +29,7 @@ const StudentConnectorRoutes = () => {
             <Route
                 exact
                 path="/studentconnector/profile/:id"
-                render={() => <EditProfile/>}
+                render={() => <ProfileView/>}
             />
                 <Route
                     exact

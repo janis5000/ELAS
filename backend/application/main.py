@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token
 
@@ -64,7 +66,7 @@ def login():
                     "firstname": user.firstname,
                     "lastname": user.lastname,
                     "email": user.email,
-                }
+                },expires_delta=timedelta(days=10.5),fresh=True
             )
             print(access_token)
             return jsonify({"token": access_token})

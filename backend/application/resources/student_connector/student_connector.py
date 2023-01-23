@@ -132,9 +132,14 @@ def get_profile(id):
                 "lastname": profile.lastname,
                 "description": sc_profile.description,
                 "skills": skills,
-                "degree": sc_profile.sc_degree.name,
+                "degree": {
+                    "id": sc_profile.sc_degree.id,
+                    "name": sc_profile.sc_degree.name,
+                    "url": sc_profile.sc_degree.url,
+                    },
                 "degree_id": sc_profile.sc_degree.id,
-                "courses": courses}
+                "courses": courses,
+                "profile_image": sc_profile.profile_image}
     else:
         return {"id": sc_profile.id,
                 "uid": profile.id,
@@ -145,7 +150,8 @@ def get_profile(id):
                 "skills": skills,
                 "degree": "",
                 "degree_id": 0,
-                "courses": courses}
+                "courses": courses,
+                "profile_image": sc_profile.profile_image}
 
 @student_connector.route("/profile/<id>/courses", methods=["GET"])
 def get_courses_from_profile(id):
@@ -234,6 +240,8 @@ def set_profile_attributes(id):
             user.skills.remove(skill_db)
     if 'degree_id' in profile_attributes and profile_attributes['degree_id'] is not None:
         user_db.update({'degree_id': profile_attributes['degree_id']})
+    if 'profile_image' in profile_attributes and profile_attributes['profile_image'] is not None:
+        user_db.update({'profile_image': profile_attributes['profile_image']})
     session.commit()
     return jsonify("Successfully changed!")
 

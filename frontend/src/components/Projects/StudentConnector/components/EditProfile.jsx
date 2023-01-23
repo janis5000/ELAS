@@ -222,7 +222,7 @@ export default function ProfileEditPage() {
                         <TextField
                             id="Description"
                             label="Description"
-                            value={description}
+                            value={currentProfile?.description}
                             onChange={e => setDescription(e.target.value)}
                             multiline
                             rows={4}
