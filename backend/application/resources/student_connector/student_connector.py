@@ -269,3 +269,12 @@ def get_lecture_by_id(id):
                        "sws": lecture.sws,
                        "name": lecture.name})
     return jsonify(result)
+
+@student_connector.route("/skills", methods=["GET"])
+def get_all_skills():
+    result = []
+    skills = session.query(Student_Connector_Skills).all()
+    for skill in skills:
+        result.append({"id":skill.id,
+                       "skill_name": skill.skill_name})
+    return jsonify(result)

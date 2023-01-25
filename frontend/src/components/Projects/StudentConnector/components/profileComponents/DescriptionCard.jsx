@@ -91,15 +91,14 @@ const DescriptionCard = ({ currentProfile, isOwner, setCurrentProfile }) => {
         <Paper className={classes.root}>
           <div style={{ padding: 5 }}>
             <Grid container>
-              <Grid item xs>
+              <Grid item>
                 <Typography className={classes.profileDescription} variant="h5">
                   About me
                 </Typography>
               </Grid>
-              <IconButton>
+              <IconButton onClick={onSetEditable}>
                 <Tooltip
                   title="Click on text to begin editing"
-                  onClick={onSetEditable}
                 >
                   <EditOutlinedIcon
                     fontSize="small"
@@ -141,8 +140,8 @@ const DescriptionCard = ({ currentProfile, isOwner, setCurrentProfile }) => {
                       color: "white",
                     }}
                   >
+                    <SaveOutlinedIcon />
                     Save
-                    <SaveOutlinedIcon fontSize="small" />
                   </Button>
                 </>
               ) : (

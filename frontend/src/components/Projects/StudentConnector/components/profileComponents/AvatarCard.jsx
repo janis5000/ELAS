@@ -23,10 +23,6 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
     },
     profileName: {
-        fontWeight: 400,
-        fontSize: 22,
-        fontFamily: 'Roboto',
-        font: 'Roboto',
         color: '#000000',
         lineHeight: 1.5,
     },
@@ -71,7 +67,7 @@ const AvatarCard = ({currentProfile, openImageDialog, setOpenImageDialog, isOwne
                         </Grid>
                     </Grid>
                     <Grid item className={classes.center}>
-                        <Typography className={classes.profileName}>
+                        <Typography className={classes.profileName} variant="h5">
                             {currentProfile?.firstname + ' ' + currentProfile?.lastname}
                         </Typography>
                     </Grid>
