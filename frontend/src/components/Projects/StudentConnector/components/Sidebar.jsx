@@ -15,6 +15,7 @@ import Avatar from "@material-ui/core/Avatar";
 const useStyles = makeStyles({
  // adjust this value to match the height of your header
  drawer: {
+   zIndex: 1
 },
   list: {
     width: 250,
@@ -31,7 +32,8 @@ const useStyles = makeStyles({
     margin:10,
   },
   icon:{
-
+    marginTop: 64,
+    marginLeft: 8
   }
 });
 
@@ -94,9 +96,8 @@ const Sidebar = () => {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        <ListItem className={classes.icon} button>
-           <img src='/images/logos/student-connector-logo.png' height="35" alt="studect Logo"/>
-           <ListItemText primary="Student Connector" className={classes.text} />
+        <ListItem className={classes.icon}>
+           <img src='/images/StudentConnector.png' height="24" alt="studect Logo"/>
         </ListItem>
         <ListItem button>
 
@@ -131,7 +132,8 @@ const Sidebar = () => {
       <Drawer 
       className='drawer' 
       anchor={'left'} 
-      open={state['left']} 
+      open={state['left']}
+      variant="permanent"
       onClose={toggleDrawer('left', false)}>
         {list('left')}
       </Drawer>

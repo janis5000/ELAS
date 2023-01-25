@@ -24,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.white,
     marginLeft: theme.spacing(3),
   },
+  appBar:{
+    zIndex: theme.zIndex.drawer + 1,
+  }
 }));
 
 export default function NavigationBar(props) {
@@ -48,7 +51,7 @@ export default function NavigationBar(props) {
 
   return (
     <>
-      <AppBar position="sticky" color="inherit" style={{backgroundColor: "#fff"}}>
+      <AppBar position="sticky" color="inherit" style={{backgroundColor: "#fff"}} className={classes.appBar}>
         <Toolbar>
           <Grid container>
             <Grid item xs className={classes.title} alignItems="center">
