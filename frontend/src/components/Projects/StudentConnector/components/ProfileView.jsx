@@ -20,6 +20,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import FormDialog from "./FormDialog";
 import AvatarCard from "./profileComponents/AvatarCard";
 import DescriptionCard from "./profileComponents/DescriptionCard";
+import SkillsCard from "./profileComponents/SkillsCard";
 
 const useStyles = makeStyles((theme) => ({
   saveProfile: {
@@ -40,7 +41,6 @@ const ProfileView = () => {
   const [saveOpen, setSaveOpen] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [currentSkills, setCurrentSkills] = useState("");
   const [skillsRemove, setSkillsRemove] = useState([]);
 
   const [allSkills, setAllSkills] = useState({
@@ -67,13 +67,19 @@ const ProfileView = () => {
     degrees: [],
   });
 
+
+  const [currentSkills, setCurrentSkills] = useState([]);
+
+
   const authConfig = createAuthConfig();
 
   const history = useHistory();
   const params = useParams();
 
+
   useEffect(() => {
     let studyProgramsRes = "";
+    let currentProfileRes = "";
     Backend.get("/studentconnector/study-programs").then((response) => {
       studyProgramsRes = response.data;
       setOptions({
@@ -84,18 +90,20 @@ const ProfileView = () => {
     Backend.get("/studentconnector/profile", authConfig).then((response) => {
       let profileRes = response.data;
       setProfile(profileRes);
+      setCurrentSkills(profileRes.skills)
       if (profileRes.id + "" === params.id) {
         setIsOwner(true);
       } else {
         setIsOwner(false);
       }
       Backend.get("/studentconnector/profile/" + params.id).then((response) => {
-        let currentProfileRes = response.data;
+        currentProfileRes = response.data;
         setCurrentProfile(currentProfileRes);
         //setInitials(currentProfileRes.firstname.substring(0, 1).toUpperCase() + currentProfileRes.lastname.substring(0, 1).toUpperCase())
       });
       Backend.get("/studentconnector/skills").then((response) => {
         let allSkillsRes = response.data
+        allSkillsRes = allSkillsRes.filter(x => !currentProfile.skills.map(y => y.id).includes(x.id))
         setAllSkills(allSkillsRes)
       })
     });
@@ -106,7 +114,7 @@ const ProfileView = () => {
     Backend.post(
       "/studentconnector/profile/" + params.id,
       {
-        skills_add: currentSkills !== "" ? currentSkills.split(" ") : null,
+        skills_add: currentProfile.skills,
         skills_remove: skillsRemove,
         description: currentProfile.description,
         degree_id: currentProfile.degree_id,
@@ -133,6 +141,23 @@ const ProfileView = () => {
     setSaveOpen(false);
   };
 
+  const handleDelete = (element) => {
+    let newSkills = []
+    debugger;
+    setCurrentProfile(prevState => {
+          let prevProfile = {...prevState}
+          newSkills = prevProfile.skills.filter((e) => e.id !== element.id)
+          prevProfile.skills = newSkills
+          setCurrentProfile(prevProfile)
+          setCurrentSkills(newSkills)
+        }
+    );
+    setSkillsRemove(prevState => {
+      prevState.push(element)
+      setSkillsRemove(prevState)
+    })
+  };
+
   return (
     <Grid container direction="column">
       <Grid container direction="row" spacing={2}>
@@ -153,6 +178,19 @@ const ProfileView = () => {
             setCurrentProfile={setCurrentProfile}
           />
         </Grid>
+        <Grid item xs={12} sm={8} lg={3}>
+        <SkillsCard
+            currentProfile={currentProfile}
+            isOwner={isOwner}
+            setCurrentProfile={setCurrentProfile}
+            skillsRemove={skillsRemove}
+            currentSkills={currentSkills}
+            setSkillsRemove={setSkillsRemove}
+            setCurrentSkills={setCurrentSkills}
+            allSkills={allSkills}
+            handleDelete={handleDelete}
+        />
+      </Grid>
       </Grid>
       <Box className={classes.saveProfile}>
         {" "}

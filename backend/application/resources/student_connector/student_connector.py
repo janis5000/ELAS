@@ -89,7 +89,10 @@ def get_personal_profile_information():
                            "name": course.name})
     if profile.skills:
         for skill in profile.skills:
-            skills.append(skill.skill_name)
+            skills.append({
+                "id": skill.id,
+                "skill_name": skill.skill_name}
+            )
     if profile.sc_degree is not None:
         return {"id": profile.id,
                 "email": profile.email,
@@ -123,7 +126,10 @@ def get_profile(id):
                            "name": course.name})
     if sc_profile.skills:
         for skill in sc_profile.skills:
-            skills.append(skill.skill_name)
+            skills.append({
+                "id":skill.id,
+                "skill_name":skill.skill_name}
+            )
     if sc_profile.sc_degree is not None:
         return {"id": sc_profile.id,
                 "uid": profile.id,
@@ -216,12 +222,15 @@ def set_profile_attributes(id):
         return abort(401)
     user_db = session.query(Student_Connector_User).filter(Student_Connector_User.email == current_user['email'])
     user = user_db.first()
+    skills_to_add = []
     if 'description' in profile_attributes and profile_attributes['description'] is not None and profile_attributes['description'] != "":
         user_db.update({'description': profile_attributes['description']})
     if 'skills_add' in profile_attributes and profile_attributes['skills_add'] != []:
-        skill_from_db = session.query(Student_Connector_Skills).filter(Student_Connector_Skills.skill_name.in_(profile_attributes['skills_add'])).all()
-        new_skills_user = list(filter(lambda x: x not in list(map(lambda y: y.skill_name, user.skills)), profile_attributes['skills_add']))
-        new_skills_db = list(filter(lambda x: x not in list(map(lambda y: y.skill_name, skill_from_db)), profile_attributes['skills_add']))
+        skills_to_add = list(map(lambda x: x["skill_name"], profile_attributes['skills_add']))
+        skill_from_db = session.query(Student_Connector_Skills).filter(Student_Connector_Skills.skill_name.in_(skills_to_add)).all()
+        new_skills_user = list(filter(lambda x: x not in list(map(lambda y: y.skill_name, user.skills)), skills_to_add))
+        new_skills_db = list(filter(lambda x: x not in list(map(lambda y: y.skill_name, skill_from_db)), skills_to_add))
+        new_skills_db = list(map(lambda x: x.skill_name.capitalize(), new_skills_db))
         skills = []
         for skill in new_skills_db:
             skill_db = Student_Connector_Skills(skill)
@@ -235,7 +244,9 @@ def set_profile_attributes(id):
 
         user.skills.extend(skills)
     if 'skills_remove' in profile_attributes and profile_attributes['skills_remove'] != []:
-        for skill in profile_attributes['skills_remove']:
+        skills_to_remove_names = list(map(lambda x: x["skill_name"], profile_attributes['skills_remove']))
+        skills_to_remove = list(filter(lambda x: x not in skills_to_add, skills_to_remove_names))
+        for skill in skills_to_remove:
             skill_db = session.query(Student_Connector_Skills).filter(Student_Connector_Skills.skill_name == skill).first()
             user.skills.remove(skill_db)
     if 'degree_id' in profile_attributes and profile_attributes['degree_id'] is not None:

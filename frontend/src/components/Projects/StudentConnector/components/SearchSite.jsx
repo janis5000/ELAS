@@ -126,7 +126,7 @@ const SearchSite = () => {
                             <Grid item alignItems="center" xs={12} sm={6} md={4}>
                                 <Card className={classes.card}>
                                     <CardMedia className={classes.cardMedia}
-                                               image="https://cdn.pixabay.com/photo/2014/06/03/19/38/board-361516__340.jpg"
+                                               image="https://nur-muth.com/wp-content/uploads/2022/02/bluebox-hintergrund-filmlexikon.jpeg"
                                                key={"media" + x.id}>
                                     </CardMedia>
                                     <CardContent className={classes.cardContent}
