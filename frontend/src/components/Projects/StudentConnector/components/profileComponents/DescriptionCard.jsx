@@ -1,104 +1,144 @@
-import {Avatar, Grid, makeStyles, Paper, TextField, Typography} from "@material-ui/core";
+import {Avatar, Grid, makeStyles, Paper, TextField, Tooltip, Typography} from "@material-ui/core";
 import FormDialog from "../FormDialog";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import React, {useEffect, useState} from 'react'
+import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
+import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
+import SaveOutlinedIcon from "@material-ui/icons/SaveOutlined";
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        'display': 'block',
-        'flexWrap': 'wrap',
+        display: 'block',
+        flexWrap: 'wrap',
         '& > *': {
             margin: theme.spacing(1),
             // width: theme.spacing(30),
             height: theme.spacing(35),
         },
     },
-    large: {
-        width: theme.spacing(17),
-        height: theme.spacing(17),
-    },
     center: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
     },
-    profileName: {
-        fontWeight: 400,
+    saveAbout: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'right',
+        verticalAlign: 'text-bottom',
+        marginTop: 15,
+    },
+    profileDescription: {
+        fontWeight: 700,
         fontSize: 22,
         fontFamily: 'Roboto',
         font: 'Roboto',
         color: '#000000',
         lineHeight: 1.5,
     },
+    textarea: {
+        backgroundColor: 'transparent',
+        border: 0,
+        borderColor: '#303f9f',
+        padding: '8px',
+        width: '100%',
+    },
 }));
 
-const DescriptionCard = ({currentProfile, openImageDialog, setOpenImageDialog, isOwner, setCurrentProfile, options}) => {
+const DescriptionCard = ({currentProfile, isOwner, setCurrentProfile}) => {
     const classes = useStyles()
 
+    const [editable, setEditable] = useState(false)
+    const [description, setDescription] = useState("");
 
-    const onClickOpenImageDialogOn = () => {
-        if (isOwner) {
-            setOpenImageDialog(true);
+    useEffect(() => {
+        setDescription(currentProfile?.description)
+    }, [currentProfile])
+
+    const handleSave = () => {
+        setCurrentProfile({... currentProfile, "description": description})
+        setEditable(false);
+    }
+
+    const onChange = (event) => {
+        if(isOwner) {
+            setDescription(event.target.value)
+            setEditable(true);
         }
     }
 
-    const handleImageDialog = (newState) => {
-        if (isOwner) {
-            setOpenImageDialog(newState)
+    const onSetEditable = () => {
+        if(isOwner){
+            setEditable(true);
         }
     }
 
-    const handleImageDialogSave = (newCurrentProfileState) => {
-        if (isOwner) {
-            setCurrentProfile(newCurrentProfileState)
-        }
+    const onStopEditing = () => {
+        setEditable(false);
+        setDescription(currentProfile?.description);
     }
 
     return (
-        <Grid container direction="column">
-            <Paper className={classes.root}>
-                <div style={{padding: 5}}>
-                    <Grid item>
-                        <Grid item className={classes.center}>
-                            <Avatar
-                                alt="profile pic"
-                                src={currentProfile?.profile_image}
-                                className={classes.large}
-                                onClick={onClickOpenImageDialogOn}
-                            />
-                            <FormDialog open={openImageDialog} handleSaveImage={handleImageDialogSave}
-                                        currentProfile={currentProfile} handleDialogStatus={handleImageDialog}/>
+        <>
+            <Grid container direction="column">
+                <Paper className={classes.root}>
+                    <div style={{ padding: 5 }}>
+                        <Grid item>
+                            <Typography className={classes.profileDescription}>
+                                About me
+                                <Tooltip title="Click on text to begin editing" onClick={onSetEditable}>
+                                    <EditOutlinedIcon
+                                        fontSize="small"
+                                        style={{ color: '#FF6500' }}
+                                    />
+                                </Tooltip>
+                            </Typography>
                         </Grid>
-                    </Grid>
-                    <Grid item className={classes.center}>
-                        <Typography className={classes.profileName}>
-                            {currentProfile?.firstname + ' ' + currentProfile?.lastname}
-                        </Typography>
-                    </Grid>
-                    <Grid item className={classes.center}>
-                        <Autocomplete
-                            id="studyprogram"
-                            options={options?.degrees}
-                            getOptionLabel={(option) => option.name}
-                            style={{width: 300}}
-                            value={currentProfile?.degree}
-                            onChange={
-                                (event, newValue) => {
-                                    setCurrentProfile({
-                                        ...currentProfile,
-                                        "degree": newValue,
-                                        "degree_id": newValue.id
-                                    });
-                                }
-                            }
-                            className={classes.preSelectInput}
-                            renderInput={(params) => <TextField {...params} label="Study Program" variant="outlined"
-                                                                size="small"/>}
-                        />
-                    </Grid>
-                </div>
-            </Paper>
-        </Grid>
+                        <Grid item className={classes.center}>
+              <textarea
+                  style={{ width: '100%' }}
+                  className={classes.textarea}
+                  rows={11}
+                  aria-label="Field name"
+                  value={description}
+                  onChange={onChange}
+                  placeholder="enter a short story of yourself"
+                  disabled={!editable}
+              />
+                        </Grid>
+
+                        <Box className={classes.saveAbout}>
+                            {editable ? (
+                                <>
+                                    <Button
+                                        onClick={onStopEditing}
+                                        variant="text"
+                                        color="primary"
+
+                                    >
+                                        Cancel
+                                    </Button>
+                                <Button
+                                    onClick={handleSave}
+                                    variant="contained"
+                                    color="primary"
+                                    style={{
+                                        backgroundColor: '#FF6500',
+                                        color: 'white',
+                                    }}
+                                    >
+                                    <SaveOutlinedIcon fontSize="small" />
+                                </Button>
+                                </>
+                            ) : (
+                                ''
+                            )}
+                        </Box>
+                    </div>
+                </Paper>
+            </Grid>
+        </>
     )
 }
 

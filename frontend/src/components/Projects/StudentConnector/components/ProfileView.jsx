@@ -19,6 +19,7 @@ import Backend from "../../../../assets/functions/Backend";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import FormDialog from "./FormDialog";
 import AvatarCard from "./profileComponents/AvatarCard";
+import DescriptionCard from "./profileComponents/DescriptionCard";
 
 const useStyles = makeStyles((theme) => ({
 saveProfile: {
@@ -121,8 +122,8 @@ const ProfileView = () => {
                                 isOwner={isOwner} setCurrentProfile={setCurrentProfile} options={options}/>
                             </Grid>
                             <Grid item xs={12} sm={8} lg={4}>
-                                <AvatarCard currentProfile={currentProfile} openImageDialog={openImageDialog} setOpenImageDialog={setOpenImageDialog}
-                                            isOwner={isOwner} setCurrentProfile={setCurrentProfile} options={options}/>
+                                <DescriptionCard currentProfile={currentProfile}
+                                            isOwner={isOwner} setCurrentProfile={setCurrentProfile}/>
                             </Grid>
                         </Grid>
                         <Box className={classes.saveProfile}>
