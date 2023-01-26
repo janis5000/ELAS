@@ -75,7 +75,8 @@ const AvatarCard = ({currentProfile, openImageDialog, setOpenImageDialog, isOwne
                         <Autocomplete
                             id="studyprogram"
                             options={options?.degrees}
-                            getOptionLabel={(option) => option.name}
+                            getOptionLabel={(option) => option.name || ''}
+                            getOptionSelected={(option, value) => option.id === value.id || true}
                             style={{width: 300}}
                             value={currentProfile?.degree}
                             onChange={

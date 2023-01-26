@@ -38,9 +38,9 @@ const ProfileView = () => {
   const [profile, setProfile] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
   const [openImageDialog, setOpenImageDialog] = useState(false);
-  const [saveOpen, setSaveOpen] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [snackBarMessage, setSnackBarMessage] = useState("");
   const [skillsRemove, setSkillsRemove] = useState([]);
 
   const [allSkills, setAllSkills] = useState({
@@ -103,7 +103,7 @@ const ProfileView = () => {
       });
       Backend.get("/studentconnector/skills").then((response) => {
         let allSkillsRes = response.data
-        allSkillsRes = allSkillsRes.filter(x => !currentProfile.skills.map(y => y.id).includes(x.id))
+        allSkillsRes = allSkillsRes.filter(x => !currentProfileRes.skills.map(y => y.id).includes(x.id))
         setAllSkills(allSkillsRes)
       })
     });
@@ -124,13 +124,13 @@ const ProfileView = () => {
     )
       .then((res) => {
         setSuccess(true);
-        setSaveOpen(true);
-        setErrorMessage("Profile Updated!");
+        setOpenSnackbar(true);
+        setSnackBarMessage("Profile Updated!");
       })
       .catch((err) => {
         setSuccess(false);
-        setSaveOpen(true);
-        setErrorMessage("An error occured. Profile not updated");
+        setOpenSnackbar(true);
+        setSnackBarMessage("An error occured. Profile not updated");
       });
   };
 
@@ -138,24 +138,7 @@ const ProfileView = () => {
     if (reason === "clickaway") {
       return;
     }
-    setSaveOpen(false);
-  };
-
-  const handleDelete = (element) => {
-    let newSkills = []
-    debugger;
-    setCurrentProfile(prevState => {
-          let prevProfile = {...prevState}
-          newSkills = prevProfile.skills.filter((e) => e.id !== element.id)
-          prevProfile.skills = newSkills
-          setCurrentProfile(prevProfile)
-          setCurrentSkills(newSkills)
-        }
-    );
-    setSkillsRemove(prevState => {
-      prevState.push(element)
-      setSkillsRemove(prevState)
-    })
+    setOpenSnackbar(false);
   };
 
   return (
@@ -181,20 +164,18 @@ const ProfileView = () => {
         <Grid item xs={12} sm={8} lg={3}>
         <SkillsCard
             currentProfile={currentProfile}
-            isOwner={isOwner}
             setCurrentProfile={setCurrentProfile}
-            skillsRemove={skillsRemove}
             currentSkills={currentSkills}
-            setSkillsRemove={setSkillsRemove}
             setCurrentSkills={setCurrentSkills}
             allSkills={allSkills}
-            handleDelete={handleDelete}
+            setSkillsRemove={setSkillsRemove}
+            isOwner={isOwner}
         />
       </Grid>
       </Grid>
       <Box className={classes.saveProfile}>
-        {" "}
         {
+          isOwner &&
           <Button
             color="primary"
             variant="contained"
@@ -211,10 +192,10 @@ const ProfileView = () => {
         }
       </Box>
       <Snackbar
-        open={saveOpen}
+        open={openSnackbar}
         autoHideDuration={3000}
         onClose={handleCloseSnackbar}
-        message={errorMessage}
+        message={snackBarMessage}
         style={{ backgroundColor: success ? "green" : "red" }}
       />
     </Grid>
