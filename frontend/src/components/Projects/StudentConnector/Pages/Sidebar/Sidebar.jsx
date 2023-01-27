@@ -7,10 +7,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import {Route, useHistory} from "react-router-dom";
-import StudentConnector from "../StudentConnector";
-import SearchSite from "./SearchSite";
-import Backend from "../../../../assets/functions/Backend";
-import {createAuthConfig} from "../utils/auth";
+import StudentConnector from "../../StudentConnector";
+import SearchSite from "../CourseSearch/SearchSite";
+import Backend from "../../../../../assets/functions/Backend";
+import {createAuthConfig} from "../../utils/auth";
 import Avatar from "@material-ui/core/Avatar";
 const useStyles = makeStyles({
  // adjust this value to match the height of your header

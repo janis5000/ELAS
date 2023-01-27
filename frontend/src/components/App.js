@@ -18,10 +18,10 @@ import Backend from "../assets/functions/Backend";
 import ProjectFinder from "./Projects/ProjectFinder/ProjectFinder";
 import StudentConnector from "./Projects/StudentConnector/StudentConnector";
 import Smatch from "./Projects/Smatch/Smatch";
-import SearchSite from "./Projects/StudentConnector/components/SearchSite";
-import Student_Connector_Routes from "./Projects/StudentConnector/components/Routes";
-import Sidebar from "./Projects/StudentConnector/components/Sidebar";
-import StudentConnectorRoutes from "./Projects/StudentConnector/components/Routes";
+import SearchSite from "./Projects/StudentConnector/Pages/CourseSearch/SearchSite";
+import Student_Connector_Routes from "./Projects/StudentConnector/Pages/Sidebar/Routes";
+import Sidebar from "./Projects/StudentConnector/Pages/Sidebar/Sidebar";
+import StudentConnectorRoutes from "./Projects/StudentConnector/Pages/Sidebar/Routes";
 
 const useStyles = makeStyles((theme) => ({
   container: {

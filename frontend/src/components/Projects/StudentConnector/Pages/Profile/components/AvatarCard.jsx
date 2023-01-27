@@ -1,5 +1,5 @@
 import {Avatar, Grid, makeStyles, Paper, TextField, Typography} from "@material-ui/core";
-import FormDialog from "../FormDialog";
+import FormDialog from "./FormDialog";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import React, {useEffect, useState} from 'react'
 

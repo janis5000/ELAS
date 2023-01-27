@@ -7,7 +7,7 @@ import {
   Tooltip,
   Typography,
 } from "@material-ui/core";
-import FormDialog from "../FormDialog";
+import FormDialog from "./FormDialog";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import React, { useEffect, useState } from "react";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";

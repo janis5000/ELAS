@@ -1,19 +1,19 @@
 import React, {useEffect, useState} from 'react'
-import Backend from "../../../../assets/functions/Backend";
+import Backend from "../../../../../assets/functions/Backend";
 import {Container, Grid, ListItem, ListItemText, Paper, TextField, Typography} from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import {muiStyles} from "../utils/muiStyles";
-import {createAuthConfig} from "../utils/auth";
+import {muiStyles} from "../../utils/muiStyles";
+import {createAuthConfig} from "../../utils/auth";
 import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
-import CourseResults from "./CourseResults";
-import LectureSite from "./LectureSite";
+import CourseResults from "../../components/CourseResults";
+import LectureSite from "../Lecture/LectureSite";
 import {useHistory} from "react-router-dom";
 import CardContent from "@material-ui/core/CardContent";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 import Box from "@material-ui/core/Box";
-import scStyles from "../utils/studentConnectorStyles";
+import scStyles from "../../utils/studentConnectorStyles";
 import CardActions from "@material-ui/core/CardActions";
 
 

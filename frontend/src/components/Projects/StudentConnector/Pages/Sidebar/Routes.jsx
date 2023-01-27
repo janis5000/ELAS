@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Route } from "react-router-dom";
-import StudentConnector from "../StudentConnector";
-import SearchSite from "./SearchSite";
-import { createAuthConfig } from "../utils/auth";
-import Backend from "../../../../assets/functions/Backend";
+import StudentConnector from "../../StudentConnector";
+import SearchSite from "../CourseSearch/SearchSite";
+import { createAuthConfig } from "../../utils/auth";
+import Backend from "../../../../../assets/functions/Backend";
 import Sidebar from "./Sidebar";
-import EditProfile from "./EditProfile";
-import LectureSite from "./LectureSite";
-import ProfileView from "./ProfileView";
+import EditProfile from "../../components/EditProfile";
+import LectureSite from "../Lecture/LectureSite";
+import ProfileView from "../Profile/ProfileView";
 import { Grid } from "@material-ui/core";
 
 const StudentConnectorRoutes = () => {

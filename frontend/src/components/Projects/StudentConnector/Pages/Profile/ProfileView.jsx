@@ -13,14 +13,14 @@ import {
 } from "@material-ui/core";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import SaveOutlinedIcon from "@material-ui/icons/SaveOutlined";
-import { createAuthConfig } from "../utils/auth";
+import { createAuthConfig } from "../../utils/auth";
 import { useHistory, useParams } from "react-router-dom";
-import Backend from "../../../../assets/functions/Backend";
+import Backend from "../../../../../assets/functions/Backend";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import FormDialog from "./FormDialog";
-import AvatarCard from "./profileComponents/AvatarCard";
-import DescriptionCard from "./profileComponents/DescriptionCard";
-import SkillsCard from "./profileComponents/SkillsCard";
+import FormDialog from "./components/FormDialog";
+import AvatarCard from "./components/AvatarCard";
+import DescriptionCard from "./components/DescriptionCard";
+import SkillsCard from "./components/SkillsCard";
 
 const useStyles = makeStyles((theme) => ({
   saveProfile: {

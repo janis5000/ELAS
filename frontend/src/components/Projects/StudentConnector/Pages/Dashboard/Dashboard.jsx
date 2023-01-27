@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
-import Backend from "../../../../assets/functions/Backend";
-import {createAuthConfig} from "../utils/auth";
+import Backend from "../../../../../assets/functions/Backend";
+import {createAuthConfig} from "../../utils/auth";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 

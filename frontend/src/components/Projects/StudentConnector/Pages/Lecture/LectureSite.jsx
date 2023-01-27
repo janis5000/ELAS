@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
-import Backend from "../../../../assets/functions/Backend";
+import Backend from "../../../../../assets/functions/Backend";
 import {useHistory, useParams} from "react-router-dom";
-import {createAuthConfig, createPostAuthConfig} from "../utils/auth";
+import {createAuthConfig, createPostAuthConfig} from "../../utils/auth";
 import Button from "@material-ui/core/Button";
 import {Grid, Paper, Typography} from "@material-ui/core";
 import {blue} from "@material-ui/core/colors";
