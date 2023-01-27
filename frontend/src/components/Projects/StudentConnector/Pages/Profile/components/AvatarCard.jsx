@@ -53,7 +53,7 @@ const AvatarCard = ({currentProfile, openImageDialog, setOpenImageDialog, isOwne
     return (
         <Grid container direction="column">
             <Paper className={classes.root}>
-                <div style={{padding: 5}}>
+                <div>
                     <Grid item>
                         <Grid item className={classes.center}>
                             <Avatar
@@ -77,7 +77,7 @@ const AvatarCard = ({currentProfile, openImageDialog, setOpenImageDialog, isOwne
                             options={options?.degrees}
                             getOptionLabel={(option) => option.name || ''}
                             getOptionSelected={(option, value) => option.id === value.id || true}
-                            style={{width: 300}}
+                            style={{width: "90%"}}
                             value={currentProfile?.degree}
                             onChange={
                                 (event, newValue) => {

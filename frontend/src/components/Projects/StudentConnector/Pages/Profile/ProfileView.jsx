@@ -143,6 +143,7 @@ const ProfileView = () => {
 
   return (
     <Grid container direction="column">
+        <Typography style={{marginBottom: "2vw"}} variant="h5">My Profile</Typography>
       <Grid container direction="row" spacing={2}>
         <Grid item xs={12} sm={8} lg={3}>
           <AvatarCard
