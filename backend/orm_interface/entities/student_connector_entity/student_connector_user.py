@@ -48,6 +48,8 @@ class Student_Connector_User(Base):
     skills = relationship('Student_Connector_Skills',
         secondary='student_connector_skills_user', back_populates="user"
     )
+    discussions = relationship('Student_Connector_Discussion', back_populates="author")
+    comments = relationship('Student_Connector_Comments', back_populates="author")
     profile_image = Column(String)
     def __init__(self, id, email, description, languages, degree_id):
         self.id = id
