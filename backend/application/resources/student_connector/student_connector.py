@@ -322,6 +322,7 @@ def start_new_discussion():
                                               text=discussion_data['text'],
                                               author_email=current_user['email'])
     session.add(discussion)
+    discussion.update(session)
     session.commit()
     return "Successfully started discussion!"
 
@@ -337,6 +338,7 @@ def add_comment_to_discussion():
     comment = Student_Connector_Comments(id=None, discussion_id=comment_data['discussion_id'],
                                          author_email=current_user['email'],
                                          text=comment_data['text'])
+    discussion.update(session)
     discussion.comments.append(comment)
     session.commit()
     return "Successfully added comment!"
@@ -349,17 +351,19 @@ def get_discussion(lecture_id):
         Student_Connector_Discussion.lecture_id == lecture_id).all()
     for discussion in discussions:
         comments = []
-        for comment in discussion.comments:
-            author = {"id": comment.author.id,
-                      "email": comment.author.email,
-                      "profile_image": comment.author.profile_image}
-            comments.append({"id": comment.id,
-                             "text": comment.text,
-                             "author": author})
-        author = {"id": discussion.author.id,
-                  "email": discussion.author.email,
-                  "profile_image": discussion.author.profile_image}
-        result.append({"id": discussion['id'],
-                       "text": discussion['text'],
-                       "author": author,
+        sorted_comments = sorted(discussion.comments, key=lambda x: x.time_created, reverse=True)
+        for comment in sorted_comments:
+            comment_author = {"comment_author_id": comment.author.id,
+                      "comment_author_email": comment.author.email,
+                      "comment_author_profile_image": comment.author.profile_image}
+            comments.append({"comment_id": comment.id,
+                             "comment_text": comment.text,
+                             "author": comment_author})
+        discussion_author = {"discussion_author_id": discussion.author.id,
+                  "discussion_author_email": discussion.author.email,
+                  "discussion_author_profile_image": discussion.author.profile_image}
+        result.append({"discussion_id": discussion.id,
+                       "discussion_text": discussion.text,
+                       "discussion_author": discussion_author,
                        "comments": comments})
+    return jsonify(result)

@@ -26,7 +26,7 @@ class Student_Connector_Discussion(Base):
         self.author_email = author_email
 
     def update(self, session):
-        self.time_updated = datetime.utcnow()
+        self.time_updated = func.now()
         session.add(self)
         session.commit()
 
