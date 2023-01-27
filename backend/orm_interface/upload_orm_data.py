@@ -3,6 +3,7 @@ import io
 from orm_interface.entities.e3_entity.e3_courses import E3_Courses, E3_Rating
 from orm_interface.entities.lecture import Lecture
 from orm_interface.entities.student_connector_entity.student_connector_user import *
+from orm_interface.entities.student_connector_entity.student_connector_discussion import *
 from orm_interface.entities.studyprogram import StudyProgram
 from orm_interface.entities.professor import Professor
 from orm_interface.entities.timetable import Timetable

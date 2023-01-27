@@ -5,6 +5,8 @@ from orm_interface.base import Base, Session, engine
 from orm_interface.entities.lecture import Lecture
 from orm_interface.entities.student_connector_entity.student_connector_user import Student_Connector_User, \
     Student_Connector_Skills, Student_Connector_Courses_User
+from orm_interface.entities.student_connector_entity.student_connector_discussion import Student_Connector_Discussion,\
+    Student_Connector_Comments
 from orm_interface.entities.user import User
 from orm_interface.entities.studyprogram import StudyProgram
 
@@ -289,3 +291,31 @@ def get_all_skills():
         result.append({"id":skill.id,
                        "skill_name": skill.skill_name})
     return jsonify(result)
+
+@student_connector.route("/start-discussion", methods=["POST"])
+@jwt_required()
+def start_new_discussion():
+    discussion_data = request.json
+    current_user = get_jwt_identity()
+    discussion = Student_Connector_Discussion(id=None, lecture_id=discussion_data['lecture_id'],
+                                              text=discussion_data['text'],
+                                              author_id=current_user['id'])
+    session.add(discussion)
+    session.commit()
+    return "Successfully started discussion!"
+
+
+@student_connector.route("/add-comment", methods=["POST"])
+@jwt_required()
+def add_comment_to_discussion():
+    current_user = get_jwt_identity()
+    comment_data = request.json
+    discussion_db = session.query(Student_Connector_Discussion).filter(Student_Connector_Discussion.id == comment_data['discussion_id'])
+    discussion = discussion_db.first()
+    comment = Student_Connector_Comments(id=None, discussion_id=comment_data['discussion_id'], author_id=current_user['id'],
+                                         text=comment_data['text'])
+    discussion.comments.append(comment)
+    session.commit()
+    return "Successfully added comment!"
+
+
