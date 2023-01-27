@@ -6,7 +6,6 @@ import {muiStyles} from "../../utils/muiStyles";
 import {createAuthConfig} from "../../utils/auth";
 import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
-import CourseResults from "../../components/CourseResults";
 import LectureSite from "../Lecture/LectureSite";
 import {useHistory} from "react-router-dom";
 import CardContent from "@material-ui/core/CardContent";

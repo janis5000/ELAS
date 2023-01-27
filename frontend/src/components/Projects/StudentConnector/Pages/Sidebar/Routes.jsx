@@ -5,7 +5,6 @@ import SearchSite from "../CourseSearch/SearchSite";
 import { createAuthConfig } from "../../utils/auth";
 import Backend from "../../../../../assets/functions/Backend";
 import Sidebar from "./Sidebar";
-import EditProfile from "../../components/EditProfile";
 import LectureSite from "../Lecture/LectureSite";
 import ProfileView from "../Profile/ProfileView";
 import { Grid } from "@material-ui/core";
