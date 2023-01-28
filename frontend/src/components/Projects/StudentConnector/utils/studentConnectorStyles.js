@@ -23,6 +23,9 @@ const scStyles = makeStyles((theme) => ({
     tabStyle:{
         backgroundColor: theme.palette.background.paper,
         color: "black"
+    },
+    cardGrid: {
+        marginBottom: 10
     }
 }))
 

@@ -109,7 +109,8 @@ def get_personal_profile_information():
                 "skills": skills,
                 "degree": profile.sc_degree.name,
                 "degree_id": profile.sc_degree.id,
-                "courses": courses}
+                "courses": courses,
+                "profile_image": profile.profile_image}
     else:
         return {"id": profile.id,
                 "email": profile.email,
@@ -117,7 +118,8 @@ def get_personal_profile_information():
                 "skills": skills,
                 "degree": "",
                 "degree_id": 0,
-                "courses": courses}
+                "courses": courses,
+                "profile_image": profile.profile_image}
 
 
 @student_connector.route("/profile/<id>", methods=["GET"])
@@ -349,21 +351,29 @@ def get_discussion(lecture_id):
     result = []
     discussions = session.query(Student_Connector_Discussion).filter(
         Student_Connector_Discussion.lecture_id == lecture_id).all()
+    profile_db = session.query(User)
     for discussion in discussions:
         comments = []
         sorted_comments = sorted(discussion.comments, key=lambda x: x.time_created, reverse=True)
         for comment in sorted_comments:
+            comment_author_name = profile_db.filter(User.email == comment.author.email).first()
             comment_author = {"comment_author_id": comment.author.id,
                       "comment_author_email": comment.author.email,
-                      "comment_author_profile_image": comment.author.profile_image}
+                      "comment_author_profile_image": comment.author.profile_image,
+                       "comment_author_name": comment_author_name.firstname + " " + comment_author_name.lastname}
             comments.append({"comment_id": comment.id,
                              "comment_text": comment.text,
-                             "author": comment_author})
+                             "author": comment_author,
+                            "time_created": discussion.time_created})
+        discussion_author_name = profile_db.filter(User.email == discussion.author.email).first()
         discussion_author = {"discussion_author_id": discussion.author.id,
                   "discussion_author_email": discussion.author.email,
-                  "discussion_author_profile_image": discussion.author.profile_image}
+                  "discussion_author_profile_image": discussion.author.profile_image,
+                             "discussion_author_name": discussion_author_name.firstname + " " +  discussion_author_name.lastname}
         result.append({"discussion_id": discussion.id,
                        "discussion_text": discussion.text,
                        "discussion_author": discussion_author,
-                       "comments": comments})
+                       "comments": comments,
+                       "time_created": discussion.time_created,
+                       "time_updated": discussion.time_updated})
     return jsonify(result)

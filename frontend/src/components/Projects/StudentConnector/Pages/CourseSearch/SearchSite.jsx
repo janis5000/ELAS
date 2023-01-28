@@ -14,6 +14,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Box from "@material-ui/core/Box";
 import scStyles from "../../utils/studentConnectorStyles";
 import CardActions from "@material-ui/core/CardActions";
+import LectureCard from "../../components/LectureCard";
 
 
 const SearchSite = () => {
@@ -124,24 +125,8 @@ const SearchSite = () => {
                 <Container className={classes.cardContainer}>
                     <Grid className={classes.cardGrid} container spacing={4}>
                         {resultLectures?.map(x =>
-                            <Grid item alignItems="center" xs={12} sm={6} md={4}>
-                                <Card className={classes.card}>
-                                    <CardMedia className={classes.cardMedia}
-                                               image="https://nur-muth.com/wp-content/uploads/2022/02/bluebox-hintergrund-filmlexikon.jpeg"
-                                               key={"media" + x.id}>
-                                    </CardMedia>
-                                    <CardContent className={classes.cardContent}
-                                                 key={"content" + x.id}>
-                                        <Typography gutterBottom variant="h5">
-                                            {x.name}
-                                        </Typography>
-                                    </CardContent>
-                                    <CardActions>
-                                        <Button size="small" color="primary" onClick={RedirectToCourseSite}>View Course</Button>
-                                    </CardActions>
-                                </Card>
-                            </Grid>
-                        )}
+                            <LectureCard hasAction={true} actionOnClick={RedirectToCourseSite} classesSc={classes}
+                                         lectureInfo={x} contentKey={"content" + x.id} mediaKey={"media" + x.id}/>)}
                     </Grid>
                 </Container>
             </Grid>
