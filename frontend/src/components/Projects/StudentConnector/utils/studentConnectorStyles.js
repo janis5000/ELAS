@@ -3,7 +3,7 @@ import {makeStyles} from "@material-ui/core/styles";
 const scStyles = makeStyles((theme) => ({
     container: {
         backgroundColor: theme.palette.background.paper,
-        padding: theme.spacing
+        padding: theme.spacing()
     },
     cardContainer: {
         padding: '20px 0'
