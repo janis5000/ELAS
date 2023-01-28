@@ -125,8 +125,10 @@ const SearchSite = () => {
                 <Container className={classes.cardContainer}>
                     <Grid className={classes.cardGrid} container spacing={4}>
                         {resultLectures?.map(x =>
+                            <Grid item xs={6} md={3} lg={3}>
                             <LectureCard hasAction={true} actionOnClick={RedirectToCourseSite} classesSc={classes}
-                                         lectureInfo={x} contentKey={"content" + x.id} mediaKey={"media" + x.id}/>)}
+                                         lectureInfo={x} contentKey={"content" + x.id} mediaKey={"media" + x.id}/>
+                            </Grid>)}
                     </Grid>
                 </Container>
             </Grid>

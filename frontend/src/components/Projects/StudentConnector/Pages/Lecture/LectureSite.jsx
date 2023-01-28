@@ -29,8 +29,6 @@ import LectureCard from "../../components/LectureCard";
 import DescriptionCard from "./components/DescriptionCard";
 import DiscussionMemberTabPanel from "./components/DiscussionMemberTabPanel";
 
-
-
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(8),
@@ -53,6 +51,7 @@ const LectureSite = () => {
   const [tabIndex, setTabIndex] = useState(0);
   const [discussions, setDiscussions] = useState([]);
   const [discussionText, setDiscussionText] = useState("");
+  const [discussionIdNewCommentText, setDiscussionIdNewCommentText] = useState({"id":"","text":""})
 
   const params = useParams();
 
@@ -144,14 +143,48 @@ const LectureSite = () => {
   };
 
   const postDiscussion = () => {
-    debugger;
-    Backend.post("/studentconnector/start-discussion",
-        {'lecture_id': params.id,
-              'text': discussionText},
-        authConfig).then((res) => {
+    Backend.post(
+      "/studentconnector/start-discussion",
+      {
+        lecture_id: params.id,
+        text: discussionText,
+      },
+      authConfig
+    ).then((res) => {
+      getDiscussions();
+      clearTextFields();
+    });
+  };
 
-    })
+  const clearTextFields = () => {
+    setDiscussionText("")
+    setDiscussionIdNewCommentText({"id":"", "text":""})
+
   }
+
+  const postComment = (discussion_id) => {
+    Backend.post(
+        "/studentconnector/add-comment",
+        {
+          "text": discussionIdNewCommentText.text,
+          "discussion_id": discussion_id
+        },
+        authConfig
+    ).then((response) => {
+      getDiscussions();
+      clearTextFields();
+      /*let discussionRes = response.data
+      setDiscussions(prevState => {
+        let prevDiscussions = [...prevState]
+        prevDiscussions.forEach(x => {
+          if(x.discussion_id == discussion_id){
+            x = discussionRes
+          }
+        })
+        setDiscussions(prevDiscussions)
+      })*/
+    });
+  };
 
   const handleViewTypeChange = (event, newValue) => {
     if (newValue === 0) {
@@ -163,83 +196,100 @@ const LectureSite = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("new discussiontext: " + discussionText)
-  },[discussionText])
-
   const onDiscussionTextChange = (event) => {
-    setDiscussionText(event.target.value)
-  }
+    setDiscussionText(event.target.value);
+  };
 
   const changeViewType = (newViewType) => {
     setViewType(newViewType);
   };
+
+  const onCommentTextChange = (event, id) => {
+    setDiscussionIdNewCommentText({"id":id, "text":event.target.value})
+  }
+
+
   return (
     <>
       <Container fixed>
-          <Grid className={classesSc.cardGrid} container spacing={3}>
-            <Grid item xs={3} md={3} lg={3}>
-              <LectureCard
-                classesSc={classesSc}
-                lectureInfo={lectureInfo}
-                mediaKey={"media" + lectureInfo?.id}
-                contentKey={"content" + lectureInfo?.id}
-                hasAction={false}
-                actionOnClick={null}
-              />
-            </Grid>
-            <Grid item xs={9} md={9} lg={9}>
-              <AppBar position="static">
-                <Tabs
-                  className={classesSc.tabStyle}
-                  value={tabIndex}
-                  onChange={handleViewTypeChange}
-                >
-                  <Tab label="Discussion" />
-                  <Tab label="Members" />
-                </Tabs>
-              </AppBar>
-              <DiscussionMemberTabPanel value={tabIndex} index={0} profile={profile} postDiscussion={postDiscussion}
-                                        onDiscussionTextChange={onDiscussionTextChange} text={discussionText} discussions={discussions}/>
-              <DiscussionMemberTabPanel value={tabIndex} index={1}/>
-            </Grid>
-            <Grid item xs={3} md={3} lg={3}>
-              <DescriptionCard
+        <Grid className={classesSc.cardGrid} container spacing={3}>
+          <Grid item xs={3} spacing={3}>
+            <Grid container direction="column" spacing={3}>
+              <Grid item>
+                <LectureCard
                   classesSc={classesSc}
                   lectureInfo={lectureInfo}
-              />
+                  mediaKey={"media" + lectureInfo?.id}
+                  contentKey={"content" + lectureInfo?.id}
+                  hasAction={false}
+                  actionOnClick={null}
+                />
+              </Grid>
+              <Grid item>
+                <DescriptionCard
+                  classesSc={classesSc}
+                  lectureInfo={lectureInfo}
+                />
+              </Grid>
             </Grid>
           </Grid>
-          {profile && !profileHasCourse() ? (
-            <Button
-              onClick={addCourseToProfile}
-                style={{
+          <Grid item xs={9}>
+            <AppBar position="static">
+              <Tabs
+                className={classesSc.tabStyle}
+                value={tabIndex}
+                onChange={handleViewTypeChange}
+                TabIndicatorProps={{style: {background: "#FF6500"}}}
+              >
+                <Tab label="Discussion" />
+                <Tab label="Members" />
+              </Tabs>
+            </AppBar>
+            <DiscussionMemberTabPanel
+              value={tabIndex}
+              index={0}
+              profile={profile}
+              postDiscussion={postDiscussion}
+              onDiscussionTextChange={onDiscussionTextChange}
+              text={discussionText}
+              discussions={discussions}
+              discussionIdNewCommentText={discussionIdNewCommentText}
+              onCommentTextChange={onCommentTextChange}
+              postComment={postComment}
+            />
+            <DiscussionMemberTabPanel value={tabIndex} index={1} />
+          </Grid>
+        </Grid>
+        {profile && !profileHasCourse() ? (
+          <Button
+            onClick={addCourseToProfile}
+            style={{
               marginLeft: 10,
               backgroundColor: "#FF6500",
               color: "white",
-                  justifyContent: "center"
+              justifyContent: "center",
             }}
-            >
-              Add Course to Dashboard
-            </Button>
-          ) : (
-            <></>
-          )}
-          {profile && profileHasCourse() ? (
-            <Button
-                style={{
+          >
+            Add Course to Dashboard
+          </Button>
+        ) : (
+          <></>
+        )}
+        {profile && profileHasCourse() ? (
+          <Button
+            style={{
               marginLeft: 10,
               backgroundColor: "#FF6500",
               color: "white",
-                  justifyContent: "center"
+              justifyContent: "center",
             }}
-              onClick={removeCourseFromProfile}
-            >
-              Remove Course from Dashboard
-            </Button>
-          ) : (
-            <></>
-          )}
+            onClick={removeCourseFromProfile}
+          >
+            Remove Course from Dashboard
+          </Button>
+        ) : (
+          <></>
+        )}
       </Container>
     </>
   );

@@ -8,7 +8,7 @@ import Button from "@material-ui/core/Button";
 
 const LectureCard = ({classesSc, lectureInfo, mediaKey, contentKey, hasAction, actionOnClick}) => {
     return (
-        <Grid item>
+        <>
             <Card className={classesSc.card}>
                 <CardMedia
                     className={classesSc.cardMedia}
@@ -31,7 +31,7 @@ const LectureCard = ({classesSc, lectureInfo, mediaKey, contentKey, hasAction, a
                     {hasAction && <Button size="small" color="primary" onClick={actionOnClick}>View Course</Button>}
                 </CardActions>
             </Card>
-        </Grid>
+        </>
     )
 }
 

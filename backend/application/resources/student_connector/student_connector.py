@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request, abort
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from sqlalchemy import func
 
 from orm_interface.base import Base, Session, engine
 from orm_interface.entities.lecture import Lecture
@@ -324,7 +325,7 @@ def start_new_discussion():
                                               text=discussion_data['text'],
                                               author_email=current_user['email'])
     session.add(discussion)
-    discussion.update(session)
+    discussion.update_time(session)
     session.commit()
     return "Successfully started discussion!"
 
@@ -340,10 +341,13 @@ def add_comment_to_discussion():
     comment = Student_Connector_Comments(id=None, discussion_id=comment_data['discussion_id'],
                                          author_email=current_user['email'],
                                          text=comment_data['text'])
-    discussion.update(session)
+    discussion.update_time(session)
     discussion.comments.append(comment)
     session.commit()
-    return "Successfully added comment!"
+    '''profile_db = session.query(User)
+    discussion = session.query(Student_Connector_Discussion).filter(
+        Student_Connector_Discussion.id == comment_data['discussion_id']).first()'''
+    return 'Successfully added comment!'
 
 
 @student_connector.route("/discussions/<lecture_id>", methods=["GET"])
@@ -353,27 +357,32 @@ def get_discussion(lecture_id):
         Student_Connector_Discussion.lecture_id == lecture_id).all()
     profile_db = session.query(User)
     for discussion in discussions:
-        comments = []
-        sorted_comments = sorted(discussion.comments, key=lambda x: x.time_created, reverse=True)
-        for comment in sorted_comments:
-            comment_author_name = profile_db.filter(User.email == comment.author.email).first()
-            comment_author = {"comment_author_id": comment.author.id,
-                      "comment_author_email": comment.author.email,
-                      "comment_author_profile_image": comment.author.profile_image,
-                       "comment_author_name": comment_author_name.firstname + " " + comment_author_name.lastname}
-            comments.append({"comment_id": comment.id,
-                             "comment_text": comment.text,
-                             "author": comment_author,
-                            "time_created": discussion.time_created})
-        discussion_author_name = profile_db.filter(User.email == discussion.author.email).first()
-        discussion_author = {"discussion_author_id": discussion.author.id,
-                  "discussion_author_email": discussion.author.email,
-                  "discussion_author_profile_image": discussion.author.profile_image,
-                             "discussion_author_name": discussion_author_name.firstname + " " +  discussion_author_name.lastname}
-        result.append({"discussion_id": discussion.id,
-                       "discussion_text": discussion.text,
-                       "discussion_author": discussion_author,
-                       "comments": comments,
-                       "time_created": discussion.time_created,
-                       "time_updated": discussion.time_updated})
+        result.append(prepare_discussion(discussion, profile_db))
+    result = sorted(result, key=lambda x: x['time_updated'], reverse=True)
     return jsonify(result)
+
+def prepare_discussion(discussion, profile_db):
+    comments = []
+    sorted_comments = sorted(discussion.comments, key=lambda x: x.time_created, reverse=True)
+    for comment in sorted_comments:
+        comment_author_name = profile_db.filter(User.email == comment.author.email).first()
+        comment_author = {"comment_author_id": comment.author.id,
+                          "comment_author_email": comment.author.email,
+                          "comment_author_profile_image": comment.author.profile_image,
+                          "comment_author_name": comment_author_name.firstname + " " + comment_author_name.lastname}
+        comments.append({"comment_id": comment.id,
+                         "comment_text": comment.text,
+                         "comment_author": comment_author,
+                         "time_created": comment.time_created})
+    discussion_author_name = profile_db.filter(User.email == discussion.author.email).first()
+    discussion_author = {"discussion_author_id": discussion.author.id,
+                         "discussion_author_email": discussion.author.email,
+                         "discussion_author_profile_image": discussion.author.profile_image,
+                         "discussion_author_name": discussion_author_name.firstname + " " + discussion_author_name.lastname}
+    result = {"discussion_id": discussion.id,
+                   "discussion_text": discussion.text,
+                   "discussion_author": discussion_author,
+                   "comments": comments,
+                   "time_created": discussion.time_created,
+                   "time_updated": discussion.time_updated}
+    return result
