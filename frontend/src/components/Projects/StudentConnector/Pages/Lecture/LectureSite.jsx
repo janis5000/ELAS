@@ -22,14 +22,11 @@ function TabPanel(props) {
   return (
       <div
           role="tabpanel"
-          hidden={value !== index}
-          id={`full-width-tabpanel-${index}`}
-          aria-labelledby={`full-width-tab-${index}`}
           {...other}
       >
         {value === index && (
             <Box p={3}>
-              <Typography>{children}</Typography>
+              <Typography>{children} test {index}</Typography>
             </Box>
         )}
       </div>
@@ -142,7 +139,12 @@ const LectureSite = () => {
   };
 
   const handleViewTypeChange = (event, newValue) => {
-    setViewType(newValue);
+    if(newValue === 0) {
+      setViewType("discussion");
+    }
+    else if(newValue === 1){
+      setViewType("members")
+    }
   }
 
   const changeViewType = (newViewType) => {
@@ -152,9 +154,6 @@ const LectureSite = () => {
     <>
       <Grid
         container
-        direction="column"
-        justify="flex-start"
-        alignItems="center"
       >
         <Container className={classesSc.cardContainer}>
           <Grid className={classesSc.cardGrid} container spacing={3}>
@@ -181,15 +180,18 @@ const LectureSite = () => {
                 </CardContent>
               </Card>
             </Grid>
-          </Grid>
           <Grid item xs={9} md={9} lg={9}>
             <AppBar position="static">
-              <Tabs value={viewType} onChange={(event, newValue) => handleViewTypeChange(event, newValue)} aria-label="simple tabs example">
-                <Tab label="Discussion" {changeViewType('discussion')}/>
-                <Tab label="Members" {change}/>
+              <Tabs className={classesSc.tabStyle} value={0} onChange={handleViewTypeChange}>
+                <Tab label="Discussion"/>
+                <Tab label="Members"/>
               </Tabs>
             </AppBar>
+            <TabPanel value={value} index={0}>Item One</TabPanel>
+            <TabPanel value={value} index={1}>Item Two</TabPanel>
         </Grid>
+
+          </Grid>
         </Container>
         <Paper className={classes.root} elevation={3}>
           <Typography className={classes.root}>
