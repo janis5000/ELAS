@@ -3,7 +3,14 @@ import Backend from "../../../../../assets/functions/Backend";
 import { useHistory, useParams } from "react-router-dom";
 import { createAuthConfig, createPostAuthConfig } from "../../utils/auth";
 import Button from "@material-ui/core/Button";
-import {Container, Grid, Paper, Tab, Tabs, Typography} from "@material-ui/core";
+import {
+  Container,
+  Grid,
+  Paper,
+  Tab,
+  Tabs, TextField,
+  Typography,
+} from "@material-ui/core";
 import { blue } from "@material-ui/core/colors";
 import CardContent from "@material-ui/core/CardContent";
 import Card from "@material-ui/core/Card";
@@ -14,22 +21,54 @@ import scStyles from "../../utils/studentConnectorStyles";
 import AppBar from "@material-ui/core/AppBar";
 import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
-
+import Avatar from "@material-ui/core/Avatar";
+import SaveOutlinedIcon from "@material-ui/icons/SaveOutlined";
+import SendIcon from '@material-ui/icons/Send';
 
 function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+  const { children, value, index, profile, ...other } = props;
 
   return (
-      <div
-          role="tabpanel"
-          {...other}
-      >
-        {value === index && (
-            <Box p={3}>
-              <Typography>{children} test {index}</Typography>
-            </Box>
-        )}
-      </div>
+    <div role="tabpanel" {...other}>
+      {value === index && index === 0 && (
+        <Paper style={{ overflow: "auto" }}>
+          <Grid container style={{ padding: "1.4vw" }}>
+            <Grid item xs={3}>
+              <Typography>Discussion</Typography>
+            </Grid>
+          </Grid>
+          <Grid container justify="flex-start" style={{ padding: "0 1.6vw 1.4vw 1.4vw" }}>
+            <Grid item style={{paddingRight: "1vw"}}>
+              <Avatar alt="profile pic" src={profile?.profile_image}></Avatar>
+            </Grid>
+            <Grid item xs={9}>
+              <form noValidate autoComplete="off">
+                <TextField
+                  id="outlined-basic"
+                  label="Post a message"
+                  variant="outlined"
+                  fullWidth
+                  size="small"
+                />
+              </form>
+            </Grid>
+            <Grid item>
+              <Button
+                  color="primary"
+                  variant="contained"
+                  style={{
+                    marginLeft: 10,
+                    backgroundColor: "#FF6500",
+                    color: "white",
+                  }}
+              >
+                <SendIcon />
+              </Button>
+          </Grid>
+          </Grid>
+        </Paper>
+      )}
+    </div>
   );
 }
 
@@ -38,7 +77,6 @@ TabPanel.propTypes = {
   index: PropTypes.any.isRequired,
   value: PropTypes.any.isRequired,
 };
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -58,7 +96,9 @@ const LectureSite = () => {
   const [profile, setProfile] = useState(null);
   const [lectureInfo, setLectureInfo] = useState(null);
   const [otherUsers, setOtherUsers] = useState(null);
-  const [viewType, setViewType] = useState('discussion');
+  const [viewType, setViewType] = useState("discussion");
+  const [tabIndex, setTabIndex] = useState(0);
+
   const params = useParams();
 
   const history = useHistory();
@@ -139,22 +179,21 @@ const LectureSite = () => {
   };
 
   const handleViewTypeChange = (event, newValue) => {
-    if(newValue === 0) {
+    if (newValue === 0) {
       setViewType("discussion");
+      setTabIndex(0);
+    } else if (newValue === 1) {
+      setViewType("members");
+      setTabIndex(1);
     }
-    else if(newValue === 1){
-      setViewType("members")
-    }
-  }
+  };
 
   const changeViewType = (newViewType) => {
-    setViewType(newViewType)
-  }
+    setViewType(newViewType);
+  };
   return (
     <>
-      <Grid
-        container
-      >
+      <Grid container>
         <Container className={classesSc.cardContainer}>
           <Grid className={classesSc.cardGrid} container spacing={3}>
             <Grid item xs={3} md={3} lg={3}>
@@ -168,29 +207,34 @@ const LectureSite = () => {
                   className={classesSc.cardContent}
                   key={"content" + "1"}
                 >
-                  <Typography gutterBottom variant="h6" style={{fontSize: '1.1rem'}}>
-                    {lectureInfo ? (
-                      <>
-                        {lectureInfo.name}
-                      </>
-                    ) : (
-                      "loading..."
-                    )}
+                  <Typography
+                    gutterBottom
+                    variant="h6"
+                    style={{ fontSize: "1.1rem" }}
+                  >
+                    {lectureInfo ? <>{lectureInfo.name}</> : "loading..."}
                   </Typography>
                 </CardContent>
               </Card>
             </Grid>
-          <Grid item xs={9} md={9} lg={9}>
-            <AppBar position="static">
-              <Tabs className={classesSc.tabStyle} value={0} onChange={handleViewTypeChange}>
-                <Tab label="Discussion"/>
-                <Tab label="Members"/>
-              </Tabs>
-            </AppBar>
-            <TabPanel value={value} index={0}>Item One</TabPanel>
-            <TabPanel value={value} index={1}>Item Two</TabPanel>
-        </Grid>
-
+            <Grid item xs={9} md={9} lg={9}>
+              <AppBar position="static">
+                <Tabs
+                  className={classesSc.tabStyle}
+                  value={tabIndex}
+                  onChange={handleViewTypeChange}
+                >
+                  <Tab label="Discussion" />
+                  <Tab label="Members" />
+                </Tabs>
+              </AppBar>
+              <TabPanel value={tabIndex} index={0} profile={profile}>
+                Item One
+              </TabPanel>
+              <TabPanel value={tabIndex} index={1}>
+                Item Two
+              </TabPanel>
+            </Grid>
           </Grid>
         </Container>
         <Paper className={classes.root} elevation={3}>
