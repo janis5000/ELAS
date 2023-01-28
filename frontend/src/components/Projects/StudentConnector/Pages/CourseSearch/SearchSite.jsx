@@ -82,7 +82,8 @@ const SearchSite = () => {
                         <Autocomplete
                             id="studyprogram"
                             options={studyPrograms}
-                            getOptionLabel={(option) => option.name}
+                            getOptionLabel={(option) => option.name || ''}
+                            getOptionSelected={(option, value) => option.name === value.name || true}
                             value={degree}
                             style={{width: 500}}
                             onChange={
@@ -105,7 +106,8 @@ const SearchSite = () => {
                         <Autocomplete
                             id="courses"
                             options={lectures}
-                            getOptionLabel={(option) => option.name}
+                            getOptionLabel={(option) => option.name || ''}
+                            getOptionSelected={(option, value) => option.name === value.name || true}
                             style={{width: 500}}
                             onChange={
                                 (event, newValue) => {
