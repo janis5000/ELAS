@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request, abort
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy import func
 
+from application.resources.student_connector.utils import prepare_discussion, prepare_profile, prepare_lecture_member
 from orm_interface.base import Base, Session, engine
 from orm_interface.entities.lecture import Lecture
 from orm_interface.entities.student_connector_entity.student_connector_user import Student_Connector_User, \
@@ -99,6 +100,7 @@ def get_profile(id):
         .join(Student_Connector_User) \
         .filter(Student_Connector_User.id == id).first()
     return prepare_profile(profile)
+
 
 @student_connector.route("/profile/<id>/courses", methods=["GET"])
 def get_courses_from_profile(id):
@@ -223,12 +225,15 @@ def get_lectures():
 @student_connector.route("/lecture/<id>", methods=["GET"])
 def get_lecture_by_id(id):
     result = []
+    members = []
     lecture = session.query(Lecture).filter(Lecture.id == id).first()
+    members = prepare_lecture_member(lecture.sc_user)
     result.append({"id": lecture.id,
                    "longtext": lecture.longtext,
                    "description": lecture.description,
                    "sws": lecture.sws,
-                   "name": lecture.name})
+                   "name": lecture.name,
+                   "members": members})
     return jsonify(result)
 
 
@@ -287,78 +292,18 @@ def get_discussion(lecture_id):
     result = sorted(result, key=lambda x: x['time_updated'], reverse=True)
     return jsonify(result)
 
-def prepare_discussion(discussion, profile_db):
-    comments = []
-    sorted_comments = sorted(discussion.comments, key=lambda x: x.time_created)
-    for comment in sorted_comments:
-        comment_author_name = profile_db.filter(User.email == comment.author.email).first()
-        comment_author = {"comment_author_id": comment.author.id,
-                          "comment_author_email": comment.author.email,
-                          "comment_author_profile_image": comment.author.profile_image,
-                          "comment_author_name": comment_author_name.firstname + " " + comment_author_name.lastname,
-                          "comment_author_firstname": comment_author_name.firstname,
-                          "comment_author_lastname": comment_author_name.lastname}
-        comments.append({"comment_id": comment.id,
-                         "comment_text": comment.text,
-                         "comment_author": comment_author,
-                         "time_created": comment.time_created})
-    discussion_author_name = profile_db.filter(User.email == discussion.author.email).first()
-    discussion_author = {"discussion_author_id": discussion.author.id,
-                         "discussion_author_email": discussion.author.email,
-                         "discussion_author_profile_image": discussion.author.profile_image,
-                         "discussion_author_name": discussion_author_name.firstname + " " + discussion_author_name.lastname,
-                         "discussion_author_firstname": discussion_author_name.firstname,
-                         "discussion_author_lastname": discussion_author_name.lastname}
-    result = {"discussion_id": discussion.id,
-                   "discussion_text": discussion.text,
-                   "discussion_author": discussion_author,
-                   "comments": comments,
-                   "time_created": discussion.time_created,
-                   "time_updated": discussion.time_updated,
-                    "show_all": False}
-    return result
 
-def prepare_profile(profile):
-    courses = []
-    skills = []
-    sc_profile = profile.student_connector_user[0]
-    if profile is None:
-        return jsonify({"error": "Profile not found!"})
-    if sc_profile.courses is not None:
-        for course in sc_profile.courses:
-            courses.append({"id": course.id,
-                            "name": course.name})
-    if sc_profile.skills:
-        for skill in sc_profile.skills:
-            skills.append({
-                "id": skill.id,
-                "skill_name": skill.skill_name}
-            )
-    if sc_profile.sc_degree is not None:
-        return {"id": sc_profile.id,
-                "uid": profile.id,
-                "email": profile.email,
-                "firstname": profile.firstname,
-                "lastname": profile.lastname,
-                "description": sc_profile.description,
-                "skills": skills,
-                "degree": {
-                    "id": sc_profile.sc_degree.id,
-                    "name": sc_profile.sc_degree.name,
-                    "url": sc_profile.sc_degree.url,
-                },
-                "degree_id": sc_profile.sc_degree.id,
-                "courses": courses,
-                "profile_image": sc_profile.profile_image}
-    else:
-        return {"id": sc_profile.id,
-                "uid": profile.id,
-                "email": profile.email,
-                "firstname": profile.firstname,
-                "lastname": profile.lastname,
-                "description": sc_profile.description,
-                "skills": skills,
-                "degree": "",
-                "degree_id": 0,
-                "courses": courses,
-                "profile_image": sc_profile.profile_image}
+@student_connector.route("/lectures-with-member-by-id", methods=["GET"])
+def get_lecture_member_by_id():
+    lecture_ids = request.args.getlist('id')
+    lecture_db = session.query(Lecture)
+    result = []
+    for lecture_id in lecture_ids:
+        lecture = lecture_db.filter(Lecture.id == lecture_id).first()
+        result.append({"id": lecture_id,
+                       "members": prepare_lecture_member(lecture.sc_user),
+                       "longtext": lecture.longtext,
+                       "description": lecture.description,
+                       "sws": lecture.sws,
+                       "name": lecture.name, })
+    return jsonify(result)

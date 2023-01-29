@@ -12,7 +12,7 @@ class User(Base):
     lastname = Column(String)
     email = Column(String, unique=True)
     password = Column(String)
-    student_connector_user = relationship(Student_Connector_User)
+    student_connector_user = relationship(Student_Connector_User, back_populates="user")
 
     def __init__(self, id, firstname, lastname, email, password):
         self.id = id

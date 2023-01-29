@@ -50,6 +50,7 @@ class Student_Connector_User(Base):
     )
     discussions = relationship('Student_Connector_Discussion', back_populates="author")
     comments = relationship('Student_Connector_Comments', back_populates="author")
+    user = relationship('User', back_populates="student_connector_user")
     profile_image = Column(String)
     def __init__(self, id, email, description, languages, degree_id):
         self.id = id
