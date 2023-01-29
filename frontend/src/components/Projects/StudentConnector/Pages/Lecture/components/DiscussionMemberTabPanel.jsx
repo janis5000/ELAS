@@ -103,10 +103,10 @@ function DiscussionMemberTabPanel(props) {
                             </Button>
                         </Grid>
                     </Grid>
-                    <Grid container style={{maxHeight: 500}}>
+                    <Grid container style={{maxHeight: 500, justifyContent: "center"}}>
                         {discussions.map((x) => (
-                            <Grid item xs={12} style={{paddingTop: "1vw"}}>
-                                <Box border={1}>
+                            <Grid item xs={12} style={{paddingTop: "1vw", paddingLeft:"1.4vw", paddingRight:"1.4vw"}}>
+                                <Box border={1} borderRadius="borderRadius">
                                     <Grid container>
                                         <Grid
                                             item
@@ -126,14 +126,15 @@ function DiscussionMemberTabPanel(props) {
                                         </Grid>
                                         <Grid item
                                               style={{
-                                                  paddingTop: "1vw",
+                                                  paddingTop: "1vw"
                                               }}>
                                             <Typography>
                                                 <b>{x?.discussion_author?.discussion_author_name}</b>
                                             </Typography>
                                             {getTime(x?.time_created)}
                                         </Grid>
-                                        <Grid item xs={12}>
+                                        <Grid item xs={12} style={{
+                                            paddingLeft: "0.65vw"}}>
                                             <Typography style={{margin: 10}}>
                                                 {x?.discussion_text}
                                             </Typography>
@@ -158,16 +159,17 @@ function DiscussionMemberTabPanel(props) {
                                                 )}
                                             </>
                                         </Grid>
-                                        <Grid container style={{paddingTop: 10}}>
-                                        {!x?.show_all
-                                            ? x?.comments
+                                        <Grid container style={{paddingTop: 10, justifyContent: "center"}}>
+                                        {x?.comments.length > 0 ? (!x?.show_all
+                                            ? (<Box border={1} borderRadius="borderRadius" style={{width: '90%'}}>{x?.comments
                                                 ?.slice(-2)
                                                 .map((comment) => (
-                                                    <Comments comment={comment} getTime={getTime} onClickProfileImage={onClickProfileImage}/>
-                                                ))
-                                            : x?.comments?.map((comment) => (
+                                                        <Comments comment={comment} getTime={getTime} onClickProfileImage={onClickProfileImage}/>
+
+                                                ))}</Box>)
+                                            : (<Box border={1} borderRadius="borderRadius" style={{width: '90%'}}>{x?.comments?.map((comment) => (
                                                 <Comments comment={comment} getTime={getTime} onClickProfileImage={onClickProfileImage}/>
-                                            ))}
+                                            ))}</Box>)) : ""}
                                         </Grid>
                                     </Grid>
                                     <Grid

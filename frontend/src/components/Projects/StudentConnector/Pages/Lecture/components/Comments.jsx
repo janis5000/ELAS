@@ -6,7 +6,7 @@ import ProfilePicture from "../../../components/ProfilePicture";
 const Comments = ({comment, getTime, onClickProfileImage}) => {
     return (
         <Grid container style={{justifyContent: "center"}}>
-            <Paper style={{width: '90%', backgroundColor: '#f0f0f0'}}>
+            <Paper style={{width: '100%', backgroundColor: '#f0f0f0'}}>
 
                 <Grid container>
                     <Grid
@@ -35,7 +35,8 @@ const Comments = ({comment, getTime, onClickProfileImage}) => {
                     </Grid>
                 </Grid>
                 <Grid container>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} style={{
+                        paddingLeft: "0.5vw"}}>
                         <Typography style={{margin: 10}}>
                             {comment?.comment_text}
                         </Typography>

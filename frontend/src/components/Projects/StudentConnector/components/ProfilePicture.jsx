@@ -16,7 +16,7 @@ const ProfilePicture = ({profile_image, profile_firstname, profile_lastname, onC
                     alt="profile picture"
                     className={avatarClass}
                     onClick={onClickAvatar}>
-                    <Typography variant={defaultAvatarVariant}>{profile_firstname[0] + profile_lastname[0]}</Typography>
+                    <Typography variant={defaultAvatarVariant}>{profile_firstname[0].toUpperCase() + profile_lastname[0].toUpperCase()}</Typography>
                 </Avatar>
             }
         </>
