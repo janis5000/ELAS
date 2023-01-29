@@ -5,6 +5,7 @@ import SendIcon from "@material-ui/icons/Send";
 import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
 import React from "react";
+import Comments from "./Comments";
 
 function DiscussionMemberTabPanel(props) {
   const {
@@ -17,7 +18,9 @@ function DiscussionMemberTabPanel(props) {
     text,
     discussionIdNewCommentText,
     onCommentTextChange,
-    postComment
+    postComment,
+    showAllComments,
+    hideAllComments
   } = props;
 
   const getTime = (textObjectCreation) => {
@@ -127,48 +130,33 @@ function DiscussionMemberTabPanel(props) {
                       <Divider variant="fullWidth" />
                       <>
                         {x?.comments.length > 2 ? (
-                          <Button>
-                            Show all {x?.comments.length} comments
-                          </Button>
+                          !x?.show_all ? (
+                            <Button
+                              onClick={() => showAllComments(x?.discussion_id)}
+                            >
+                              Show all {x?.comments.length} comments
+                            </Button>
+                          ) : (
+                            <Button
+                              onClick={() => hideAllComments(x?.discussion_id)}
+                            >
+                              Hide comments
+                            </Button>
+                          )
                         ) : (
                           ""
                         )}
                       </>
                     </Grid>
-                    <Grid container>
-                      {x?.comments?.map((comment) => (
-                        <Paper>
-                          <Grid
-                            item
-                            style={{
-                              paddingRight: "1vw",
-                              paddingLeft: "1vw",
-                              paddingTop: "1vw",
-                            }}
-                          >
-                            <Avatar
-                              alt="profile pic"
-                              src={
-                                comment?.comment_author
-                                  ?.comment_author_profile_image
-                              }
-                            />
-                          </Grid>
-                          <Grid item>
-                            <Typography>
-                              {comment?.comment_author?.discussion_author_name}
-                            </Typography>
-                            {getTime(comment?.time_created)}
-                          </Grid>
-                          <Grid item xs={12}>
-                            <Typography style={{ margin: 10 }}>
-                              {comment?.comment_text}
-                            </Typography>
-                            <Divider variant="fullWidth" />
-                          </Grid>
-                        </Paper>
-                      ))}
-                    </Grid>
+                    {!x?.show_all
+                      ? x?.comments
+                          ?.slice(-2)
+                          .map((comment) => (
+                            <Comments comment={comment} getTime={getTime} />
+                          ))
+                      : x?.comments?.map((comment) => (
+                          <Comments comment={comment} getTime={getTime} />
+                        ))}
                   </Grid>
                   <Grid
                     container

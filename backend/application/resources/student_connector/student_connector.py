@@ -363,7 +363,7 @@ def get_discussion(lecture_id):
 
 def prepare_discussion(discussion, profile_db):
     comments = []
-    sorted_comments = sorted(discussion.comments, key=lambda x: x.time_created, reverse=True)
+    sorted_comments = sorted(discussion.comments, key=lambda x: x.time_created)
     for comment in sorted_comments:
         comment_author_name = profile_db.filter(User.email == comment.author.email).first()
         comment_author = {"comment_author_id": comment.author.id,
@@ -384,5 +384,6 @@ def prepare_discussion(discussion, profile_db):
                    "discussion_author": discussion_author,
                    "comments": comments,
                    "time_created": discussion.time_created,
-                   "time_updated": discussion.time_updated}
+                   "time_updated": discussion.time_updated,
+                    "show_all": False}
     return result

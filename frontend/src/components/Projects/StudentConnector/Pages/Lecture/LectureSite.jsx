@@ -208,6 +208,29 @@ const LectureSite = () => {
     setDiscussionIdNewCommentText({"id":id, "text":event.target.value})
   }
 
+  const showAllComments = (id) => {
+    setDiscussions(prevState => {
+      let prevDiscussions = [...prevState]
+      prevDiscussions.forEach(x => {
+        if(x.discussion_id === id){
+          x.show_all = true;
+        }
+      })
+      setDiscussions(prevDiscussions)
+    })
+  }
+
+  const hideAllComments = (id) => {
+    setDiscussions(prevState => {
+      let prevDiscussions = [...prevState]
+      prevDiscussions.forEach(x => {
+        if(x.discussion_id === id){
+          x.show_all = false;
+        }
+      })
+      setDiscussions(prevDiscussions)
+    })
+  }
 
   return (
     <>
@@ -256,6 +279,8 @@ const LectureSite = () => {
               discussionIdNewCommentText={discussionIdNewCommentText}
               onCommentTextChange={onCommentTextChange}
               postComment={postComment}
+              showAllComments={showAllComments}
+              hideAllComments={hideAllComments}
             />
             <DiscussionMemberTabPanel value={tabIndex} index={1} />
           </Grid>
