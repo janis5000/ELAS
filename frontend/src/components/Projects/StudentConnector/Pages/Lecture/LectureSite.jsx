@@ -28,6 +28,7 @@ import SendIcon from "@material-ui/icons/Send";
 import LectureCard from "../../components/LectureCard";
 import DescriptionCard from "./components/DescriptionCard";
 import DiscussionMemberTabPanel from "./components/DiscussionMemberTabPanel";
+import Sidebar from "../Sidebar/Sidebar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -129,7 +130,7 @@ const LectureSite = () => {
   };
 
   const profileHasCourse = () => {
-    let p = profile?.courses?.filter((x) => x["id"] === params.id);
+    let p = profile?.courses?.filter((x) => x.id === params.id);
     if (p != null) {
       return p.length > 0;
     } else {
@@ -236,13 +237,18 @@ const LectureSite = () => {
     history.push("/studentconnector/profile/" + profile_id)
   }
 
+  const onViewProfileMemberClick = (profile_id) => {
+    history.push("/studentconnector/profile/" + profile_id)
+  }
+
   return (
     <>
-      <Container fixed>
+      <Sidebar />
+      <Container fixed style={{paddingTop: 20, float: "left"}}>
         <Grid className={classesSc.cardGrid} container spacing={3}>
           <Grid item xs={3} spacing={3}>
             <Grid container direction="column" spacing={3}>
-              <Grid item>
+              <Grid item style={{paddingBottom: 40}}>
                 <LectureCard
                   classesSc={classesSc}
                   lectureInfo={lectureInfo}
@@ -250,6 +256,7 @@ const LectureSite = () => {
                   contentKey={"content" + lectureInfo?.id}
                   hasAction={false}
                   actionOnClick={null}
+                  hasMember={false}
                 />
               </Grid>
               <Grid item>
@@ -257,6 +264,35 @@ const LectureSite = () => {
                   classesSc={classesSc}
                   lectureInfo={lectureInfo}
                 />
+              </Grid>
+              <Grid item style={{justifyContent: "center"}}>
+                {profile && !profileHasCourse() ? (
+                    <Button
+                        onClick={addCourseToProfile}
+                        style={{
+                          backgroundColor: "#FF6500",
+                          color: "white"
+                        }}
+                    >
+                      <Typography style={{fontSize: 12}}>Add Course to Dashboard</Typography>
+                    </Button>
+                ) : (
+                    <></>
+                )}
+                {profile && profileHasCourse() ? (
+                    <Button
+                        style={{
+                          marginLeft: 10,
+                          backgroundColor: "#FF6500",
+                          color: "white",
+                        }}
+                        onClick={removeCourseFromProfile}
+                    >
+                      <Typography style={{fontSize: 12}}>Remove Course from Dashboard</Typography>
+                    </Button>
+                ) : (
+                    <></>
+                )}
               </Grid>
             </Grid>
           </Grid>
@@ -287,39 +323,13 @@ const LectureSite = () => {
               hideAllComments={hideAllComments}
               onClickProfileImage={onClickProfileImage}
             />
-            <DiscussionMemberTabPanel value={tabIndex} index={1} />
+            <DiscussionMemberTabPanel
+                value={tabIndex}
+                index={1}
+                members={lectureInfo?.members}
+                onViewProfileMemberClick={onViewProfileMemberClick}/>
           </Grid>
         </Grid>
-        {profile && !profileHasCourse() ? (
-          <Button
-            onClick={addCourseToProfile}
-            style={{
-              marginLeft: 10,
-              backgroundColor: "#FF6500",
-              color: "white",
-              justifyContent: "center",
-            }}
-          >
-            Add Course to Dashboard
-          </Button>
-        ) : (
-          <></>
-        )}
-        {profile && profileHasCourse() ? (
-          <Button
-            style={{
-              marginLeft: 10,
-              backgroundColor: "#FF6500",
-              color: "white",
-              justifyContent: "center",
-            }}
-            onClick={removeCourseFromProfile}
-          >
-            Remove Course from Dashboard
-          </Button>
-        ) : (
-          <></>
-        )}
       </Container>
     </>
   );

@@ -15,6 +15,7 @@ import Box from "@material-ui/core/Box";
 import scStyles from "../../utils/studentConnectorStyles";
 import CardActions from "@material-ui/core/CardActions";
 import LectureCard from "../../components/LectureCard";
+import Sidebar from "../Sidebar/Sidebar";
 
 
 const SearchSite = () => {
@@ -77,6 +78,7 @@ const SearchSite = () => {
     const classes = scStyles();
     return (
         <>
+            <Sidebar />
             <Grid container direction="column" justify="flex-start" alignItems="center">
                 <Grid item xs={10}>
                     <Paper>
@@ -127,7 +129,7 @@ const SearchSite = () => {
                         {resultLectures?.map(x =>
                             <Grid item xs={6} md={3} lg={3}>
                             <LectureCard hasAction={true} actionOnClick={RedirectToCourseSite} classesSc={classes}
-                                         lectureInfo={x} contentKey={"content" + x.id} mediaKey={"media" + x.id}/>
+                                         lectureInfo={x} contentKey={"content" + x.id} mediaKey={"media" + x.id} lectureMember={x.members} hasMember={true}/>
                             </Grid>)}
                     </Grid>
                 </Container>

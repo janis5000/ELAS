@@ -21,6 +21,7 @@ import FormDialog from "./components/FormDialog";
 import AvatarCard from "./components/AvatarCard";
 import DescriptionCard from "./components/DescriptionCard";
 import SkillsCard from "./components/SkillsCard";
+import Sidebar from "../Sidebar/Sidebar";
 
 const useStyles = makeStyles((theme) => ({
   saveProfile: {
@@ -90,7 +91,6 @@ const ProfileView = () => {
     Backend.get("/studentconnector/profile", authConfig).then((response) => {
       let profileRes = response.data;
       setProfile(profileRes);
-      setCurrentSkills(profileRes.skills)
       if (profileRes.id + "" === params.id) {
         setIsOwner(true);
       } else {
@@ -99,6 +99,7 @@ const ProfileView = () => {
       Backend.get("/studentconnector/profile/" + params.id).then((response) => {
         currentProfileRes = response.data;
         setCurrentProfile(currentProfileRes);
+        setCurrentSkills(currentProfileRes.skills)
         //setInitials(currentProfileRes.firstname.substring(0, 1).toUpperCase() + currentProfileRes.lastname.substring(0, 1).toUpperCase())
       });
       Backend.get("/studentconnector/skills").then((response) => {
@@ -142,6 +143,8 @@ const ProfileView = () => {
   };
 
   return (
+      <>
+      <Sidebar />
     <Grid container direction="column">
         <Typography style={{marginBottom: "2vw"}} variant="h5">My Profile</Typography>
       <Grid container direction="row" spacing={2}>
@@ -200,6 +203,7 @@ const ProfileView = () => {
         style={{ backgroundColor: success ? "green" : "red" }}
       />
     </Grid>
+        </>
   );
 };
 

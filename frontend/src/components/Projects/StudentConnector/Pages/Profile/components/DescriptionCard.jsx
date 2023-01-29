@@ -113,7 +113,7 @@ const DescriptionCard = ({ currentProfile, isOwner, setCurrentProfile }) => {
                 className={classes.textarea}
                 rows={11}
                 aria-label="Field name"
-                value={description}
+                value={description !== null ? description : ""}
                 onChange={onChange}
                 placeholder="enter a short story of yourself"
                 disabled={!editable}
