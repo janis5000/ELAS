@@ -10,11 +10,11 @@ import ProfileView from "../Profile/ProfileView";
 import { Grid } from "@material-ui/core";
 
 const StudentConnectorRoutes = () => {
+
   return (
     <>
       <Grid>
         <div className="sidebar">
-          <Sidebar />
           <div style={{ marginLeft: 300 }}>
             <Route
               exact
