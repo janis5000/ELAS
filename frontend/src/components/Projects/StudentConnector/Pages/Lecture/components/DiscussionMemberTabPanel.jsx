@@ -29,25 +29,25 @@ function DiscussionMemberTabPanel(props) {
         let timeDelta = Date.now() - Date.parse(textObjectCreation);
         if (timeDelta < 1000 * 60) {
             return (
-                <Typography style={{color: "gray"}}>
+                <Typography style={{color: "gray", fontWeight: 100, fontSize: 12 }}>
                     {Math.round(timeDelta / 1000) + "seconds ago"}
                 </Typography>
             );
         } else if (timeDelta < 1000 * 60 * 60) {
             return (
-                <Typography style={{color: "gray"}}>
+                <Typography style={{color: "gray", fontWeight: 100, fontSize: 12}}>
                     {Math.round(timeDelta / (1000 * 60)) + "minutes ago"}
                 </Typography>
             );
         } else if (timeDelta < 1000 * 60 * 60 * 24) {
             return (
-                <Typography style={{color: "gray"}}>
+                <Typography style={{color: "gray", fontWeight: 100, fontSize: 12}}>
                     {Math.round(timeDelta / (1000 * 60 * 60)) + "hours ago"}
                 </Typography>
             );
         } else if (timeDelta > 1000 * 60 * 60 * 24) {
             return (
-                <Typography style={{color: "gray"}}>
+                <Typography style={{color: "gray", fontWeight: 100, fontSize: 12}}>
                     {Math.round(timeDelta / (1000 * 60 * 60 * 24)) + "days ago"}
                 </Typography>
             );
@@ -124,9 +124,12 @@ function DiscussionMemberTabPanel(props) {
                                                             defaultAvatarVariant={"h6"}
                                                             onClickAvatar={() => onClickProfileImage(x?.discussion_author?.discussion_author_id)}/>
                                         </Grid>
-                                        <Grid item>
+                                        <Grid item
+                                              style={{
+                                                  paddingTop: "1vw",
+                                              }}>
                                             <Typography>
-                                                {x?.discussion_author?.discussion_author_name}
+                                                <b>{x?.discussion_author?.discussion_author_name}</b>
                                             </Typography>
                                             {getTime(x?.time_created)}
                                         </Grid>
@@ -155,6 +158,7 @@ function DiscussionMemberTabPanel(props) {
                                                 )}
                                             </>
                                         </Grid>
+                                        <Grid container style={{paddingTop: 10}}>
                                         {!x?.show_all
                                             ? x?.comments
                                                 ?.slice(-2)
@@ -164,6 +168,7 @@ function DiscussionMemberTabPanel(props) {
                                             : x?.comments?.map((comment) => (
                                                 <Comments comment={comment} getTime={getTime} onClickProfileImage={onClickProfileImage}/>
                                             ))}
+                                        </Grid>
                                     </Grid>
                                     <Grid
                                         container
