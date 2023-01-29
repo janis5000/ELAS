@@ -96,7 +96,7 @@ const DescriptionCard = ({ currentProfile, isOwner, setCurrentProfile }) => {
                   About me
                 </Typography>
               </Grid>
-              <IconButton onClick={onSetEditable}>
+              {isOwner && <IconButton onClick={onSetEditable}>
                 <Tooltip
                   title="Click on text to begin editing"
                 >
@@ -105,7 +105,7 @@ const DescriptionCard = ({ currentProfile, isOwner, setCurrentProfile }) => {
                     style={{ color: "#FF6500" }}
                   />
                 </Tooltip>
-              </IconButton>
+              </IconButton>}
             </Grid>
             <Grid item className={classes.center}>
               <textarea

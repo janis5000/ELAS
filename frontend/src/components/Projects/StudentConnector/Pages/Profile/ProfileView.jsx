@@ -103,7 +103,7 @@ const ProfileView = () => {
       });
       Backend.get("/studentconnector/skills").then((response) => {
         let allSkillsRes = response.data
-        allSkillsRes = allSkillsRes.filter(x => !currentProfileRes.skills.map(y => y.id).includes(x.id))
+        allSkillsRes = allSkillsRes.filter(x => !currentProfileRes.skills?.map(y => y.id).includes(x.id))
         setAllSkills(allSkillsRes)
       })
     });

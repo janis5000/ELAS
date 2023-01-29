@@ -2,6 +2,7 @@ import {Avatar, Grid, makeStyles, Paper, TextField, Typography} from "@material-
 import FormDialog from "./FormDialog";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import React, {useEffect, useState} from 'react'
+import ProfilePicture from "../../../components/ProfilePicture";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -56,12 +57,11 @@ const AvatarCard = ({currentProfile, openImageDialog, setOpenImageDialog, isOwne
                 <div>
                     <Grid item>
                         <Grid item className={classes.center}>
-                            <Avatar
-                                alt="profile pic"
-                                src={currentProfile?.profile_image}
-                                className={classes.large}
-                                onClick={onClickOpenImageDialogOn}
-                            />
+                            <ProfilePicture profile_image={currentProfile?.profile_image}
+                                            profile_firstname={currentProfile?.firstname}
+                                            profile_lastname={currentProfile?.lastname}
+                                            avatarClass={classes.large}
+                                            defaultAvatarVariant={"h2"} onClickAvatar={onClickOpenImageDialogOn}/>
                             <FormDialog open={openImageDialog} handleSaveImage={handleImageDialogSave}
                                         currentProfile={currentProfile} handleDialogStatus={handleImageDialog}/>
                         </Grid>

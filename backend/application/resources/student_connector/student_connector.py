@@ -87,40 +87,9 @@ def get_other_users_in_course(course_id):
 @jwt_required()
 def get_personal_profile_information():
     current_user = get_jwt_identity()
-    profile = session.query(Student_Connector_User).filter(
+    profile = session.query(User).join(Student_Connector_User).filter(
         Student_Connector_User.email == current_user["email"]).first()
-    courses = []
-    skills = []
-    if profile is None:
-        return jsonify({"error": "Profile not found!"})
-    if profile.courses is not None:
-        for course in profile.courses:
-            courses.append({"id": course.id,
-                            "name": course.name})
-    if profile.skills:
-        for skill in profile.skills:
-            skills.append({
-                "id": skill.id,
-                "skill_name": skill.skill_name}
-            )
-    if profile.sc_degree is not None:
-        return {"id": profile.id,
-                "email": profile.email,
-                "description": profile.description,
-                "skills": skills,
-                "degree": profile.sc_degree.name,
-                "degree_id": profile.sc_degree.id,
-                "courses": courses,
-                "profile_image": profile.profile_image}
-    else:
-        return {"id": profile.id,
-                "email": profile.email,
-                "description": profile.description,
-                "skills": skills,
-                "degree": "",
-                "degree_id": 0,
-                "courses": courses,
-                "profile_image": profile.profile_image}
+    return prepare_profile(profile)
 
 
 @student_connector.route("/profile/<id>", methods=["GET"])
@@ -129,50 +98,7 @@ def get_profile(id):
     profile = session.query(User) \
         .join(Student_Connector_User) \
         .filter(Student_Connector_User.id == id).first()
-    courses = []
-    skills = []
-    sc_profile = profile.student_connector_user[0]
-    if profile is None:
-        return jsonify({"error": "Profile not found!"})
-    if sc_profile.courses is not None:
-        for course in sc_profile.courses:
-            courses.append({"id": course.id,
-                            "name": course.name})
-    if sc_profile.skills:
-        for skill in sc_profile.skills:
-            skills.append({
-                "id": skill.id,
-                "skill_name": skill.skill_name}
-            )
-    if sc_profile.sc_degree is not None:
-        return {"id": sc_profile.id,
-                "uid": profile.id,
-                "email": profile.email,
-                "firstname": profile.firstname,
-                "lastname": profile.lastname,
-                "description": sc_profile.description,
-                "skills": skills,
-                "degree": {
-                    "id": sc_profile.sc_degree.id,
-                    "name": sc_profile.sc_degree.name,
-                    "url": sc_profile.sc_degree.url,
-                },
-                "degree_id": sc_profile.sc_degree.id,
-                "courses": courses,
-                "profile_image": sc_profile.profile_image}
-    else:
-        return {"id": sc_profile.id,
-                "uid": profile.id,
-                "email": profile.email,
-                "firstname": profile.firstname,
-                "lastname": profile.lastname,
-                "description": sc_profile.description,
-                "skills": skills,
-                "degree": "",
-                "degree_id": 0,
-                "courses": courses,
-                "profile_image": sc_profile.profile_image}
-
+    return prepare_profile(profile)
 
 @student_connector.route("/profile/<id>/courses", methods=["GET"])
 def get_courses_from_profile(id):
@@ -369,7 +295,9 @@ def prepare_discussion(discussion, profile_db):
         comment_author = {"comment_author_id": comment.author.id,
                           "comment_author_email": comment.author.email,
                           "comment_author_profile_image": comment.author.profile_image,
-                          "comment_author_name": comment_author_name.firstname + " " + comment_author_name.lastname}
+                          "comment_author_name": comment_author_name.firstname + " " + comment_author_name.lastname,
+                          "comment_author_firstname": comment_author_name.firstname,
+                          "comment_author_lastname": comment_author_name.lastname}
         comments.append({"comment_id": comment.id,
                          "comment_text": comment.text,
                          "comment_author": comment_author,
@@ -378,7 +306,9 @@ def prepare_discussion(discussion, profile_db):
     discussion_author = {"discussion_author_id": discussion.author.id,
                          "discussion_author_email": discussion.author.email,
                          "discussion_author_profile_image": discussion.author.profile_image,
-                         "discussion_author_name": discussion_author_name.firstname + " " + discussion_author_name.lastname}
+                         "discussion_author_name": discussion_author_name.firstname + " " + discussion_author_name.lastname,
+                         "discussion_author_firstname": discussion_author_name.firstname,
+                         "discussion_author_lastname": discussion_author_name.lastname}
     result = {"discussion_id": discussion.id,
                    "discussion_text": discussion.text,
                    "discussion_author": discussion_author,
@@ -387,3 +317,48 @@ def prepare_discussion(discussion, profile_db):
                    "time_updated": discussion.time_updated,
                     "show_all": False}
     return result
+
+def prepare_profile(profile):
+    courses = []
+    skills = []
+    sc_profile = profile.student_connector_user[0]
+    if profile is None:
+        return jsonify({"error": "Profile not found!"})
+    if sc_profile.courses is not None:
+        for course in sc_profile.courses:
+            courses.append({"id": course.id,
+                            "name": course.name})
+    if sc_profile.skills:
+        for skill in sc_profile.skills:
+            skills.append({
+                "id": skill.id,
+                "skill_name": skill.skill_name}
+            )
+    if sc_profile.sc_degree is not None:
+        return {"id": sc_profile.id,
+                "uid": profile.id,
+                "email": profile.email,
+                "firstname": profile.firstname,
+                "lastname": profile.lastname,
+                "description": sc_profile.description,
+                "skills": skills,
+                "degree": {
+                    "id": sc_profile.sc_degree.id,
+                    "name": sc_profile.sc_degree.name,
+                    "url": sc_profile.sc_degree.url,
+                },
+                "degree_id": sc_profile.sc_degree.id,
+                "courses": courses,
+                "profile_image": sc_profile.profile_image}
+    else:
+        return {"id": sc_profile.id,
+                "uid": profile.id,
+                "email": profile.email,
+                "firstname": profile.firstname,
+                "lastname": profile.lastname,
+                "description": sc_profile.description,
+                "skills": skills,
+                "degree": "",
+                "degree_id": 0,
+                "courses": courses,
+                "profile_image": sc_profile.profile_image}

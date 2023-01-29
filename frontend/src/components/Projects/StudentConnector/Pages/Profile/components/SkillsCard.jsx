@@ -130,14 +130,14 @@ const SkillsCard = ({
                   Skills
                 </Typography>
               </Grid>
-              <IconButton onClick={onSetEditable}>
+              {isOwner && <IconButton onClick={onSetEditable}>
                 <Tooltip title="Click on text to begin editing">
                   <EditOutlinedIcon
                     fontSize="small"
                     style={{ color: "#FF6500" }}
                   />
                 </Tooltip>
-              </IconButton>
+              </IconButton>}
             </Grid>
             {currentSkills?.map((x) => (
               <Chip

@@ -232,6 +232,10 @@ const LectureSite = () => {
     })
   }
 
+  const onClickProfileImage = (profile_id) => {
+    history.push("/studentconnector/profile/" + profile_id)
+  }
+
   return (
     <>
       <Container fixed>
@@ -281,6 +285,7 @@ const LectureSite = () => {
               postComment={postComment}
               showAllComments={showAllComments}
               hideAllComments={hideAllComments}
+              onClickProfileImage={onClickProfileImage}
             />
             <DiscussionMemberTabPanel value={tabIndex} index={1} />
           </Grid>

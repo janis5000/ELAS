@@ -1,8 +1,9 @@
 import { Divider, Grid, Paper, Typography } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
 import React from "react";
+import ProfilePicture from "../../../components/ProfilePicture";
 
-const Comments = ({ comment, getTime }) => {
+const Comments = ({ comment, getTime, onClickProfileImage }) => {
   return (
     <Grid container>
       <Paper>
@@ -14,10 +15,12 @@ const Comments = ({ comment, getTime }) => {
             paddingTop: "1vw",
           }}
         >
-          <Avatar
-            alt="profile pic"
-            src={comment?.comment_author?.comment_author_profile_image}
-          />
+            <ProfilePicture profile_image={
+                comment?.comment_author?.comment_author_profile_image}
+                            profile_firstname={comment?.comment_author?.comment_author_firstname}
+                            profile_lastname={comment?.comment_author?.comment_author_lastname}
+                            defaultAvatarVariant={"h6"}
+                            onClickAvatar={() => onClickProfileImage(comment?.comment_author?.comment_author_id)}/>
         </Grid>
         <Grid item>
           <Typography>
