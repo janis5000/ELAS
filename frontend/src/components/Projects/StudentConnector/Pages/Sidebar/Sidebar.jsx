@@ -142,7 +142,7 @@ const Sidebar = () => {
             open={state["left"]}
             variant="permanent"
           >
-            {list("left")}
+            {profile !== null && list("left")}
           </Drawer>
         </div>
   );
