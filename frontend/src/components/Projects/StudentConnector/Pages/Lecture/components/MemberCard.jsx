@@ -11,7 +11,7 @@ import scStyles from "../../../utils/studentConnectorStyles";
 import {makeStyles} from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
-  profile_picture: {
+  profilePicture: {
     width: theme.spacing(24),
     height: theme.spacing(24)
   },
@@ -33,7 +33,7 @@ const MemberCard = ({ contentKey, mediaKey, member, actionOnClick }) => {
                           profile_firstname={member.firstname}
                           profile_lastname={member.lastname}
                           defaultAvatarVariant={"h5"}
-                          avatarClass={classes.profile_picture}
+                          avatarClass={classes.profilePicture}
           />
         </CardMedia>
         <CardActions>

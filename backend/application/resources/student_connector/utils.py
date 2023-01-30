@@ -32,6 +32,51 @@ def prepare_discussion(discussion, profile_db):
                     "show_all": False}
     return result
 
+def prepare_profile_from_sc_user(sc_profile):
+    courses = []
+    skills = []
+    profile = sc_profile.user
+    if profile is None:
+        return jsonify({"error": "Profile not found!"})
+    if sc_profile.courses is not None:
+        for course in sc_profile.courses:
+            courses.append({"id": course.id,
+                            "name": course.name})
+    if sc_profile.skills:
+        for skill in sc_profile.skills:
+            skills.append({
+                "id": skill.id,
+                "skill_name": skill.skill_name}
+            )
+    if sc_profile.sc_degree is not None:
+        return {"id": sc_profile.id,
+                "uid": profile.id,
+                "email": profile.email,
+                "firstname": profile.firstname,
+                "lastname": profile.lastname,
+                "description": sc_profile.description,
+                "skills": skills,
+                "degree": {
+                    "id": sc_profile.sc_degree.id,
+                    "name": sc_profile.sc_degree.name,
+                    "url": sc_profile.sc_degree.url,
+                },
+                "degree_id": sc_profile.sc_degree.id,
+                "courses": courses,
+                "profile_image": sc_profile.profile_image}
+    else:
+        return {"id": sc_profile.id,
+                "uid": profile.id,
+                "email": profile.email,
+                "firstname": profile.firstname,
+                "lastname": profile.lastname,
+                "description": sc_profile.description,
+                "skills": skills,
+                "degree": "",
+                "degree_id": 0,
+                "courses": courses,
+                "profile_image": sc_profile.profile_image}
+
 def prepare_profile(profile):
     courses = []
     skills = []

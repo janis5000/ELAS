@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, Integer, String, Float, ForeignKey, Table
+from sqlalchemy import Boolean, Column, Integer, String, Float, ForeignKey, Table, DateTime, func
 from orm_interface.base import Base
 from sqlalchemy.orm import relationship
 
@@ -29,12 +29,24 @@ class Student_Connector_Chat_Room(Base):
     user = relationship('Student_Connector_User', secondary='student_connector_chat_room_user', back_populates='chats')
     messages = relationship('Student_Connector_Messages', back_populates='chat')
 
+    def __init__(self, id):
+        self.id = id
+
 class Student_Connector_Messages(Base):
     __tablename__ = 'student_connector_messages'
     id = Column(Integer, primary_key=True, autoincrement=True)
     chat_id = Column(Integer, ForeignKey('student_connector_chat_room.id'))
+    user_id = Column(Integer, ForeignKey('student_connector_user.id'))
+    user = relationship('Student_Connector_User', back_populates='messages')
     chat = relationship('Student_Connector_Chat_Room', back_populates='messages')
-    message = Column(String)
+    message = Column(String, nullable=False)
+    is_read = Column(Boolean, default=False)
+    time_created = Column(DateTime(timezone=True), server_default=func.now())
+
+    def __init__(self, chat_id, message, user_id):
+        self.chat_id = chat_id
+        self.message = message
+        self.user_id = user_id
 
 class Student_Connector_User(Base):
     __tablename__ = 'student_connector_user'
@@ -51,6 +63,7 @@ class Student_Connector_User(Base):
     discussions = relationship('Student_Connector_Discussion', back_populates="author")
     comments = relationship('Student_Connector_Comments', back_populates="author")
     user = relationship('User', back_populates="student_connector_user")
+    messages = relationship('Student_Connector_Messages', back_populates="user")
     profile_image = Column(String)
     def __init__(self, id, email, description, languages, degree_id):
         self.id = id

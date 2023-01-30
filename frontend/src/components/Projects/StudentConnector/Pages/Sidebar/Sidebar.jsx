@@ -84,6 +84,11 @@ const Sidebar = () => {
     history.push(path);
   };
 
+  const messageButton = () => {
+    let path = "/studentconnector/chats/"
+    history.push(path)
+  }
+
   const list = (anchor) => (
     <div
       className={classes.list}
@@ -113,7 +118,8 @@ const Sidebar = () => {
           />
         </ListItem>
         <ListItem button>
-          <ListItemText primary="Messages" className={classes.text} />
+          <ListItemText primary="Messages" className={classes.text}
+                        onClick={messageButton} />
         </ListItem>
         <ListItem button>
           <ListItemText

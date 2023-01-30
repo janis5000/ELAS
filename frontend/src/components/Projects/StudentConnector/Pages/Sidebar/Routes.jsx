@@ -8,6 +8,8 @@ import Sidebar from "./Sidebar";
 import LectureSite from "../Lecture/LectureSite";
 import ProfileView from "../Profile/ProfileView";
 import { Grid } from "@material-ui/core";
+import Chat from "../../Chat";
+import Messages from "../Chat/Messages";
 
 const StudentConnectorRoutes = () => {
 
@@ -30,6 +32,11 @@ const StudentConnectorRoutes = () => {
                 </div>
               )}
             />
+              <Route
+                  exact
+                  path="/studentconnector/chats/"
+                    render={() => <Messages/>}>
+              </Route>
             <Route
               exact
               path="/studentconnector/profile/:id"

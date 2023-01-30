@@ -2,11 +2,12 @@ from flask import Blueprint, jsonify, request, abort
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy import func
 
-from application.resources.student_connector.utils import prepare_discussion, prepare_profile, prepare_lecture_member
+from application.resources.student_connector.utils import prepare_discussion, prepare_profile, prepare_lecture_member, \
+    prepare_profile_from_sc_user
 from orm_interface.base import Base, Session, engine
 from orm_interface.entities.lecture import Lecture
 from orm_interface.entities.student_connector_entity.student_connector_user import Student_Connector_User, \
-    Student_Connector_Skills, Student_Connector_Courses_User
+    Student_Connector_Skills, Student_Connector_Courses_User, Student_Connector_Chat_Room, Student_Connector_Messages
 from orm_interface.entities.student_connector_entity.student_connector_discussion import Student_Connector_Discussion, \
     Student_Connector_Comments
 from orm_interface.entities.user import User
@@ -307,3 +308,97 @@ def get_lecture_member_by_id():
                        "sws": lecture.sws,
                        "name": lecture.name, })
     return jsonify(result)
+
+
+@student_connector.route("/chats", methods=["GET"])
+@jwt_required()
+def get_chats():
+    current_user = get_jwt_identity()
+    result_chat = []
+    sc_user = session.query(Student_Connector_User).filter(Student_Connector_User.id == current_user["id"]).first()
+    for chat in sc_user.chats:
+        messages = []
+        recipient_user = list(filter(lambda x: x.id != current_user["id"], chat.user))[0]
+        recipient_user = prepare_profile_from_sc_user(recipient_user)
+        for message in chat.messages:
+            messages.append({"user_id": message.user_id,
+                             "message": message.message})
+        result_chat.append({
+            "chat_id": chat.id,
+            "messages": messages,
+            "recipient_user": recipient_user})
+    return jsonify(result_chat)
+
+
+@student_connector.route("/create-chatroom", methods=["POST"])
+@jwt_required()
+def create_chatroom():
+    current_user = get_jwt_identity()
+    data = request.json
+    sc_user = session.query(Student_Connector_User).filter(Student_Connector_User.id == current_user["id"]).first()
+    recipient_user = session.query(Student_Connector_User).filter(
+        Student_Connector_User.id == data["recipient_id"]).first()
+    if sc_user.chats == []:
+        chat_room = Student_Connector_Chat_Room(None)
+        chat_room.user.append(sc_user)
+        chat_room.user.append(recipient_user)
+        session.add(chat_room)
+        session.commit()
+        return jsonify("Succesfully created chatroom!")
+    for chat in sc_user.chats:
+        if recipient_user not in chat.user:
+            chat_room = Student_Connector_Chat_Room(None)
+            chat_room.user.append(sc_user)
+            chat_room.user.append(recipient_user)
+            session.add(chat_room)
+            session.commit()
+            return jsonify("Succesfully created chatroom!")
+    return jsonify("Chatroom already exists!")
+
+
+@student_connector.route("/chatroom", methods=["GET"])
+@jwt_required()
+def get_chatroom():
+    current_user = get_jwt_identity()
+    data = request.json
+    user = session.query(User).filter(User.id == current_user["id"]).first()
+    recipient_user = session.query(User).filter(User.id == data["recipient_id"]).first()
+    sc_user = session.query(Student_Connector_User).filter(Student_Connector_User.id == current_user["id"]).first()
+    sc_recipient_user = session.query(Student_Connector_User).filter(
+        Student_Connector_User.id == data["recipient_id"]).first()
+    for chat in sc_user.chats:
+        if sc_recipient_user in chat.user and sc_user in chat.user:
+            unread_messages_db = session.query(Student_Connector_Messages).filter(Student_Connector_Messages.chat_id == chat.id
+                and Student_Connector_Messages.is_read == False)
+            unread_messages_db.update({"is_read": True})
+            result_chat = []
+            messages = []
+            users = []
+            users.append(prepare_profile(user))
+            users.append(prepare_profile(recipient_user))
+            for message in chat.messages:
+                messages.append({"user_id": message.user_id,
+                                 "message": message.message,
+                                 "time_created": message.time_created})
+            messages = sorted(messages, key=lambda x: x['time_created'])
+            result_chat.append({
+                "chat_id": chat.id,
+                "messages": messages,
+                "users": users})
+            session.commit()
+            return jsonify(result_chat)
+    return jsonify("Chatroom does not exist!")
+
+
+@student_connector.route("/send-message/<chat_id>", methods=["POST"])
+@jwt_required()
+def send_message(chat_id):
+    current_user = get_jwt_identity()
+    message_data = request.json
+    chat_room = session.query(Student_Connector_Chat_Room).filter(Student_Connector_Chat_Room.id == chat_id).first()
+    sc_user = session.query(Student_Connector_User).filter(Student_Connector_User.id == current_user["id"]).first()
+    new_message = Student_Connector_Messages(chat_id=chat_room.id, message=message_data['message'], user_id=sc_user.id)
+    chat_room.messages.append(new_message)
+    session.add(new_message)
+    session.commit()
+    return jsonify("Succesfully added message!")
