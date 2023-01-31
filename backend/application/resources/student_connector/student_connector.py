@@ -193,7 +193,8 @@ def set_profile_attributes(id):
             Student_Connector_Skills.skill_name.in_(skills_to_add)).all()
         new_skills_user = list(filter(lambda x: x not in list(map(lambda y: y.skill_name, user.skills)), skills_to_add))
         new_skills_db = list(filter(lambda x: x not in list(map(lambda y: y.skill_name, skill_from_db)), skills_to_add))
-        new_skills_db = list(map(lambda x: x.skill_name.capitalize(), new_skills_db))
+        #new_skills_db = list(map(lambda x: x.skill_name.capitalize(), new_skills_db))
+        new_skills_db = list(map(lambda x: x.capitalize(), new_skills_db))
         skills = []
         for skill in new_skills_db:
             skill_db = Student_Connector_Skills(skill)
@@ -201,20 +202,22 @@ def set_profile_attributes(id):
                 skills.append(skill_db)
             session.add(skill_db)
         for skill in new_skills_user:
-            if skill not in new_skills_db:
+            if skill.capitalize() not in new_skills_db:
                 skill_db = session.query(Student_Connector_Skills).filter(
                     Student_Connector_Skills.skill_name == skill).first()
                 skills.append(skill_db)
 
         user.skills.extend(skills)
     if 'skills_remove' in profile_attributes and profile_attributes['skills_remove'] != []:
+        user_skills = list(map(lambda x: x.skill_name, user.skills))
         skills_to_remove_names = list(map(lambda x: x["skill_name"], profile_attributes['skills_remove']))
         skills_to_remove = list(filter(lambda x: x not in skills_to_add, skills_to_remove_names))
         for skill in skills_to_remove:
-            skill_db = session.query(Student_Connector_Skills).filter(
-                Student_Connector_Skills.skill_name == skill).first()
-            user.skills.remove(skill_db)
-    if 'degree_id' in profile_attributes and profile_attributes['degree_id'] is not None:
+            if skill in user_skills:
+                skill_db = session.query(Student_Connector_Skills).filter(
+                    Student_Connector_Skills.skill_name == skill).first()
+                user.skills.remove(skill_db)
+    if 'degree_id' in profile_attributes and profile_attributes['degree_id'] is not None and profile_attributes['degree_id'] != 0:
         user_db.update({'degree_id': profile_attributes['degree_id']})
     if 'profile_image' in profile_attributes and profile_attributes['profile_image'] is not None:
         user_db.update({'profile_image': profile_attributes['profile_image']})
@@ -348,7 +351,7 @@ def get_chats():
             "messages": messages,
             "recipient_user": recipient_user,
             "unread_messages": unread_messages,
-        "time_updated":chat.time_updated})
+            "time_updated": chat.time_updated})
     result_chat = sorted(result_chat, key=lambda x: x['time_updated'], reverse=True)
     return jsonify(result_chat)
 
@@ -365,6 +368,7 @@ def create_chatroom():
         chat_room = Student_Connector_Chat_Room(None)
         chat_room.user.append(sc_user)
         chat_room.user.append(recipient_user)
+        chat_room.update_time(session)
         session.add(chat_room)
         session.commit()
         return jsonify("Succesfully created chatroom!")

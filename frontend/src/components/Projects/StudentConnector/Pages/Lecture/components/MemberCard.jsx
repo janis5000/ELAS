@@ -32,7 +32,7 @@ const MemberCard = ({ contentKey, mediaKey, member, onViewProfileClick, onSendMe
           <ProfilePicture profile_image={member.profile_image}
                           profile_firstname={member.firstname}
                           profile_lastname={member.lastname}
-                          defaultAvatarVariant={"h5"}
+                          defaultAvatarVariant={"h2"}
                           avatarClass={classes.profilePicture}
           />
         </CardMedia>

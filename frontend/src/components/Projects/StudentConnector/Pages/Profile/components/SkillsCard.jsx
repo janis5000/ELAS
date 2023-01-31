@@ -65,7 +65,7 @@ const SkillsCard = ({
   const [snackBarMessage, setSnackBarMessage] = useState("");
   const [color, setColor] = useState("green");
   const [editable, setEditable] = useState(false);
-
+  const [text, setText] = useState("");
   const onChangeSkills = (event, newValue) => {
     setCurrentSkills((prevState) => {
       let prevSkills = [...prevState]
@@ -78,12 +78,23 @@ const SkillsCard = ({
       setCurrentSkills(prevSkills);
     })
   }
+
+  const onAddItem = () => {
+    if(text !== ""){
+      onChangeSkills(null, {"skill_name": text})
+    }
+  }
+
+  const onTextChange = (val) => {
+    setText(val)
+  }
+
   const handleDelete = (element) => {
     if(isOwner && editable) {
       let newSkills = []
       setCurrentSkills(prevState => {
             let prevSkills = [...prevState]
-            newSkills = prevSkills.filter((e) => e.id !== element.id)
+            newSkills = prevSkills.filter((e) => e.id !== element.id && e.name == element.name)
             setSnackBarMessage("Successfully removed the skill " + element.skill_name)
             setColor("red")
             setOpenSnackbar(true)
@@ -96,10 +107,11 @@ const SkillsCard = ({
       })
     }
   };
+
   const handleSave = () => {
     if(isOwner) {
       setCurrentProfile({...currentProfile, "skills": currentSkills})
-      setEditable(false)
+      onStopEditing()
     }
   }
 
@@ -153,23 +165,29 @@ const SkillsCard = ({
             {editable && <Grid item className={classes.center}>
               <>
               <Autocomplete
-                id="studyprogram"
+                id="Skills"
                 options={allSkills}
                 getOptionLabel={(option) => option.skill_name || ''}
                 getOptionSelected={(option, value) => option.id === value.id || true}
                 style={{ width: 300 }}
                 freeSolo
                 onChange={(event, newValue) => {
-                  onChangeSkills(event, newValue);
+                  if(typeof(newValue) !== "string"){
+                      onChangeSkills(event, newValue);
+                  }
+                  else{
+                    onChangeSkills(event, {"skill_name": newValue})
+                  }
                 }}
                 className={classes.preSelectInput}
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="Study Program"
+                    label="Skills"
                     variant="standard"
                     placeholder="All skills"
                     size="small"
+                    onChange={(event) => onTextChange(event.target.value)}
                   />
                 )}
               />
@@ -182,6 +200,18 @@ const SkillsCard = ({
                   Cancel
                 </Button>
                 <Button
+                    onClick={onAddItem}
+                    variant="contained"
+                    color="primary"
+                    style={{
+                      backgroundColor: "#FF6500",
+                      color: "white",
+                      marginRight: 16
+                    }}
+                >
+                  Add
+                </Button>
+                <Button
                     onClick={handleSave}
                     variant="contained"
                     color="primary"
@@ -191,7 +221,7 @@ const SkillsCard = ({
                     }}
                 >
                   <SaveOutlinedIcon />
-                  Save
+                  Done
                 </Button>
               </>
             </Grid>}

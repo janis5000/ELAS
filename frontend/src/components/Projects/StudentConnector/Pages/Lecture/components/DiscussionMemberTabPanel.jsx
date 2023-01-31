@@ -48,6 +48,7 @@ function DiscussionMemberTabPanel(props) {
           showAllComments={showAllComments}
           hideAllComments={hideAllComments}
           onClickProfileImage={onClickProfileImage}
+          onSendMessageClick={onSendMessageClick}
         />
       )}
       {value === index && index === 1 && (

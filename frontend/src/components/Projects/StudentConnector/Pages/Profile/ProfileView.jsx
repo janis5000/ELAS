@@ -58,7 +58,7 @@ const ProfileView = () => {
     description: "",
     skills: [],
     degree: "",
-    degree_id: "",
+    degree_id: null,
     courses: [],
     profile_image: "",
   });
@@ -100,13 +100,14 @@ const ProfileView = () => {
         currentProfileRes = response.data;
         setCurrentProfile(currentProfileRes);
         setCurrentSkills(currentProfileRes.skills)
+
+        Backend.get("/studentconnector/skills").then((response) => {
+          let allSkillsRes = response.data
+          allSkillsRes = allSkillsRes.filter(x => !currentProfileRes.skills?.map(y => y.id).includes(x.id))
+          setAllSkills(allSkillsRes)
+        })
         //setInitials(currentProfileRes.firstname.substring(0, 1).toUpperCase() + currentProfileRes.lastname.substring(0, 1).toUpperCase())
       });
-      Backend.get("/studentconnector/skills").then((response) => {
-        let allSkillsRes = response.data
-        allSkillsRes = allSkillsRes.filter(x => !currentProfileRes.skills?.map(y => y.id).includes(x.id))
-        setAllSkills(allSkillsRes)
-      })
     });
     //getProfileInfoAndSetProfileInfoState()
   }, []);

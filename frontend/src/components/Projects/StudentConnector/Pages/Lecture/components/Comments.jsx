@@ -1,9 +1,11 @@
-import {Divider, Grid, Paper, Typography} from "@material-ui/core";
+import {Divider, Grid, IconButton, Paper, Typography} from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
 import React from "react";
 import ProfilePicture from "../../../components/ProfilePicture";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import ViewProfileSendMessageButton from "./ViewProfileSendMessageButton";
 
-const Comments = ({comment, getTime, onClickProfileImage}) => {
+const Comments = ({comment, getTime, onClickProfileImage, onSendMessageClick}) => {
     return (
         <Grid container style={{justifyContent: "center"}}>
             <Paper style={{width: '100%', backgroundColor: '#f0f0f0'}}>
@@ -24,7 +26,7 @@ const Comments = ({comment, getTime, onClickProfileImage}) => {
                                         defaultAvatarVariant={"h6"}
                                         onClickAvatar={() => onClickProfileImage(comment?.comment_author?.comment_author_id)}/>
                     </Grid>
-                    <Grid item
+                    <Grid item xs={10}
                           style={{
                               paddingTop: "1vw",
                           }}>
@@ -32,6 +34,9 @@ const Comments = ({comment, getTime, onClickProfileImage}) => {
                             <b>{comment?.comment_author?.comment_author_name}</b>
                         </Typography>
                         {getTime(comment?.time_created)}
+                    </Grid>
+                    <Grid item>
+                        <ViewProfileSendMessageButton comment={comment} onSendMessageClick={onSendMessageClick} />
                     </Grid>
                 </Grid>
                 <Grid container>

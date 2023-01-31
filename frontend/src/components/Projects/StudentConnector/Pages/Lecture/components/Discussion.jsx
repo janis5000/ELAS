@@ -18,6 +18,7 @@ const Discussion = ({
   showAllComments,
   hideAllComments,
   onClickProfileImage,
+                      onSendMessageClick
 }) => {
   const getTime = (textObjectCreation) => {
     let timeDelta = Date.now() - Date.parse(textObjectCreation);
@@ -200,6 +201,7 @@ const Discussion = ({
                             comment={comment}
                             getTime={getTime}
                             onClickProfileImage={onClickProfileImage}
+                            onSendMessageClick={onSendMessageClick}
                           />
                         ))}
                       </Box>
@@ -214,6 +216,7 @@ const Discussion = ({
                             comment={comment}
                             getTime={getTime}
                             onClickProfileImage={onClickProfileImage}
+                            onSendMessageClick={onSendMessageClick}
                           />
                         ))}
                       </Box>
@@ -229,7 +232,7 @@ const Discussion = ({
                 style={{ padding: "0 1.6vw 1.4vw 1.4vw" }}
               >
                 <Grid item style={{ paddingRight: "1vw" }}></Grid>
-                <Grid item xs={9} style={{ paddingTop: "1vw" }}>
+                <Grid item xs={10} style={{ paddingTop: "1vw" }}>
                   <TextField
                     id="outlined-basic"
                     label="Post a message"
