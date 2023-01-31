@@ -5,6 +5,7 @@ import SendIcon from "@material-ui/icons/Send";
 import Box from "@material-ui/core/Box";
 import Comments from "./Comments";
 import React from "react";
+import ViewProfileSendMessageButton from "./ViewProfileSendMessageButton";
 
 const Discussion = ({
   discussions,
@@ -148,11 +149,15 @@ const Discussion = ({
                   style={{
                     paddingTop: "1vw",
                   }}
+                  xs={10}
                 >
                   <Typography>
                     <b>{x?.discussion_author?.discussion_author_name}</b>
                   </Typography>
                   {getTime(x?.time_created)}
+                </Grid>
+                <Grid item>
+                  <ViewProfileSendMessageButton authorId={x?.discussion_author?.discussion_author_id} onSendMessageClick={onSendMessageClick} />
                 </Grid>
                 <Grid
                   item

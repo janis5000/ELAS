@@ -5,7 +5,7 @@ import MessageIcon from '@material-ui/icons/Message';
 import React from "react";
 import {useHistory} from "react-router-dom";
 
-const ViewProfileSendMessageButton = ({comment, onSendMessageClick}) => {
+const ViewProfileSendMessageButton = ({authorId, onSendMessageClick}) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const history = useHistory()
@@ -34,13 +34,13 @@ const ViewProfileSendMessageButton = ({comment, onSendMessageClick}) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <MenuItem onClick={() => onClickViewProfile(comment?.comment_author?.comment_author_id)} >
+                <MenuItem onClick={() => onClickViewProfile(authorId)} >
                     <ListItemIcon style={{float: "left", minWidth: "33"}}>
                         <VisibilityIcon/>
                     </ListItemIcon>
                     <Typography variant="inherit" style={{float: "left"}}>View Profile</Typography>
                 </MenuItem>
-                <MenuItem onClick={() => onSendMessageClick(comment?.comment_author?.comment_author_id)}>
+                <MenuItem onClick={() => onSendMessageClick(authorId)}>
                     <ListItemIcon style={{float: "left", minWidth: "33"}}>
                         <MessageIcon/>
                     </ListItemIcon>

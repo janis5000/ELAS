@@ -36,7 +36,7 @@ const Comments = ({comment, getTime, onClickProfileImage, onSendMessageClick}) =
                         {getTime(comment?.time_created)}
                     </Grid>
                     <Grid item>
-                        <ViewProfileSendMessageButton comment={comment} onSendMessageClick={onSendMessageClick} />
+                        <ViewProfileSendMessageButton authorId={comment?.comment_author?.comment_author_id} onSendMessageClick={onSendMessageClick} />
                     </Grid>
                 </Grid>
                 <Grid container>
