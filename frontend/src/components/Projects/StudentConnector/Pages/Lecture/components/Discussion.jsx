@@ -6,17 +6,19 @@ import Box from "@material-ui/core/Box";
 import Comments from "./Comments";
 import React from "react";
 
-const Discussion = ({        discussions,
-                      profile,
-                      postDiscussion,
-                      onDiscussionTextChange,
-                      text,
-                      discussionIdNewCommentText,
-                      onCommentTextChange,
-                      postComment,
-                      showAllComments,
-                      hideAllComments,
-                      onClickProfileImage}) => {
+const Discussion = ({
+  discussions,
+  profile,
+  postDiscussion,
+  onDiscussionTextChange,
+  text,
+  discussionIdNewCommentText,
+  onCommentTextChange,
+  postComment,
+  showAllComments,
+  hideAllComments,
+  onClickProfileImage,
+}) => {
   const getTime = (textObjectCreation) => {
     let timeDelta = Date.now() - Date.parse(textObjectCreation);
     if (timeDelta < 1000 * 60) {
@@ -68,7 +70,13 @@ const Discussion = ({        discussions,
           />
         </Grid>
         <Grid item xs={9}>
-          <form noValidate autoComplete="off">
+          <form
+            noValidate
+            autoComplete="off"
+            onSubmit={(e) => {
+              e.preventDefault();
+            }}
+          >
             <TextField
               id="outlined-basic"
               label="Post a message"

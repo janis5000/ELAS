@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const MemberCard = ({ contentKey, mediaKey, member, actionOnClick }) => {
+const MemberCard = ({ contentKey, mediaKey, member, onViewProfileClick, onSendMessageClick}) => {
   const classesSc = scStyles()
   const classes = useStyles()
   return (
@@ -40,8 +40,15 @@ const MemberCard = ({ contentKey, mediaKey, member, actionOnClick }) => {
           <Grid container>
             <Grid item>
               {
-                <Button size="small" color="primary" onClick={actionOnClick}>
+                <Button size="small" color="secondary" onClick={onViewProfileClick} style={{color: "#FF6500"}}>
                   View Profile
+                </Button>
+              }
+            </Grid>
+            <Grid item>
+              {
+                <Button size="small" color="secondary" style={{paddingLeft: 50, color: "#FF6500"}} onClick={onSendMessageClick}>
+                  Send Message
                 </Button>
               }
             </Grid>

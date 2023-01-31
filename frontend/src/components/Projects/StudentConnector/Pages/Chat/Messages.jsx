@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import Backend from "../../../../../assets/functions/Backend";
 import { createAuthConfig } from "../../utils/auth";
 import {
+  Badge,
   Container,
   Grid,
   ListItem,
   ListItemAvatar,
-  Paper,
+  Paper, Snackbar,
+  TextField,
   Typography,
 } from "@material-ui/core";
 import ProfilePicture from "../../components/ProfilePicture";
@@ -18,6 +20,10 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Box from "@material-ui/core/Box";
+import { ChatBox, ReceiverMessage, SenderMessage } from "mui-chat-box";
+import Avatar from "@material-ui/core/Avatar";
+import SendIcon from "@material-ui/icons/Send";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
   profilePicture: {
@@ -37,9 +43,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Messages = () => {
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackBarMessage, setSnackBarMessage] = useState("");
   const [chats, setChats] = useState([]);
   const [profile, setProfile] = useState(null);
   const [selectedChat, setSelectedChat] = useState(null);
+  const [text, setText] = useState("");
+  const [color, setColor] = useState("green");
   const authConfig = createAuthConfig();
 
   const classes = useStyles();
@@ -55,8 +65,51 @@ const Messages = () => {
     });
   }, []);
 
+  const getChatRoomData = (recipientId) => {
+    Backend.get("/studentconnector/chatroom?id=" + recipientId, authConfig).then((response) => {
+      setChats(prevState => {
+        let prevChats = [...prevState]
+        for(let i = 0; i<prevChats.length; i++){
+          if(prevChats[i].recipient_user.id === recipientId){
+            prevChats[i].unread_messages = 0
+          }
+        }
+        setChats(prevChats);
+      })
+    })
+  }
+
+  const sendNewMessage = (chat) => {
+    Backend.post(
+      "/studentconnector/send-message/" + chat.chat_id,
+      {
+        message: text,
+      },
+      authConfig
+    ).then((response) => {
+      setSnackBarMessage("Successfully sent message!")
+      setOpenSnackbar(true)
+    });
+  };
+
   const onSelectChat = (chat) => {
+    debugger;
+    getChatRoomData(chat.recipient_user.id)
     setSelectedChat(chat);
+  };
+  const onTextChange = (event) => {
+    setText(event.target.value);
+  };
+
+  const sendMessage = (chat) => {
+    sendNewMessage(chat);
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSnackbar(false);
   };
 
   return (
@@ -91,11 +144,13 @@ const Messages = () => {
                     {chats?.map((x) => (
                       <ListItem button>
                         <ListItemAvatar>
+                          <Badge badgeContent={x.unread_messages} color="primary">
                           <ProfilePicture
                             profile_image={x?.recipient_user.profile_image}
                             profile_firstname={x?.recipient_user.firstname}
                             profile_lastname={x?.recipient_user.lastname}
                           />
+                          </Badge>
                         </ListItemAvatar>
                         <ListItemText
                           className={classes.text}
@@ -105,8 +160,8 @@ const Messages = () => {
                             <Typography variant="subheading" noWrap>
                               {x?.messages?.at(-1)?.message.length <= 8
                                 ? x?.messages?.at(-1)?.message
-                                : x?.messages?.at(-1)?.message.substring(0, 8) +
-                                  "..."}
+                                : <>{(x?.messages.length > 0 ? x?.messages?.at(-1)?.message.substring(0, 8) +
+                                  "..." : "")}</>}
                             </Typography>
                           }
                         </ListItemText>
@@ -125,7 +180,7 @@ const Messages = () => {
                   }}
                 >
                   {selectedChat && (
-                    <Card style={{overflow: "auto", background: "#e6e8eb" }}>
+                    <Card style={{ overflow: "auto", background: "#e6e8eb" }}>
                       <CardMedia
                         style={{
                           background: "gray",
@@ -148,30 +203,66 @@ const Messages = () => {
                             selectedChat?.recipient_user?.lastname}
                         </Typography>
                       </CardMedia>
-                      <CardContent
-                        style={{ height: 390}}
-                      >
-                        {selectedChat?.messages?.map(x => (<>
-                            {x?.user_id === profile.id ? <Box style={{padding: 20, textAlign: "right", alignContent: "end"}}>
-                              <Card>
-                                <CardContent>
+                      <CardContent style={{ height: 390 }}>
+                        <ChatBox>
+                          {selectedChat?.messages?.map((x) => (
+                            <>
+                              {x?.user_id !== profile?.id ? (
+                                <ReceiverMessage
+                                  avatar={
+                                    <Avatar
+                                      src={
+                                        selectedChat?.recipient_user
+                                          ?.profile_image
+                                      }
+                                    ></Avatar>
+                                  }
+                                >
                                   {x?.message}
-                                </CardContent>
-                              </Card>
-                            </Box> : <Box style={{padding: 20, textAlign: "left"}}>
-                              <Card>
-                                <CardContent>
-                                  <ProfilePicture
-                                    profile_image={selectedChat?.recepient_user?.profile_image}
-                                    profile_firstname={selectedChat?.recepient_user?.firstname}
-                                    profile_lastname={selectedChat?.recepient_user?.lastname}
-                                />
-                                {x?.message}
-                              </CardContent>
-                              </Card>
-                            </Box> }
+                                </ReceiverMessage>
+                              ) : (
+                                <SenderMessage
+                                  avatar={
+                                    <Avatar
+                                      src={profile?.profile_image}
+                                    ></Avatar>
+                                  }
+                                >
+                                  {x?.message}
+                                </SenderMessage>
+                              )}
                             </>
-                        ))}
+                          ))}
+                          <div style={{ paddingBottom: 10 }}></div>
+                        </ChatBox>
+                        <form
+                          noValidate
+                          autoComplete="off"
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                          }}
+                        >
+                          <TextField
+                            id="outlined-basic"
+                            label="Send a message"
+                            variant="outlined"
+                            style={{ width: "90%" }}
+                            size="small"
+                            onChange={onTextChange}
+                            value={text}
+                          />
+                          <Button
+                            color="primary"
+                            variant="contained"
+                            style={{
+                              backgroundColor: "#FF6500",
+                              color: "white",
+                            }}
+                            onClick={() => sendMessage(selectedChat)}
+                          >
+                            <SendIcon />
+                          </Button>
+                        </form>
                       </CardContent>
                     </Card>
                   )}
@@ -181,6 +272,13 @@ const Messages = () => {
           </Paper>
         </Grid>
       </Container>
+      <Snackbar
+          open={openSnackbar}
+          autoHideDuration={3000}
+          onClose={handleCloseSnackbar}
+          message={snackBarMessage}
+          style={{ backgroundColor: color}}
+      />
     </>
   );
 };

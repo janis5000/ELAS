@@ -12,8 +12,10 @@ import SearchSite from "../CourseSearch/SearchSite";
 import Backend from "../../../../../assets/functions/Backend";
 import { createAuthConfig } from "../../utils/auth";
 import Avatar from "@material-ui/core/Avatar";
+import { Badge, Typography } from "@material-ui/core";
+import MailIcon from "@material-ui/icons/Mail";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   // adjust this value to match the height of your header
   drawer: {
     zIndex: 1,
@@ -34,13 +36,15 @@ const useStyles = makeStyles({
     marginTop: 64,
     marginLeft: 8,
   },
-});
+}));
 
 const Sidebar = () => {
   const classes = useStyles();
   const [state, setState] = useState({
     left: false,
   });
+
+  const [newMessageAmount, setNewMessageAmount] = useState(0);
 
   const authConfig = createAuthConfig();
   const [profile, setProfile] = useState(null);
@@ -85,15 +89,12 @@ const Sidebar = () => {
   };
 
   const messageButton = () => {
-    let path = "/studentconnector/chats/"
-    history.push(path)
-  }
+    let path = "/studentconnector/chats/";
+    history.push(path);
+  };
 
   const list = (anchor) => (
-    <div
-      className={classes.list}
-      role="presentation"
-    >
+    <div className={classes.list} role="presentation">
       <List>
         <ListItem className={classes.icon}>
           <img
@@ -118,8 +119,20 @@ const Sidebar = () => {
           />
         </ListItem>
         <ListItem button>
-          <ListItemText primary="Messages" className={classes.text}
-                        onClick={messageButton} />
+          <ListItemText
+            primary={
+              <>
+                <Badge
+                  className={classes.badgePadding}
+                  badgeContent={profile?.all_unread_messages}
+                  color="primary"
+                  variant="dot"
+                ><Typography>Messages</Typography></Badge>
+              </>
+            }
+            className={classes.text}
+            onClick={messageButton}
+          />
         </ListItem>
         <ListItem button>
           <ListItemText
@@ -132,19 +145,17 @@ const Sidebar = () => {
     </div>
   );
 
-
-
   return (
-        <div>
-          <Drawer
-            className="drawer"
-            anchor={"left"}
-            open={state["left"]}
-            variant="permanent"
-          >
-            {profile !== null && list("left")}
-          </Drawer>
-        </div>
+    <div>
+      <Drawer
+        className="drawer"
+        anchor={"left"}
+        open={state["left"]}
+        variant="permanent"
+      >
+        {profile !== null && list("left")}
+      </Drawer>
+    </div>
   );
 };
 

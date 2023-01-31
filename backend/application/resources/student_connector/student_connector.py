@@ -91,7 +91,21 @@ def get_personal_profile_information():
     current_user = get_jwt_identity()
     profile = session.query(User).join(Student_Connector_User).filter(
         Student_Connector_User.email == current_user["email"]).first()
-    return prepare_profile(profile)
+    chats = []
+    all_unread_messages = 0
+    for i,chat in enumerate(profile.student_connector_user[0].chats):
+        chats.append({"chat_id": chat.id,
+                       "unread_messages" : 0})
+        unread_messages = 0
+        for message in chat.messages:
+            if not message.is_read and current_user["id"] != message.user_id:
+                unread_messages += 1
+        chats[i]["unread_messages"] = unread_messages
+        all_unread_messages += unread_messages
+    profile = prepare_profile(profile)
+    profile["unread_chats"] = chats
+    profile["all_unread_messages"] = all_unread_messages
+    return profile
 
 
 @student_connector.route("/profile/<id>", methods=["GET"])
@@ -279,7 +293,10 @@ def add_comment_to_discussion():
     '''profile_db = session.query(User)
     discussion = session.query(Student_Connector_Discussion).filter(
         Student_Connector_Discussion.id == comment_data['discussion_id']).first()'''
-    return 'Successfully added comment!'
+    profile_db = session.query(User)
+    discussion = session.query(Student_Connector_Discussion).filter(
+        Student_Connector_Discussion.id == comment_data['discussion_id']).first()
+    return prepare_discussion(discussion, profile_db)
 
 
 @student_connector.route("/discussions/<lecture_id>", methods=["GET"])
@@ -316,17 +333,23 @@ def get_chats():
     current_user = get_jwt_identity()
     result_chat = []
     sc_user = session.query(Student_Connector_User).filter(Student_Connector_User.id == current_user["id"]).first()
-    for chat in sc_user.chats:
+    chats = []
+    all_unread_messages = 0
+    for i,chat in enumerate(sc_user.chats):
         messages = []
         recipient_user = list(filter(lambda x: x.id != current_user["id"], chat.user))[0]
         recipient_user = prepare_profile_from_sc_user(recipient_user)
+        unread_messages = 0
         for message in chat.messages:
+            if not message.is_read and current_user["id"] != message.user_id:
+                unread_messages += 1
             messages.append({"user_id": message.user_id,
                              "message": message.message})
         result_chat.append({
             "chat_id": chat.id,
             "messages": messages,
-            "recipient_user": recipient_user})
+            "recipient_user": recipient_user,
+            "unread_messages": unread_messages})
     return jsonify(result_chat)
 
 
@@ -346,30 +369,30 @@ def create_chatroom():
         session.commit()
         return jsonify("Succesfully created chatroom!")
     for chat in sc_user.chats:
-        if recipient_user not in chat.user:
-            chat_room = Student_Connector_Chat_Room(None)
-            chat_room.user.append(sc_user)
-            chat_room.user.append(recipient_user)
-            session.add(chat_room)
-            session.commit()
-            return jsonify("Succesfully created chatroom!")
-    return jsonify("Chatroom already exists!")
+        if recipient_user in chat.user:
+            return jsonify("Chatroom already exists!")
+    chat_room = Student_Connector_Chat_Room(None)
+    chat_room.user.append(sc_user)
+    chat_room.user.append(recipient_user)
+    session.add(chat_room)
+    session.commit()
+    return jsonify("Succesfully created chatroom!")
 
 
 @student_connector.route("/chatroom", methods=["GET"])
 @jwt_required()
 def get_chatroom():
     current_user = get_jwt_identity()
-    data = request.json
-    user = session.query(User).filter(User.id == current_user["id"]).first()
-    recipient_user = session.query(User).filter(User.id == data["recipient_id"]).first()
-    sc_user = session.query(Student_Connector_User).filter(Student_Connector_User.id == current_user["id"]).first()
+    data = int(request.args.get("id"))
+    user = session.query(User).filter(User.id == int(current_user["id"])).first()
+    recipient_user = session.query(User).filter(User.id == data).first()
+    sc_user = session.query(Student_Connector_User).filter(Student_Connector_User.id == int(current_user["id"])).first()
     sc_recipient_user = session.query(Student_Connector_User).filter(
-        Student_Connector_User.id == data["recipient_id"]).first()
+        Student_Connector_User.id == data).first()
     for chat in sc_user.chats:
         if sc_recipient_user in chat.user and sc_user in chat.user:
-            unread_messages_db = session.query(Student_Connector_Messages).filter(Student_Connector_Messages.chat_id == chat.id
-                and Student_Connector_Messages.is_read == False)
+            unread_messages_db = session.query(Student_Connector_Messages).filter((Student_Connector_Messages.chat_id == chat.id
+                and Student_Connector_Messages.is_read == False) or Student_Connector_Messages.user_id != int(current_user["id"]))
             unread_messages_db.update({"is_read": True})
             result_chat = []
             messages = []
@@ -395,7 +418,7 @@ def get_chatroom():
 def send_message(chat_id):
     current_user = get_jwt_identity()
     message_data = request.json
-    chat_room = session.query(Student_Connector_Chat_Room).filter(Student_Connector_Chat_Room.id == chat_id).first()
+    chat_room = session.query(Student_Connector_Chat_Room).filter(Student_Connector_Chat_Room.id == int(chat_id)).first()
     sc_user = session.query(Student_Connector_User).filter(Student_Connector_User.id == current_user["id"]).first()
     new_message = Student_Connector_Messages(chat_id=chat_room.id, message=message_data['message'], user_id=sc_user.id)
     chat_room.messages.append(new_message)

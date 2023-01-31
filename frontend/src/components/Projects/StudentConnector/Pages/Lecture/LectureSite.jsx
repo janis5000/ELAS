@@ -172,18 +172,24 @@ const LectureSite = () => {
         },
         authConfig
     ).then((response) => {
-      getDiscussions();
+      //getDiscussions();
       clearTextFields();
-      /*let discussionRes = response.data
+      debugger;
+      let discussionRes = response.data
       setDiscussions(prevState => {
         let prevDiscussions = [...prevState]
-        prevDiscussions.forEach(x => {
+        for(let i =0;i<prevDiscussions.length;i++){
+          if(prevDiscussions[i].discussion_id === discussion_id){
+            prevDiscussions[i] = discussionRes
+          }
+        }
+        /*prevDiscussions.forEach(x => {
           if(x.discussion_id == discussion_id){
             x = discussionRes
           }
-        })
+        })*/
         setDiscussions(prevDiscussions)
-      })*/
+      })
     });
   };
 
@@ -239,6 +245,17 @@ const LectureSite = () => {
 
   const onViewProfileMemberClick = (profile_id) => {
     history.push("/studentconnector/profile/" + profile_id)
+  }
+
+  const createNewChat = (recipientId) => {
+    Backend.post("/studentconnector/create-chatroom", {
+      "recipient_id": recipientId
+    }, authConfig)
+  }
+
+  const onSendMessageClick = (recipientId) => {
+    createNewChat(recipientId)
+    history.push("/studentconnector/chats")
   }
 
   return (
@@ -322,12 +339,14 @@ const LectureSite = () => {
               showAllComments={showAllComments}
               hideAllComments={hideAllComments}
               onClickProfileImage={onClickProfileImage}
+              onSendMessageClick={onSendMessageClick}
             />
             <DiscussionMemberTabPanel
                 value={tabIndex}
                 index={1}
                 members={lectureInfo?.members}
-                onViewProfileMemberClick={onViewProfileMemberClick}/>
+                onViewProfileMemberClick={onViewProfileMemberClick}
+                onSendMessageClick={onSendMessageClick}/>
           </Grid>
         </Grid>
       </Container>
