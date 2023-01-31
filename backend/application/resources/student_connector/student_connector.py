@@ -188,17 +188,17 @@ def set_profile_attributes(id):
         'description'] != "":
         user_db.update({'description': profile_attributes['description']})
     if 'skills_add' in profile_attributes and profile_attributes['skills_add'] != []:
-        skills_to_add = list(map(lambda x: x["skill_name"], profile_attributes['skills_add']))
+        skills_to_add = list(map(lambda x: x["skill_name"].capitalize(), profile_attributes['skills_add']))
         skill_from_db = session.query(Student_Connector_Skills).filter(
             Student_Connector_Skills.skill_name.in_(skills_to_add)).all()
-        new_skills_user = list(filter(lambda x: x not in list(map(lambda y: y.skill_name, user.skills)), skills_to_add))
-        new_skills_db = list(filter(lambda x: x not in list(map(lambda y: y.skill_name, skill_from_db)), skills_to_add))
+        new_skills_user = list(filter(lambda x: x not in list(map(lambda y: y.skill_name.capitalize(), user.skills)), skills_to_add))
+        new_skills_db = list(filter(lambda x: x not in list(map(lambda y: y.skill_name.capitalize(), skill_from_db)), skills_to_add))
         #new_skills_db = list(map(lambda x: x.skill_name.capitalize(), new_skills_db))
         new_skills_db = list(map(lambda x: x.capitalize(), new_skills_db))
         skills = []
         for skill in new_skills_db:
             skill_db = Student_Connector_Skills(skill)
-            if skill in new_skills_user:
+            if skill.capitalize() in new_skills_user:
                 skills.append(skill_db)
             session.add(skill_db)
         for skill in new_skills_user:

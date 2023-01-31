@@ -94,7 +94,7 @@ const SkillsCard = ({
       let newSkills = []
       setCurrentSkills(prevState => {
             let prevSkills = [...prevState]
-            newSkills = prevSkills.filter((e) => e.id !== element.id && e.name == element.name)
+            newSkills = prevSkills.filter((e) => e.skill_name !== element.skill_name)
             setSnackBarMessage("Successfully removed the skill " + element.skill_name)
             setColor("red")
             setOpenSnackbar(true)
