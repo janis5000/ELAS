@@ -116,7 +116,7 @@ const Discussion = ({
               paddingRight: "1.4vw",
             }}
           >
-            <Box border={1} borderRadius="borderRadius">
+            <Box border={1} borderRadius="borderRadius" style={{marginBottom: 16}}>
               <Grid container>
                 <Grid
                   item
