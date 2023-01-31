@@ -61,10 +61,10 @@ export const projectDetails = [
   },
   {
     name: "Student Connector (Studect)",
-    image: "images/studect.jpg",
+    image: "images/logos/student-connector-logo.png",
     shortName: "studentconnector",
     teamMembers:
-      "Osman Tasdelen, Ahmad Rifaee, Shahab Aldin Abbaszadeh, Oliver Fischer Fabian, Furkan Erbil",
+      "Mahmoud Dallah, Janis Evers, Kirolos Zaky, Tom Straub, Luca Pazdzior",
     github1: "https://github.com/SteveMelons/awt-bionweb-project",
     youtube: "https://www.youtube.com/watch?v=0-iC3HUFw1k",
     description:

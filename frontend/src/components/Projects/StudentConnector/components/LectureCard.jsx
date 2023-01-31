@@ -14,7 +14,7 @@ const LectureCard = ({classesSc, lectureInfo, mediaKey, contentKey, hasAction, a
             <Card className={classesSc.card}>
                 <CardMedia
                     className={classesSc.cardMedia}
-                    image="https://nur-muth.com/wp-content/uploads/2022/02/bluebox-hintergrund-filmlexikon.jpeg"
+                    image="/images/backgroundbox.png"
                     key={mediaKey}
                 ></CardMedia>
                 <CardContent
