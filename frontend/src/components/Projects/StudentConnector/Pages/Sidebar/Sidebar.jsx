@@ -89,22 +89,23 @@ const Sidebar = ({profile}) => {
             alt="studect Logo"
           />
         </ListItem>
-        <ListItem button>
+        <ListItem button
+                  onClick={dashboardButton}>
           <ListItemText
             primary="Dashboard"
             className={classes.text}
-            onClick={dashboardButton}
           />
         </ListItem>
 
-        <ListItem button>
+        <ListItem button
+                  onClick={searchCourseButton}>
           <ListItemText
             primary="Search Courses"
             className={classes.text}
-            onClick={searchCourseButton}
           />
         </ListItem>
-        <ListItem button>
+        <ListItem button
+                  onClick={messageButton}>
           <ListItemText
             primary={
               <>
@@ -117,14 +118,13 @@ const Sidebar = ({profile}) => {
               </>
             }
             className={classes.text}
-            onClick={messageButton}
           />
         </ListItem>
-        <ListItem button>
+        <ListItem button
+                  onClick={myProfileButton}>
           <ListItemText
             primary="My Profile"
             className={classes.text}
-            onClick={myProfileButton}
           />
         </ListItem>
       </List>

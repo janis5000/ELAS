@@ -263,7 +263,7 @@ const LectureSite = () => {
       <Sidebar profile={profile}/>
       <Container fixed style={{paddingTop: 20, float: "left"}}>
         <Grid className={classesSc.cardGrid} container spacing={3}>
-          <Grid item xs={3} spacing={3}>
+          <Grid item xs={12} md={3} spacing={3}>
             <Grid container direction="column" spacing={3}>
               <Grid item style={{paddingBottom: 40}}>
                 <LectureCard
@@ -314,7 +314,7 @@ const LectureSite = () => {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={9}>
+          <Grid item xs={12} md={9}>
             <AppBar position="static">
               <Tabs
                 className={classesSc.tabStyle}

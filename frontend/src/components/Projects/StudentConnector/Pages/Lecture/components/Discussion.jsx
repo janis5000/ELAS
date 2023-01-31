@@ -116,7 +116,7 @@ const Discussion = ({
               paddingRight: "1.4vw",
             }}
           >
-            <Box border={1} borderRadius="borderRadius" style={{marginBottom: 16}}>
+            <Box border={1} borderRadius="borderRadius" style={{marginBottom: 16, borderColor:"#c4c4c4"}}>
               <Grid container>
                 <Grid
                   item
@@ -149,7 +149,7 @@ const Discussion = ({
                   style={{
                     paddingTop: "1vw",
                   }}
-                  xs={10}
+                  xs
                 >
                   <Typography>
                     <b>{x?.discussion_author?.discussion_author_name}</b>
@@ -175,12 +175,16 @@ const Discussion = ({
                       !x?.show_all ? (
                         <Button
                           onClick={() => showAllComments(x?.discussion_id)}
+                          size="small"
+                          style={{color: "#FF6500"}}
                         >
                           Show all {x?.comments.length} comments
                         </Button>
                       ) : (
                         <Button
                           onClick={() => hideAllComments(x?.discussion_id)}
+                          size="small"
+                          style={{color: "#FF6500"}}
                         >
                           Hide comments
                         </Button>
@@ -199,7 +203,7 @@ const Discussion = ({
                       <Box
                         border={1}
                         borderRadius="borderRadius"
-                        style={{ width: "90%" }}
+                        style={{ width: "90%", color: "#c4c4c4" }}
                       >
                         {x?.comments?.slice(-2).map((comment) => (
                           <Comments

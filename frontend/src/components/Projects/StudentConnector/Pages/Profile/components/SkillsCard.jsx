@@ -160,6 +160,7 @@ const SkillsCard = ({
                 color="primary"
                 label={x?.skill_name}
                 key={x?.id}
+                style={{marginLeft: 1, marginRight: 1}}
               ></Chip>
             ))}
             {editable && <Grid item className={classes.center}>

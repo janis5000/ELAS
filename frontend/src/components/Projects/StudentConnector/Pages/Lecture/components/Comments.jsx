@@ -26,7 +26,7 @@ const Comments = ({comment, getTime, onClickProfileImage, onSendMessageClick}) =
                                         defaultAvatarVariant={"h6"}
                                         onClickAvatar={() => onClickProfileImage(comment?.comment_author?.comment_author_id)}/>
                     </Grid>
-                    <Grid item xs={10}
+                    <Grid item xs
                           style={{
                               paddingTop: "1vw",
                           }}>

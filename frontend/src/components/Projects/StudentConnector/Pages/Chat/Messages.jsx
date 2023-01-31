@@ -142,7 +142,7 @@ const Messages = () => {
                   </Typography>
                   <List>
                     {chats?.map((x) => (
-                      <ListItem button>
+                      <ListItem button onClick={() => onSelectChat(x)}>
                         <ListItemAvatar>
                           <Badge badgeContent={x.unread_messages} color="primary">
                           <ProfilePicture
@@ -154,7 +154,6 @@ const Messages = () => {
                         </ListItemAvatar>
                         <ListItemText
                           className={classes.text}
-                          onClick={() => onSelectChat(x)}
                         >
                           <Grid container>
                             <Grid item>
