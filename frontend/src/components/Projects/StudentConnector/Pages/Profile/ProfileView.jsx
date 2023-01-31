@@ -145,7 +145,7 @@ const ProfileView = () => {
 
   return (
       <>
-      <Sidebar />
+      <Sidebar profile={profile}/>
     <Grid container direction="column">
         <Typography style={{marginBottom: "2vw"}} variant="h5">My Profile</Typography>
       <Grid container direction="row" spacing={2}>

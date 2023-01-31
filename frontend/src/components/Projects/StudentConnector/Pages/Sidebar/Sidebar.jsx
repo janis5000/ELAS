@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Sidebar = () => {
+const Sidebar = ({profile}) => {
   const classes = useStyles();
   const [state, setState] = useState({
     left: false,
@@ -47,20 +47,6 @@ const Sidebar = () => {
   const [newMessageAmount, setNewMessageAmount] = useState(0);
 
   const authConfig = createAuthConfig();
-  const [profile, setProfile] = useState(null);
-
-  useEffect(() => {
-    if (authConfig !== null) {
-      getProfile();
-    }
-  }, []);
-
-  const getProfile = () => {
-    Backend.get("/studentconnector/profile", authConfig).then((response) => {
-      let profileRes = response.data;
-      setProfile(profileRes);
-    });
-  };
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (

@@ -260,7 +260,7 @@ const LectureSite = () => {
 
   return (
     <>
-      <Sidebar />
+      <Sidebar profile={profile}/>
       <Container fixed style={{paddingTop: 20, float: "left"}}>
         <Grid className={classesSc.cardGrid} container spacing={3}>
           <Grid item xs={3} spacing={3}>

@@ -93,7 +93,7 @@ def get_personal_profile_information():
         Student_Connector_User.email == current_user["email"]).first()
     chats = []
     all_unread_messages = 0
-    for i,chat in enumerate(profile.student_connector_user[0].chats):
+    for i, chat in enumerate(profile.student_connector_user[0].chats):
         chats.append({"chat_id": chat.id,
                        "unread_messages" : 0})
         unread_messages = 0
@@ -336,7 +336,7 @@ def get_chats():
     current_user = get_jwt_identity()
     result_chat = []
     sc_user = session.query(Student_Connector_User).filter(Student_Connector_User.id == current_user["id"]).first()
-    for i,chat in enumerate(sc_user.chats):
+    for i, chat in enumerate(sc_user.chats):
         messages = []
         recipient_user = list(filter(lambda x: x.id != current_user["id"], chat.user))[0]
         recipient_user = prepare_profile_from_sc_user(recipient_user)

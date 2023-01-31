@@ -42,7 +42,7 @@ const Dashboard = () => {
 
     return (
         <>
-            <Sidebar />
+            <Sidebar profile={profile}/>
             {profile?.courses === null || profile?.courses.length === 0 ? "You have no courses selected yet." : (
                 <Container className={classes.cardContainer} style={{float: "left"}}>
                 <Grid className={classes.cardGrid} container spacing={4}>

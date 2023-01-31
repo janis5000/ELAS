@@ -78,7 +78,7 @@ const SearchSite = () => {
     const classes = scStyles();
     return (
         <>
-            <Sidebar />
+            <Sidebar profile={profile}/>
             <Grid container direction="column" justify="flex-start" alignItems="center">
                 <Grid item xs={10}>
                     <Paper>

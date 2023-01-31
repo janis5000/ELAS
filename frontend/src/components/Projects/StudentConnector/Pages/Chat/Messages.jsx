@@ -93,7 +93,6 @@ const Messages = () => {
   };
 
   const onSelectChat = (chat) => {
-    debugger;
     getChatRoomData(chat.recipient_user.id)
     setSelectedChat(chat);
   };
@@ -114,7 +113,7 @@ const Messages = () => {
 
   return (
     <>
-      <Sidebar />
+      <Sidebar profile={profile} />
       <Container fixed style={{ paddingTop: 30 }}>
         <Grid container style={{ width: "90%" }}>
           <Paper style={{ width: "100%" }}>
@@ -126,6 +125,7 @@ const Messages = () => {
                     profile_firstname={profile?.firstname}
                     profile_lastname={profile?.lastname}
                     avatarClass={classes.profilePicture}
+                    defaultAvatarVariant={"h2"}
                   />
                 </Grid>
                 <Grid item style={{ paddingLeft: 55 }}>
