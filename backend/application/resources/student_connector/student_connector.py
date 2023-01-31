@@ -333,8 +333,6 @@ def get_chats():
     current_user = get_jwt_identity()
     result_chat = []
     sc_user = session.query(Student_Connector_User).filter(Student_Connector_User.id == current_user["id"]).first()
-    chats = []
-    all_unread_messages = 0
     for i,chat in enumerate(sc_user.chats):
         messages = []
         recipient_user = list(filter(lambda x: x.id != current_user["id"], chat.user))[0]
@@ -349,7 +347,9 @@ def get_chats():
             "chat_id": chat.id,
             "messages": messages,
             "recipient_user": recipient_user,
-            "unread_messages": unread_messages})
+            "unread_messages": unread_messages,
+        "time_updated":chat.time_updated})
+    result_chat = sorted(result_chat, key=lambda x: x['time_updated'], reverse=True)
     return jsonify(result_chat)
 
 
@@ -374,6 +374,7 @@ def create_chatroom():
     chat_room = Student_Connector_Chat_Room(None)
     chat_room.user.append(sc_user)
     chat_room.user.append(recipient_user)
+    chat_room.update_time(session)
     session.add(chat_room)
     session.commit()
     return jsonify("Succesfully created chatroom!")
@@ -422,6 +423,7 @@ def send_message(chat_id):
     sc_user = session.query(Student_Connector_User).filter(Student_Connector_User.id == current_user["id"]).first()
     new_message = Student_Connector_Messages(chat_id=chat_room.id, message=message_data['message'], user_id=sc_user.id)
     chat_room.messages.append(new_message)
+    chat_room.update_time(session)
     session.add(new_message)
     session.commit()
     return jsonify("Succesfully added message!")

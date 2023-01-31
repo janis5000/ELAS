@@ -47,9 +47,11 @@ const Dashboard = () => {
                 <Container className={classes.cardContainer} style={{float: "left"}}>
                 <Grid className={classes.cardGrid} container spacing={4}>
                     {lecturesWithMembers?.map(x =>
-                        <Grid item xs={6} md={3} lg={3}>
+                        <Grid item xs={6} md={3} lg={3} key={x.id}>
                             <LectureCard hasAction={true} actionOnClick={() => RedirectToCourseSite(x.id)} classesSc={classes}
-                                         lectureInfo={x} contentKey={"content" + x.id} mediaKey={"media" + x.id} lectureMember={x.members} hasMember={true}/>
+                                         lectureInfo={x} contentKey={"content" + x.id} mediaKey={"media" + x.id}
+                                         actionKey={"action" + x.id}
+                                         lectureMember={x.members} hasMember={true}/>
                         </Grid>)}
                 </Grid>
             </Container>)}

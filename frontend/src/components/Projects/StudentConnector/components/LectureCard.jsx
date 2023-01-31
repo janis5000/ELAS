@@ -8,7 +8,7 @@ import Button from "@material-ui/core/Button";
 import {AvatarGroup} from "@material-ui/lab";
 import ProfilePicture from "./ProfilePicture";
 
-const LectureCard = ({classesSc, lectureInfo, mediaKey, contentKey, hasAction, actionOnClick, lectureMember, hasMember}) => {
+const LectureCard = ({classesSc, lectureInfo, mediaKey, contentKey, hasAction, actionOnClick, lectureMember, hasMember, actionKey}) => {
     return (
         <>
             <Card className={classesSc.card}>
@@ -29,7 +29,7 @@ const LectureCard = ({classesSc, lectureInfo, mediaKey, contentKey, hasAction, a
                         {lectureInfo ? <>{lectureInfo.name}</> : "loading..."}
                     </Typography>
                 </CardContent>
-                <CardActions>
+                <CardActions key={actionKey}>
                     <Grid container>
                         <Grid item xs={6}>
                             {hasMember && (<Typography style={{fontSize: 11, color:"gray"}}>Members</Typography>)}
@@ -38,6 +38,7 @@ const LectureCard = ({classesSc, lectureInfo, mediaKey, contentKey, hasAction, a
                                     <ProfilePicture profile_firstname={x.firstname}
                                                     profile_lastname={x.lastname}
                                                     profile_image={x.profile_image}
+                                                    key={x.id}
                                     defaultAvatarVariant="h6"/>))}
                             </AvatarGroup>)}
                         </Grid>

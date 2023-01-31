@@ -271,6 +271,7 @@ const LectureSite = () => {
                   lectureInfo={lectureInfo}
                   mediaKey={"media" + lectureInfo?.id}
                   contentKey={"content" + lectureInfo?.id}
+                  contentKey={"action" + lectureInfo?.id}
                   hasAction={false}
                   actionOnClick={null}
                   hasMember={false}
@@ -344,6 +345,7 @@ const LectureSite = () => {
             <DiscussionMemberTabPanel
                 value={tabIndex}
                 index={1}
+                profile={profile}
                 members={lectureInfo?.members}
                 onViewProfileMemberClick={onViewProfileMemberClick}
                 onSendMessageClick={onSendMessageClick}/>

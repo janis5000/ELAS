@@ -55,7 +55,7 @@ function DiscussionMemberTabPanel(props) {
             <Grid className={classes.cardGrid} container spacing={2}>
               {members?.map(x => (
                   <Grid item xs={6} md={4} lg={4}>
-                    <MemberCard member={x} mediaKey={x.id} onViewProfileClick={() => onViewProfileMemberClick(x.id)}
+                    <MemberCard owner={profile} member={x} mediaKey={x.id} onViewProfileClick={() => onViewProfileMemberClick(x.id)}
                                 onSendMessageClick={() => onSendMessageClick(x.id)}/>
                   </Grid>
           ))}

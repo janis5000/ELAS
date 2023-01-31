@@ -27,10 +27,16 @@ class Student_Connector_Chat_Room(Base):
     __tablename__ = 'student_connector_chat_room'
     id = Column(Integer, primary_key=True, autoincrement=True)
     user = relationship('Student_Connector_User', secondary='student_connector_chat_room_user', back_populates='chats')
+    time_updated = Column(DateTime(timezone=True))
     messages = relationship('Student_Connector_Messages', back_populates='chat')
 
     def __init__(self, id):
         self.id = id
+
+    def update_time(self, session):
+        self.time_updated = func.now()
+        session.add(self)
+        session.commit()
 
 class Student_Connector_Messages(Base):
     __tablename__ = 'student_connector_messages'

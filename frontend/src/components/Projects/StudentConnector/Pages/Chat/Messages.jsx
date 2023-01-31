@@ -156,14 +156,20 @@ const Messages = () => {
                           className={classes.text}
                           onClick={() => onSelectChat(x)}
                         >
+                          <Grid container>
+                            <Grid item>
+                              <Typography style={{fontWeight: "bold"}}>{x?.recipient_user?.firstname + " " + x?.recipient_user?.lastname}</Typography>
+                            </Grid>
+                            <Grid item>
                           {
                             <Typography variant="subheading" noWrap>
                               {x?.messages?.at(-1)?.message.length <= 8
                                 ? x?.messages?.at(-1)?.message
                                 : <>{(x?.messages.length > 0 ? x?.messages?.at(-1)?.message.substring(0, 8) +
-                                  "..." : "")}</>}
+                                  "..." : "Send the first message")}</>}
                             </Typography>
-                          }
+                          }</Grid>
+                          </Grid>
                         </ListItemText>
                       </ListItem>
                     ))}
@@ -235,37 +241,38 @@ const Messages = () => {
                           ))}
                           <div style={{ paddingBottom: 10 }}></div>
                         </ChatBox>
-                        <form
-                          noValidate
-                          autoComplete="off"
-                          onSubmit={(e) => {
-                            e.preventDefault();
-                          }}
-                        >
-                          <TextField
-                            id="outlined-basic"
-                            label="Send a message"
-                            variant="outlined"
-                            style={{ width: "90%" }}
-                            size="small"
-                            onChange={onTextChange}
-                            value={text}
-                          />
-                          <Button
-                            color="primary"
-                            variant="contained"
-                            style={{
-                              backgroundColor: "#FF6500",
-                              color: "white",
-                            }}
-                            onClick={() => sendMessage(selectedChat)}
-                          >
-                            <SendIcon />
-                          </Button>
-                        </form>
                       </CardContent>
                     </Card>
                   )}
+
+                  <form
+                      noValidate
+                      autoComplete="off"
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                      }}
+                  >
+                    {selectedChat !== null ? <><TextField
+                        id="outlined-basic"
+                        label="Send a message"
+                        variant="outlined"
+                        style={{ width: "90%" }}
+                        size="small"
+                        onChange={onTextChange}
+                        value={text}
+                    />
+                    <Button
+                        color="primary"
+                        variant="contained"
+                        style={{
+                          backgroundColor: "#FF6500",
+                          color: "white",
+                        }}
+                        onClick={() => sendMessage(selectedChat)}
+                    >
+                      <SendIcon />
+                    </Button></> : ""}
+                  </form>
                 </Grid>
               </Grid>
             </Grid>
