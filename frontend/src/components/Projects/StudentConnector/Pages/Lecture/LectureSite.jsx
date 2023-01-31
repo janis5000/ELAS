@@ -283,13 +283,14 @@ const LectureSite = () => {
                   lectureInfo={lectureInfo}
                 />
               </Grid>
-              <Grid item style={{justifyContent: "center"}}>
+              <Grid item>
                 {profile && !profileHasCourse() ? (
                     <Button
                         onClick={addCourseToProfile}
                         style={{
                           backgroundColor: "#FF6500",
-                          color: "white"
+                          color: "white",
+                          marginLeft: 45
                         }}
                     >
                       <Typography style={{fontSize: 12}}>Add Course to Dashboard</Typography>
@@ -300,9 +301,9 @@ const LectureSite = () => {
                 {profile && profileHasCourse() ? (
                     <Button
                         style={{
-                          marginLeft: 10,
                           backgroundColor: "#FF6500",
                           color: "white",
+                          marginLeft: 25
                         }}
                         onClick={removeCourseFromProfile}
                     >
