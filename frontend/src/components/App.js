@@ -16,7 +16,6 @@ import {makeStyles} from "@material-ui/core/styles";
 import StudyCompassHomepage from "./Projects/UDEStudyCompass/StudyCompassHomepage";
 import Backend from "../assets/functions/Backend";
 import ProjectFinder from "./Projects/ProjectFinder/ProjectFinder";
-import StudentConnector from "./Projects/StudentConnector/StudentConnector";
 import Smatch from "./Projects/Smatch/Smatch";
 import {
   StudentConnectorRouter
