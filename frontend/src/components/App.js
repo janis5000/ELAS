@@ -18,10 +18,9 @@ import Backend from "../assets/functions/Backend";
 import ProjectFinder from "./Projects/ProjectFinder/ProjectFinder";
 import StudentConnector from "./Projects/StudentConnector/StudentConnector";
 import Smatch from "./Projects/Smatch/Smatch";
-import SearchSite from "./Projects/StudentConnector/Pages/CourseSearch/SearchSite";
-import Student_Connector_Routes from "./Projects/StudentConnector/Pages/Sidebar/Routes";
-import Sidebar from "./Projects/StudentConnector/Pages/Sidebar/Sidebar";
-import StudentConnectorRoutes from "./Projects/StudentConnector/Pages/Sidebar/Routes";
+import {
+  StudentConnectorRouter
+} from "./Projects/StudentConnector/components/StudentConnectorRouter/StudentConnectorRouter";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -32,78 +31,83 @@ const useStyles = makeStyles((theme) => ({
 export default function App() {
   const classes = useStyles();
   const isLoggedIn = !!sessionStorage.getItem("elas_userLoggedIn");
+
   useEffect(async () => {
     await Backend.get("/");
   }, [])
 
   return (
-    <>
-      <CssBaseline/>
-      <NavigationBar/>
-      <Switch>
-        <Grid
-          container
-          direction="column"
-          style={{position: "relative", minHeight: "83vh"}}
-        >
-          <Route exact path="/" render={() => <Home classes={classes}/>}/>
-          <Route
-            exact
-            path="/login"
-            render={() => <Login classes={classes}/>}
-          />
-          <Route
-            exact
-            path="/register"
-            render={() => <Registration classes={classes}/>}
-          />
-          <Route
-            exact
-            path="/e3selector"
-            render={() => <E3Selector classes={classes}/>}
-          />
-          <Route
-            exact
-            path="/intogen"
-            render={() => <Intogen classes={classes}/>}
-          />
-          <Route
-            exact
-            path="/course-recommender"
-            render={() => <CourseRecommender classes={classes}/>}
-          />
-          <Route
-            exact
-            path="/studycompass"
-            render={() => <StudyCompassHomepage/>}
-          />
-          <Route
-            exact
-            path="/project-finder"
-            render={() => <ProjectFinder/>}
-          />
-          <StudentConnectorRoutes/>
-          <Route
-            exact
-            path="/smatch"
-            render={() => <Smatch />}
-          />
-
-          {!isLoggedIn ? (
-            <Route render={() => <Redirect to={{pathname: "/"}}/>}/>
-          ) : (
-            <AuthorizedRoute
-              isAuth={isLoggedIn}
-              path="/admin"
-              component={Admin}
-              classes={classes}
+      <>
+        <CssBaseline/>
+        <NavigationBar/>
+        <Switch>
+          <Grid
+              container
+              direction="column"
+              style={{position: "relative", minHeight: "83vh"}}
+          >
+            <Route exact path="/" render={() => <Home classes={classes}/>}/>
+            <Route
+                exact
+                path="/login"
+                render={() => <Login classes={classes}/>}
             />
-          )}
-          <Route render={() => <Redirect to={{pathname: "/"}}/>}/>
-        </Grid>
-      </Switch>
-      <Footer/>
-      <ScrollToTop/>
-    </>
+            <Route
+                exact
+                path="/register"
+                render={() => <Registration classes={classes}/>}
+            />
+            <Route
+                exact
+                path="/e3selector"
+                render={() => <E3Selector classes={classes}/>}
+            />
+            <Route
+                exact
+                path="/intogen"
+                render={() => <Intogen classes={classes}/>}
+            />
+            <Route
+                exact
+                path="/course-recommender"
+                render={() => <CourseRecommender classes={classes}/>}
+            />
+            <Route
+                exact
+                path="/studycompass"
+                render={() => <StudyCompassHomepage/>}
+            />
+            <Route
+                exact
+                path="/project-finder"
+                render={() => <ProjectFinder/>}
+            />
+            <Route
+                exact
+                path="/studentconnector"
+                render={() => <StudentConnectorRouter/>}
+            />
+            <Route
+                exact
+                path="/smatch"
+                render={() => <Smatch />}
+            />
+
+            {!isLoggedIn ? (
+                <Route render={() => <Redirect to={{pathname: "/"}}/>}/>
+            ) : (
+                <AuthorizedRoute
+                    isAuth={isLoggedIn}
+                    path="/admin"
+                    component={Admin}
+                    classes={classes}
+                />
+            )}
+            <Route render={() => <Redirect to={{pathname: "/"}}/>}/>
+          </Grid>
+        </Switch>
+        <Footer/>
+        <ScrollToTop/>
+      </>
   );
 }
