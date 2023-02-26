@@ -345,7 +345,9 @@ def get_chats():
             if not message.is_read and current_user["id"] != message.user_id:
                 unread_messages += 1
             messages.append({"user_id": message.user_id,
-                             "message": message.message})
+                             "message": message.message,
+                             "time_created": message.time_created})
+            messages = sorted(messages, key=lambda x: x['time_created'])
         result_chat.append({
             "chat_id": chat.id,
             "messages": messages,
@@ -394,6 +396,8 @@ def get_chatroom():
     sc_user = session.query(Student_Connector_User).filter(Student_Connector_User.id == int(current_user["id"])).first()
     sc_recipient_user = session.query(Student_Connector_User).filter(
         Student_Connector_User.id == data).first()
+
+    recipient_user = prepare_profile_from_sc_user(sc_recipient_user)
     for chat in sc_user.chats:
         if sc_recipient_user in chat.user and sc_user in chat.user:
             unread_messages_db = session.query(Student_Connector_Messages).filter((Student_Connector_Messages.chat_id == chat.id
@@ -401,9 +405,6 @@ def get_chatroom():
             unread_messages_db.update({"is_read": True})
             result_chat = []
             messages = []
-            users = []
-            users.append(prepare_profile(user))
-            users.append(prepare_profile(recipient_user))
             for message in chat.messages:
                 messages.append({"user_id": message.user_id,
                                  "message": message.message,
@@ -412,7 +413,8 @@ def get_chatroom():
             result_chat.append({
                 "chat_id": chat.id,
                 "messages": messages,
-                "users": users})
+                "recipient_user": recipient_user,
+                "time_updated": chat.time_updated})
             session.commit()
             return jsonify(result_chat)
     return jsonify("Chatroom does not exist!")
