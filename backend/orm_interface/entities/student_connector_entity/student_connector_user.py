@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, Integer, String, Float, ForeignKey, Table, DateTime, func
+from sqlalchemy import Boolean, Column, Integer, String, ForeignKey, Table, DateTime, func
 from orm_interface.base import Base
 from sqlalchemy.orm import relationship
 
@@ -88,8 +88,3 @@ class Student_Connector_Skills(Base):
 
     def __init__(self, skill_name):
         self.skill_name = skill_name
-
-"""class Student_Connector_Skills_User(Base):
-    __tablename__ = 'student_connector_skills_user'
-    skill_id = Column(Integer, ForeignKey('student_connector_skills.id'), primary_key=True)
-    user_id = Column(Integer, ForeignKey('student_connector_user.id'), primary_key=True)"""

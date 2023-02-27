@@ -110,7 +110,6 @@ def get_personal_profile_information():
 
 @student_connector.route("/profile/<id>", methods=["GET"])
 def get_profile(id):
-    # profile = session.query(Student_Connector_User).filter(Student_Connector_User.id == id).first()
     profile = session.query(User) \
         .join(Student_Connector_User) \
         .filter(Student_Connector_User.id == id).first()
@@ -132,7 +131,6 @@ def get_courses_from_profile(id):
 @student_connector.route("/add-course", methods=["POST"])
 @jwt_required()
 def add_course_to_profile():
-    # this is only a dummy authentication, it is completely useless!
     current_user = get_jwt_identity()
     user = session.query(Student_Connector_User).filter(Student_Connector_User.email == current_user.email).first()
     if 'courses' in request.form:
@@ -193,7 +191,6 @@ def set_profile_attributes(id):
             Student_Connector_Skills.skill_name.in_(skills_to_add)).all()
         new_skills_user = list(filter(lambda x: x not in list(map(lambda y: y.skill_name.capitalize(), user.skills)), skills_to_add))
         new_skills_db = list(filter(lambda x: x not in list(map(lambda y: y.skill_name.capitalize(), skill_from_db)), skills_to_add))
-        #new_skills_db = list(map(lambda x: x.skill_name.capitalize(), new_skills_db))
         new_skills_db = list(map(lambda x: x.capitalize(), new_skills_db))
         skills = []
         for skill in new_skills_db:
@@ -230,7 +227,6 @@ def get_lectures():
     result = []
     studyprogram_id = request.args.get('studyprogram-id')
     lectures = session.query(Lecture).filter(Lecture.root_id.any(id=studyprogram_id)).all()
-    # lectures = session.query(Lecture).filter_by(Lecture.root_id.any(studyprogram_id)).all()
     for lecture in lectures:
         result.append({"id": lecture.id,
                        "longtext": lecture.longtext,

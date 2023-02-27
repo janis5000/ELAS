@@ -12,7 +12,6 @@ class Student_Connector_Discussion(Base):
     text = Column(String, nullable=False)
     author_email = Column(String, ForeignKey('student_connector_user.email'))
     time_created = Column(DateTime(timezone=True), server_default=func.now())
-    #time_updated = Column(DateTime(timezone=True), onupdate=func.now())
     time_updated = Column(DateTime(timezone=True))
     author = relationship('Student_Connector_User', back_populates="discussions")
     comments = relationship('Student_Connector_Comments', back_populates="discussion"
