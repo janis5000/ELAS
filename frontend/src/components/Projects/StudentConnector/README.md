@@ -83,7 +83,6 @@ For further reference see the README of the ELAS project.
 
  - Frontend installation
     - Open a command prompt, move inside frontend folder, and follow the steps below by typing the commands in your command prompt
-          - Open command prompt/terminal and follow the steps below:
     
             - Download and install node packages
     
