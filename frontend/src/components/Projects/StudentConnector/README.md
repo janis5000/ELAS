@@ -9,7 +9,7 @@
 * [Project Architecture](#project-architecture)
 * [Libraries used](#libraries-used)
 * [Examples](#visualization)
-* [Links](#links)
+* [Videos](#links)
 * [Get Started](#get-started)
 * [Developers](#developers)
 
@@ -42,10 +42,68 @@ access to the backend is given here.
 - Postgres database
 
 ## Examples
-<img src="components/Assets/screenshot.png">
-<img src="components/Assets/screenshot1.png">
-<img src="components/Assets/screenshot2.png">
-<img src="components/Assets/screenshot3.png">
-<img src="components/Assets/screenshot4.png">
-<img src="components/Assets/screenshot5.png">
-<img src="components/Assets/screenshot6.png">
+<img src="components/Assets/dashboard.png" alt="Dashboard">
+<img src="components/Assets/search.png" alt="Search courses">
+<img src="components/Assets/chats.png" alt="Chats">
+<img src="components/Assets/profile.png" alt="Profile">
+<img src="components/Assets/discussion.png" alt="Discussion in a course">
+<img src="components/Assets/member.png" alt="Member in a course">
+
+## Videos
+<a href="https://www.youtube.com/watch?v=Cj9fKYqKolI">Advertisement Video</a>
+
+## Getting started
+For further reference see the README of the ELAS project.
+ - Backend installation
+   - Open a command prompt, move inside `backend` folder, and follow the steps below by typing the commands in your
+             command prompt
+
+               - Install a python virtual environment
+
+                 
+                 python -m venv venv
+                 
+
+               - Activate the python virtual environment
+                  .\venv\Scripts\activate
+                 
+
+               - Upgrade the pip version
+                  python -m pip install --upgrade pip
+                 
+
+               - Install the required packages from the `requirements.txt` file
+
+                 pip install -r requirements.txt           # For Linux/MacOS
+                 pip install -r requirements-windows.txt   # For Windows
+   
+          - Type the following command in a command prompt to run server
+
+                  python -m flask run --host=0.0.0.0
+
+   - Frontend installation
+
+         - Open command prompt/terminal and follow the steps below:
+
+         - Download and install node packages
+
+          npm ci
+
+          - Run the script and starts the application
+
+           npm run dev
+
+           - Stop the Frontend application by pressing `Cntl + c` inside the command prompt
+
+           - Application will open automatically in browser at [localhost:3000](http://localhost:3000)
+
+           - Read more about CSS framework [Material UI v4](https://v4.mui.com/getting-started/installation/)
+
+ - Application will start automatically on [http://localhost:3000](http://localhost:3000). Backend is available at [http://localhost:5000](http://localhost:5000).
+
+## Developers
+- Janis Evers
+- Mahmoud Dallah
+- Tom Straub
+- Luca Pazdzior
+- Kirolos Zaky
