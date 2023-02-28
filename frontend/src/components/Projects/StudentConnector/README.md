@@ -97,12 +97,6 @@ For further reference see the README of the ELAS project.
             - Run the script and starts the application
     
              npm run dev
-    
-             - Stop the Frontend application by pressing `Cntl + c` inside the command prompt
-    
-             - Application will open automatically in browser at [localhost:3000](http://localhost:3000)
-    
-             - Read more about CSS framework [Material UI v4](https://v4.mui.com/getting-started/installation/)
 
  - Application will start automatically on [http://localhost:3000](http://localhost:3000). Backend is available at [http://localhost:5000](http://localhost:5000).
 
