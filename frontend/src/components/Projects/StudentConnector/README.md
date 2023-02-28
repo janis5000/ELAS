@@ -86,7 +86,7 @@ For further reference see the README of the ELAS project.
     
             - Download and install node packages
     
-            npm ci
+            npm install
     
             - Run the script and starts the application
     
