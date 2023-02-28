@@ -90,7 +90,7 @@ For further reference see the README of the ELAS project.
 
  - Frontend installation
     - Open a command prompt, move inside frontend folder, and follow the steps below by typing the commands in your command prompt
-    - in this project we use  npm: '8.5.0' and  node: '16.14.2'. the most recent versions of npm and node may cause errors while running            npm ci
+    - In this project we use  npm: '8.5.0' and  node: '16.14.2'. The most recent versions of npm and node may cause errors while running npm ci or npm install
  
     
             - Download and install node packages
