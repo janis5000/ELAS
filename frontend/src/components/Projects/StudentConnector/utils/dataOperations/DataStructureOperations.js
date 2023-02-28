@@ -1,7 +1,7 @@
-export function isEmptyObject(obj){
+export function isEmptyObject(obj) {
     return Object.keys(obj).length === 0;
 }
 
-export function isEmptyList(list){
+export function isEmptyList(list) {
     return list.length === 0;
 }

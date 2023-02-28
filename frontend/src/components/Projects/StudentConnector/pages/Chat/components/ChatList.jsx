@@ -14,7 +14,7 @@ export const ChatList = ({chats, onSelectChat}) => {
         history.push("/studentconnector/profile/" + recipientId)
     }
 
-    return(
+    return (
         <List>
             {chats?.map((x) => (
                 <ListItem button onClick={() => onSelectChat(x)}>
@@ -33,7 +33,8 @@ export const ChatList = ({chats, onSelectChat}) => {
                     >
                         <Grid container>
                             <Grid item>
-                                <Typography style={{fontWeight: "bold"}}>{x?.recipient_user?.firstname + " " + x?.recipient_user?.lastname}</Typography>
+                                <Typography
+                                    style={{fontWeight: "bold"}}>{x?.recipient_user?.firstname + " " + x?.recipient_user?.lastname}</Typography>
                             </Grid>
                             <Grid item>
                                 {

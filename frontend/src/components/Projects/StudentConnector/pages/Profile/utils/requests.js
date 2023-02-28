@@ -14,7 +14,7 @@ const getStudyProgramsRequest = (executeFunc) => {
     defaultGet("study-programs", executeFunc)
 }
 
-export const getCurrentProfileById = (id, setCurrentProfile, setCurrentSkills) =>{
+export const getCurrentProfileById = (id, setCurrentProfile, setCurrentSkills) => {
     const executeFuncReq = (res) => {
         setCurrentProfile(res)
         setCurrentSkills(res.skills)
@@ -23,7 +23,7 @@ export const getCurrentProfileById = (id, setCurrentProfile, setCurrentSkills) =
 }
 
 const getCurrentProfileByIdRequest = (id, executeFunc) => {
-    defaultGet("profile/"+id, executeFunc)
+    defaultGet("profile/" + id, executeFunc)
 }
 
 export const getAllSkillsOfUser = (setAllSkills, currentProfile) => {

@@ -17,21 +17,22 @@ export const sendMessageToChatId = (id, data, setSnackBarMessage, setOpenSnackba
 }
 
 const sendMessageToChatIdRequest = (id, data, executeFunc, authConfig) => {
-    authenticatedPost("send-message/" + id, data, executeFunc, () => {}, authConfig)
+    authenticatedPost("send-message/" + id, data, executeFunc, () => {
+    }, authConfig)
 }
 
 export const getChatsAndSetChatWithUserIdToUnread = (recipientId, setChats, setSelectedChat, authConfig) => {
     const executeFunc = (res) => {
         setChats(prevState => {
-                let prevChats = [...prevState]
-                for (let i = 0; i < prevChats.length; i++) {
-                    if (prevChats[i].recipient_user.id === recipientId) {
-                        prevChats[i].unread_messages = 0
-                        setSelectedChat(res[0]);
-                    }
+            let prevChats = [...prevState]
+            for (let i = 0; i < prevChats.length; i++) {
+                if (prevChats[i].recipient_user.id === recipientId) {
+                    prevChats[i].unread_messages = 0
+                    setSelectedChat(res[0]);
                 }
-                setChats(prevChats);
-            })
+            }
+            setChats(prevChats);
+        })
     }
     getChatsAndSetChatWithUserIdToUnreadRequest(recipientId, executeFunc, authConfig)
 }

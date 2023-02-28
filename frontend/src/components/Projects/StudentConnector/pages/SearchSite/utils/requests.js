@@ -25,13 +25,12 @@ const getSelectedLecturesResultsByLectureIdRequest = (lecture_id, executeFunc) =
 }
 
 
-
 export const getLecturesByStudyProgramId = (id, setLectures) => {
     getLecturesByStudyProgramIdRequest(id, setLectures)
 }
 
 const getLecturesByStudyProgramIdRequest = (id, executeFunc) => {
-    defaultGet("lectures?studyprogram-id="+id, executeFunc)
+    defaultGet("lectures?studyprogram-id=" + id, executeFunc)
 }
 
 

@@ -19,7 +19,7 @@ export const StartDiscussion = ({discussion_id, onSetDiscussion}) => {
     const onDiscussionTextChange = (event) => {
         setDiscussionText(event.target.value);
     };
-    return(
+    return (
         <Grid
             container
             justify="flex-start"

@@ -9,14 +9,15 @@ const DescriptionCard = ({classesSc, lectureInfo}) => {
         <Grid item>
             <Card className={classesSc.card}>
                 <CardMedia>
-                    <Typography style={{paddingLeft: 14, paddingTop: 10, fontSize: "0.9rem"}}><b>Description</b></Typography>
+                    <Typography
+                        style={{paddingLeft: 14, paddingTop: 10, fontSize: "0.9rem"}}><b>Description</b></Typography>
                 </CardMedia>
                 <CardContent
-                    className={classesSc.cardContent} style={{maxHeight:200, overflow: 'auto'}}
+                    className={classesSc.cardContent} style={{maxHeight: 200, overflow: 'auto'}}
                 >
                     <Typography
                         gutterBottom
-                        style={{ fontSize: "0.8rem" }}
+                        style={{fontSize: "0.8rem"}}
 
                     >
                         {lectureInfo ? <>{lectureInfo.description}</> : "loading..."}

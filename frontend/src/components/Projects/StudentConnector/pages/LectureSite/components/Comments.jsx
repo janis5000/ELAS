@@ -34,12 +34,14 @@ const Comments = ({comment, getTime, onClickProfileImage, onSendMessageClick}) =
                         {getTime(comment?.time_created)}
                     </Grid>
                     <Grid item>
-                        <ViewProfileSendMessageButton authorId={comment?.comment_author?.comment_author_id} onSendMessageClick={onSendMessageClick} />
+                        <ViewProfileSendMessageButton authorId={comment?.comment_author?.comment_author_id}
+                                                      onSendMessageClick={onSendMessageClick}/>
                     </Grid>
                 </Grid>
                 <Grid container>
                     <Grid item xs={12} style={{
-                        paddingLeft: "0.5vw"}}>
+                        paddingLeft: "0.5vw"
+                    }}>
                         <Typography style={{margin: 10}}>
                             {comment?.comment_text}
                         </Typography>

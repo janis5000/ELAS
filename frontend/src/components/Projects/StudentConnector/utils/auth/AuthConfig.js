@@ -15,7 +15,7 @@ const createAuthConfig = () => {
         })
 
     } else {
-        return {headers:{}};
+        return {headers: {}};
     }
 }
 
@@ -23,7 +23,9 @@ export const AuthConfigContextProvider = (props) => {
     const [config, setConfig] = useState({
         headers: {}
     });
-    useEffect(() => {setConfig(createAuthConfig());}, [])
+    useEffect(() => {
+        setConfig(createAuthConfig());
+    }, [])
 
     return (
         <AuthConfigContext.Provider value={config}>

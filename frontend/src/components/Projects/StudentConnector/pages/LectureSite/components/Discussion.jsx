@@ -5,7 +5,7 @@ import Box from "@material-ui/core/Box";
 import Comments from "./Comments";
 import React, {useEffect, useState} from "react";
 import ViewProfileSendMessageButton from "./ViewProfileSendMessageButton";
-import {getDiscussionsById } from "../utils/requests";
+import {getDiscussionsById} from "../utils/requests";
 import {useParams} from "react-router-dom";
 import {getTime, hideAllComments, showAllComments} from "../utils/utils";
 import StartDiscussion from "./StartDiscussion";
@@ -87,8 +87,9 @@ const Discussion = ({
                                     {getTime(currentDiscussion?.time_created)}
                                 </Grid>
                                 <Grid item>
-                                    <ViewProfileSendMessageButton authorId={currentDiscussion?.discussion_author?.discussion_author_id}
-                                                                  onSendMessageClick={onSendMessageClick}/>
+                                    <ViewProfileSendMessageButton
+                                        authorId={currentDiscussion?.discussion_author?.discussion_author_id}
+                                        onSendMessageClick={onSendMessageClick}/>
                                 </Grid>
                                 <Grid
                                     item

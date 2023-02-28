@@ -34,7 +34,7 @@ const ViewProfileSendMessageButton = ({authorId, onSendMessageClick}) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <MenuItem onClick={() => onClickViewProfile(authorId)} >
+                <MenuItem onClick={() => onClickViewProfile(authorId)}>
                     <ListItemIcon style={{float: "left", minWidth: "33"}}>
                         <VisibilityIcon/>
                     </ListItemIcon>

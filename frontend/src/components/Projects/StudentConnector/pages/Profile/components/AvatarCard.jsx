@@ -6,7 +6,6 @@ import ProfilePicture from "../../../components/ProfilePicture/ProfilePicture";
 import {avatarCardStyle} from "../styles/avatarCardStyle";
 
 
-
 const AvatarCard = ({currentProfile, openImageDialog, setOpenImageDialog, isOwner, setCurrentProfile, options}) => {
     const classes = avatarCardStyle()
 

@@ -20,7 +20,7 @@ const scStyles = makeStyles((theme) => ({
     cardContent: {
         flexGrow: 1,
     },
-    tabStyle:{
+    tabStyle: {
         backgroundColor: theme.palette.background.paper,
         color: "black"
     },

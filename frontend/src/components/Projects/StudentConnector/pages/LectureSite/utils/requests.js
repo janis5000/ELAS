@@ -1,7 +1,9 @@
 import {authenticatedPost, defaultGet} from "../../../utils/requests/BackendRequests";
 
-export const getLecturesById = (id,executeFuncAtRequest) => {
-    const executeFunc = (list) => {executeFuncAtRequest(list[0])}
+export const getLecturesById = (id, executeFuncAtRequest) => {
+    const executeFunc = (list) => {
+        executeFuncAtRequest(list[0])
+    }
     getLecturesByIdRequest('lecture/' + id, executeFunc)
 }
 
@@ -10,7 +12,7 @@ const getLecturesByIdRequest = (url, executeFuncAtRequest) => {
 }
 
 export const getDiscussionsById = (id, executeFuncAtRequest) => {
-    getDiscussionsByIdRequest(id,executeFuncAtRequest)
+    getDiscussionsByIdRequest(id, executeFuncAtRequest)
 }
 
 const getDiscussionsByIdRequest = (id, executeFuncAtRequest) => {
@@ -20,7 +22,9 @@ const getDiscussionsByIdRequest = (id, executeFuncAtRequest) => {
 
 export const postDiscussionById = (id, data, setDiscussions, clearTextFields, authConfig) => {
     const executeFunc = () => {
-        const onSetDiscussion = (val) => {setDiscussions(val)}
+        const onSetDiscussion = (val) => {
+            setDiscussions(val)
+        }
         getDiscussionsByIdRequest(id, onSetDiscussion)
         clearTextFields();
     }
@@ -28,7 +32,8 @@ export const postDiscussionById = (id, data, setDiscussions, clearTextFields, au
 };
 
 const postDiscussionByIdRequest = (id, data, executeFuncAtRequest, authConfig) => {
-    authenticatedPost("start-discussion", data, executeFuncAtRequest, () => {}, authConfig);
+    authenticatedPost("start-discussion", data, executeFuncAtRequest, () => {
+    }, authConfig);
 }
 
 export const createNewChatById = (recipientId, authConfig) => {
@@ -36,7 +41,9 @@ export const createNewChatById = (recipientId, authConfig) => {
 }
 
 const createNewChatByIdRequest = (data, authConfig) => {
-    authenticatedPost("create-chatroom", data, () => {}, () => {}, authConfig)
+    authenticatedPost("create-chatroom", data, () => {
+    }, () => {
+    }, authConfig)
 }
 
 export const postCommentById = (discussion_id, data, setDiscussions, clearTextFields, authConfig) => {
@@ -55,6 +62,7 @@ export const postCommentById = (discussion_id, data, setDiscussions, clearTextFi
     postCommentByIdRequest(data, executeFunc, authConfig)
 }
 
-const postCommentByIdRequest = (data, executeFunc, authConfig) =>{
-    authenticatedPost("add-comment", data, executeFunc, () =>{} , authConfig)
+const postCommentByIdRequest = (data, executeFunc, authConfig) => {
+    authenticatedPost("add-comment", data, executeFunc, () => {
+    }, authConfig)
 }

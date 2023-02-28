@@ -4,10 +4,10 @@ import AuthConfigContext from "./AuthConfig";
 import {isEmptyObject} from "../dataOperations/DataStructureOperations";
 
 export const ProfileContext = createContext({
-    profile : {},
-    setProfile : () => {},
-    });
-
+    profile: {},
+    setProfile: () => {
+    },
+});
 
 
 export const ProfileContextProvider = (props) => {
@@ -20,7 +20,7 @@ export const ProfileContextProvider = (props) => {
     }
 
     useEffect(() => {
-        if(!isEmptyObject(authConfig.headers)) {
+        if (!isEmptyObject(authConfig.headers)) {
             authenticatedGet('profile', onSetUser, authConfig)
         }
     }, [authConfig])

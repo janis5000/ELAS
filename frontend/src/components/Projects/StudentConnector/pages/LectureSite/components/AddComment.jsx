@@ -17,7 +17,7 @@ export const AddComment = ({currentDiscussion, onSetDiscussion}) => {
         setDiscussionIdNewCommentText({"id": id, "text": event.target.value})
     }
 
-    return(
+    return (
         <Grid
             container
             justify="flex-start"

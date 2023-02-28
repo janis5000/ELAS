@@ -11,7 +11,7 @@ export const MessageContextProvider = (props) => {
         setMessage(profile?.all_unread_messages)
     }, [profile])
 
-    return(
+    return (
         <MessageContext.Provider value={{message, setMessage}}>
             {props.children}
         </MessageContext.Provider>
