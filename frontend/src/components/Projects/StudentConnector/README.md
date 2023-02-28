@@ -33,9 +33,11 @@ project.
 - styles folder: A folder containing global styles
 - utils folder: A folder containing different global functionalities that are used
 throughout the whole project. For example the usage of the context API or centralized
-access to the backend is given here.
+access to the backend is given here. <br>
+
+A diagram of the used architecture can be seen here:
 <details>
-  <summary>Diagram of used architecture</summary>
+  <summary>Show diagram of used architecture</summary>
     <img src="components/Assets/architecture.png" alt="Architecture">
 </details>
 
