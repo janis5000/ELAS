@@ -57,15 +57,13 @@ A diagram of the used architecture can be seen here:
 
 ## Videos
 <a href="https://www.youtube.com/watch?v=Cj9fKYqKolI">Advertisement Video</a>
-
+<a href="https://www.youtube.com/watch?v=ozi4evvgL7Y">Demo Video</a>
 ## Getting started
 For further reference see the README of the ELAS project.
  - Backend installation
    - Open a command prompt, move inside `backend` folder, and follow the steps below by typing the commands in your
              command prompt
-    - Python 3.10.4 was used in this project.
-    - Please also consider the installation guide of the main ELAS platform. Most of the installations steps are equivalent
-      to the ones stated here.
+    -we used python 3.10.4 in this project.
 
                - Install a python virtual environment
 
@@ -89,15 +87,9 @@ For further reference see the README of the ELAS project.
                  The command: pip install -r requirements-windows.txt may also work for Linux/MacOS but is 
                  not guaranteed to do so.
    
-               - Rename the files `example.env` to `.env` and `example.flaskenv` to `.flaskenv` respectively
-
-               - Open `.env` file, find `POSTGRES_PASS`, and type the password of your postgresql database between the single
-                 quotation mark
-               
-                - Type the following command in a command prompt to run server
+          - Type the following command in a command prompt to run server
 
                   python -m flask run --host=0.0.0.0
-
 
  - Frontend installation
     - Open a command prompt, move inside frontend folder, and follow the steps below by typing the commands in your command prompt
@@ -114,19 +106,6 @@ For further reference see the README of the ELAS project.
 
  - Application will start automatically on [http://localhost:3000](http://localhost:3000). Backend is available at [http://localhost:5000](http://localhost:5000).
 
-
-- Database setup
-    Course data of the university is necessary to run this project properly. Follow the steps accordingly to scrape the course data.
-  - In the ELAS web application homepage, click `Login` button and create a new account
-  - After successful login, click the circle button at the top right corner, open the menu, and click `Settings`
-  - Click on `SCRAPE COURSES` button
-  - Copy and paste the following address links in the respective text fields
-      - Example link
-        for [E3 courses SS22](https://campus.uni-due.de/lsf/rds?state=wtree&search=1&trex=step&root120221=303720%7C306477%7C306534&P.vx=kurz)
-      - Example link
-        for [Engineering courses SS22](https://campus.uni-due.de/lsf/rds?state=wtree&search=1&trex=step&root120221=303720%7C306861%7C305477&P.vx=kurz)
-  - Click the `SCRAPE NOW` button, wait for the scraping to finish (check progress in the webserver command prompt)
-  - Read more about [ORM interface](backend\orm_interface\README.md)
 ## Developers
 - Janis Evers
 - Mahmoud Dallah
