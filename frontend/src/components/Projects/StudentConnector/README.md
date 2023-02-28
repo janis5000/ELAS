@@ -63,6 +63,7 @@ For further reference see the README of the ELAS project.
  - Backend installation
    - Open a command prompt, move inside `backend` folder, and follow the steps below by typing the commands in your
              command prompt
+    -we used python 3.10.4 in this project.
 
                - Install a python virtual environment
 
@@ -89,6 +90,8 @@ For further reference see the README of the ELAS project.
 
  - Frontend installation
     - Open a command prompt, move inside frontend folder, and follow the steps below by typing the commands in your command prompt
+    - in this project we use  npm: '8.5.0' and  node: '16.14.2'. the most recent versions of npm and node may cause errors while running            npm ci
+ 
     
             - Download and install node packages
     
