@@ -81,8 +81,11 @@ For further reference see the README of the ELAS project.
 
                - Install the required packages from the `requirements.txt` file
 
-                 pip install -r requirements.txt           # For Linux/MacOS
                  pip install -r requirements-windows.txt   # For Windows
+   
+                 Running the project on Linux/MacOS may result in errors since it is currently not supported. 
+                 The command: pip install -r requirements-windows.txt may also work for Linux/MacOS but is 
+                 not guaranteed to do so.
    
           - Type the following command in a command prompt to run server
 
