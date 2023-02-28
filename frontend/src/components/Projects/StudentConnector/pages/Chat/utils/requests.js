@@ -1,4 +1,4 @@
-import {authenticatedGet, authenticatedPost} from "../../../utils/requests/backendRequests";
+import {authenticatedGet, authenticatedPost} from "../../../utils/requests/BackendRequests";
 
 export const getChatsOfUser = (setChats, authConfig) => {
     getChatsOfUserRequest(setChats, authConfig)

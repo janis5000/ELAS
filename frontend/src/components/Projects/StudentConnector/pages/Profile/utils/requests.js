@@ -1,4 +1,4 @@
-import {authenticatedPost, defaultGet} from "../../../utils/requests/backendRequests";
+import {authenticatedPost, defaultGet} from "../../../utils/requests/BackendRequests";
 
 export const getStudyPrograms = (executeFuncAtRequest) => {
     const executeFuncReq = (res, param) => {

@@ -1,4 +1,4 @@
-import {defaultGet} from "../../../utils/requests/backendRequests";
+import {defaultGet} from "../../../utils/requests/BackendRequests";
 
 export const getStudyPrograms = (executeFunc) => {
     getStudyProgramsRequest(executeFunc)

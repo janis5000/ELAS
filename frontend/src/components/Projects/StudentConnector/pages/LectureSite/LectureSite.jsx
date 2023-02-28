@@ -18,9 +18,8 @@ import {
     createNewChatById,
     getLecturesById
 } from "./utils/requests";
-import {addCourseToProfile, removeCourseFromProfileById} from "./utils/buttonFunctions"
 import AuthConfigContext from "../../utils/auth/AuthConfig";
-import {profileHasCourse} from "./utils/utils";
+import {profileHasCourse, addCourseToProfile, removeCourseFromProfileById} from "./utils/utils";
 
 const LectureSite = () => {
     const classesSc = scStyles();

@@ -1,5 +1,5 @@
 import {createContext, useContext, useEffect, useState} from "react";
-import {authenticatedGet} from "../requests/backendRequests";
+import {authenticatedGet} from "../requests/BackendRequests";
 import AuthConfigContext from "./AuthConfig";
 import {isEmptyObject} from "../dataOperations/DataStructureOperations";
 

@@ -1,4 +1,4 @@
-import {defaultGet} from "../../../utils/requests/backendRequests";
+import {defaultGet} from "../../../utils/requests/BackendRequests";
 import {isEmptyList} from "../../../utils/dataOperations/DataStructureOperations";
 
 const getLectureMembersRequest = (profileCourses, executeFuncAtRequest) => {
