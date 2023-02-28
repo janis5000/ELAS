@@ -57,6 +57,7 @@ A diagram of the used architecture can be seen here:
 
 ## Videos
 <a href="https://www.youtube.com/watch?v=Cj9fKYqKolI">Advertisement Video</a>
+<a href="https://www.youtube.com/watch?v=ozi4evvgL7Y">Demo Video</a>
 
 ## Getting started
 For further reference see the README of the ELAS project.
