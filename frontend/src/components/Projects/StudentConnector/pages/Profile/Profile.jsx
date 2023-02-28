@@ -3,7 +3,6 @@ import {
     Box,
     Button,
     Grid,
-    makeStyles,
     Snackbar,
     Typography,
 } from "@material-ui/core";
@@ -16,19 +15,10 @@ import AuthConfigContext from "../../utils/auth/AuthConfig";
 import ProfileContext from "../../utils/auth/ProfileContext";
 import {getAllSkillsOfUser, getCurrentProfileById, getStudyPrograms, postProfileData} from "./utils/requests";
 import {checkIfOwner} from "./utils/utils";
-
-const useStyles = makeStyles((theme) => ({
-    saveProfile: {
-        display: "flex",
-        justifyContent: "flex-end",
-        alignItems: "right",
-        verticalAlign: "text-bottom",
-        marginTop: 5,
-    },
-}));
+import {profileStyle} from "./styles/profileStyle";
 
 const Profile = () => {
-    const classes = useStyles();
+    const classes = profileStyle();
 
     const [isOwner, setIsOwner] = useState(false);
     const [openImageDialog, setOpenImageDialog] = useState(false);

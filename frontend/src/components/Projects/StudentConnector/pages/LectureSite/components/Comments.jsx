@@ -1,8 +1,6 @@
-import {Divider, Grid, IconButton, Paper, Typography} from "@material-ui/core";
-import Avatar from "@material-ui/core/Avatar";
+import {Divider, Grid, Paper, Typography} from "@material-ui/core";
 import React from "react";
 import ProfilePicture from "../../../components/ProfilePicture/ProfilePicture";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
 import ViewProfileSendMessageButton from "./ViewProfileSendMessageButton";
 
 const Comments = ({comment, getTime, onClickProfileImage, onSendMessageClick}) => {

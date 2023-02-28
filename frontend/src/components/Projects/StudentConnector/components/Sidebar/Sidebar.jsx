@@ -1,5 +1,4 @@
 import React, {useContext, useState} from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -8,37 +7,12 @@ import { useHistory } from "react-router-dom";
 import { Badge, Typography } from "@material-ui/core";
 import {ProfileContext} from "../../utils/auth/ProfileContext";
 import MessageContext from "../../utils/messages/MessageContext";
+import {style} from "./style";
 
-const useStyles = makeStyles((theme) => ({
-    drawer: {
-        position: "relative",
-        zIndex: theme.zIndex.appBar - 1
-    },
-    list: {
-        width: 250,
-        overflowX: 'hidden'
-    },
-    fullList: {
-        width: "auto",
-    },
-    menuButton: {},
-    text: {
-        fontFamily: "Roboto",
-        color: "black",
-        margin: 10,
-    },
-    icon: {
-        marginTop: 64,
-        marginLeft: 8,
-    },
-    container: {
-        backgroundColor: theme.palette.background.paper,
-            padding: theme.spacing()
-    }
-}));
+
 
 const Sidebar = () => {
-    const classes = useStyles();
+    const classes = style();
     const {profile} = useContext(ProfileContext);
     const {message, setMessage} = useContext(MessageContext);
     const [state] = useState({

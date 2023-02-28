@@ -1,30 +1,18 @@
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
-import CardContent from "@material-ui/core/CardContent";
-import { Grid, Typography } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import CardActions from "@material-ui/core/CardActions";
-import { AvatarGroup } from "@material-ui/lab";
 import ProfilePicture from "../../../components/ProfilePicture/ProfilePicture";
 import Button from "@material-ui/core/Button";
 import React from "react";
 import scStyles from "../../../styles/scStyles";
-import {makeStyles} from "@material-ui/core/styles";
+import {memberCardStyle} from "../styles/memberCardStyle";
 
-const useStyles = makeStyles((theme) => ({
-  profilePicture: {
-    width: theme.spacing(24),
-    height: theme.spacing(24)
-  },
-  cardMediaMember: {
-    paddingTop: '5.25%',
-    paddingLeft: theme.spacing(1),
-    paddingRight: theme.spacing(1)
-  }
-}));
 
-const MemberCard = ({ contentKey, mediaKey, member, onViewProfileClick, onSendMessageClick, owner}) => {
+
+const MemberCard = ({ mediaKey, member, onViewProfileClick, onSendMessageClick, owner}) => {
   const classesSc = scStyles()
-  const classes = useStyles()
+  const classes = memberCardStyle()
   return (
     <>
       <Card className={classesSc.card}>

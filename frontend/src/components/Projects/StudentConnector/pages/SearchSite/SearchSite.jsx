@@ -62,7 +62,7 @@ return (
             justify="flex-start"
             alignItems="center"
         >
-            <Grid item xs={10}>
+            <Grid item xs={10} style={{paddingTop: 50}}>
                 <Paper>
                     <Autocomplete
                         id="studyprogram"

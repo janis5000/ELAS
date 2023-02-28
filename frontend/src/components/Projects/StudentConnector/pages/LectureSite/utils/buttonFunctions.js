@@ -11,7 +11,6 @@ export const addCourseToProfile = (id, executeFuncAtRequest, lectureInfo, authCo
             }
             executeFuncAtRequest(prevProfile);
         });
-        //getOtherUsersById(id);
     }
     authenticatedPost("add-course/" + id, {},executeFunc, () => {}, authConfig)
 };

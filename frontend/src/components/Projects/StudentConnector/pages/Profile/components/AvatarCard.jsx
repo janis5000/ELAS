@@ -1,36 +1,14 @@
-import {Avatar, Grid, makeStyles, Paper, TextField, Typography} from "@material-ui/core";
+import {Grid, Paper, TextField, Typography} from "@material-ui/core";
 import FormDialog from "./FormDialog";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 import ProfilePicture from "../../../components/ProfilePicture/ProfilePicture";
+import {avatarCardStyle} from "../styles/avatarCardStyle";
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        'display': 'block',
-        'flexWrap': 'wrap',
-        '& > *': {
-            margin: theme.spacing(1),
-            // width: theme.spacing(30),
-            height: theme.spacing(35),
-        },
-    },
-    large: {
-        width: theme.spacing(17),
-        height: theme.spacing(17),
-    },
-    center: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    profileName: {
-        color: '#000000',
-        lineHeight: 1.5,
-    },
-}));
+
 
 const AvatarCard = ({currentProfile, openImageDialog, setOpenImageDialog, isOwner, setCurrentProfile, options}) => {
-    const classes = useStyles()
+    const classes = avatarCardStyle()
 
 
     const onClickOpenImageDialogOn = () => {

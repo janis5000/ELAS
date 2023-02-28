@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Chip,
   Grid,
-  makeStyles,
   Paper, Snackbar,
   TextField,
   Tooltip,
@@ -14,42 +13,8 @@ import IconButton from "@material-ui/core/IconButton";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import Button from "@material-ui/core/Button";
 import SaveOutlinedIcon from "@material-ui/icons/SaveOutlined";
+import {skillsCardStyle} from "../styles/skillsCardStyle";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "block",
-    flexWrap: "wrap",
-    "& > *": {
-      margin: theme.spacing(1),
-      // width: theme.spacing(30),
-      height: theme.spacing(35),
-    },
-    width: "100%",
-  },
-  center: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  saveAbout: {
-    display: "flex",
-    justifyContent: "flex-end",
-    alignItems: "right",
-    verticalAlign: "text-bottom",
-    marginTop: 15,
-  },
-  profileDescription: {
-    color: "#000000",
-    lineHeight: 1.5,
-  },
-  textarea: {
-    backgroundColor: "transparent",
-    border: 0,
-    borderColor: "#303f9f",
-    padding: "8px",
-    width: "100%",
-  },
-}));
 const SkillsCard = ({
   currentProfile,
   setCurrentProfile,
@@ -59,7 +24,7 @@ const SkillsCard = ({
   isOwner,
     setSkillsRemove
 }) => {
-  const classes = useStyles();
+  const classes = skillsCardStyle();
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackBarMessage, setSnackBarMessage] = useState("");

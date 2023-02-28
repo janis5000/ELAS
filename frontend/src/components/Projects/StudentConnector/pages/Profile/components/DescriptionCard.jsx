@@ -1,59 +1,19 @@
 import {
-  Avatar,
   Grid,
-  makeStyles,
   Paper,
-  TextField,
   Tooltip,
   Typography,
 } from "@material-ui/core";
-import FormDialog from "./FormDialog";
-import Autocomplete from "@material-ui/lab/Autocomplete";
 import React, { useEffect, useState } from "react";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import SaveOutlinedIcon from "@material-ui/icons/SaveOutlined";
 import IconButton from "@material-ui/core/IconButton";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "block",
-    flexWrap: "wrap",
-    "& > *": {
-      margin: theme.spacing(1),
-      // width: theme.spacing(30),
-      height: theme.spacing(35),
-    },
-    width: '100%'
-  },
-  center: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  saveAbout: {
-    display: "flex",
-    justifyContent: "flex-end",
-    alignItems: "right",
-    verticalAlign: "text-bottom",
-    marginTop: 15,
-  },
-  profileDescription: {
-    color: "#000000",
-    lineHeight: 1.5,
-  },
-  textarea: {
-    backgroundColor: "transparent",
-    border: 0,
-    borderColor: "#303f9f",
-    padding: "8px",
-    width: "100%",
-  },
-}));
+import {descriptionCardStyle} from "../styles/descriptionCardStyle";
 
 const DescriptionCard = ({ currentProfile, isOwner, setCurrentProfile }) => {
-  const classes = useStyles();
+  const classes = descriptionCardStyle();
 
   const [editable, setEditable] = useState(false);
   const [description, setDescription] = useState("");

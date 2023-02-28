@@ -1,7 +1,6 @@
-import Backend from "../../../../../../assets/functions/Backend";
 import {authenticatedPost, defaultGet} from "../../../utils/requests/backendRequests";
 
-export const getStudyPrograms = (executeFuncAtRequest, param) => {
+export const getStudyPrograms = (executeFuncAtRequest) => {
     const executeFuncReq = (res, param) => {
         executeFuncAtRequest({
             ...param,
